@@ -1,7 +1,10 @@
+import { ArrowRight, Database, Sparkles, BookOpen, Shield, Layers, GitBranch } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+
 import { HeroCanvas } from "@/components/HeroCanvas";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Database, Sparkles, BookOpen, Shield, Layers, GitBranch } from "lucide-react";
+
 
 const features = [
   {
@@ -38,7 +41,12 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <>
+      <Helmet>
+        <title>Solun - Write worlds. Keep them true.</title>
+        <meta name="description" content="A premium AI workspace for writers and world-builders. Distraction-free editor, Lore Vault, and RAG-powered chat working in harmony." />
+      </Helmet>
+      <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
       <section className="relative overflow-hidden section">
         <HeroCanvas />
@@ -166,6 +174,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

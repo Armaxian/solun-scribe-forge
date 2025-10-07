@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { detectPlatform, getPlatformLabel, type Platform } from "@/lib/platform";
-import { Button } from "@/components/ui/button";
 import { Download as DownloadIcon, Check, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { detectPlatform, getPlatformLabel, type Platform } from "@/lib/platform";
 
 const installers = {
   windows: [
