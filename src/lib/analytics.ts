@@ -1,4 +1,4 @@
-import posthog from 'posthog-js'
+import { usePostHog } from 'posthog-js/react'
 
 export interface AnalyticsEvent {
   name: string
@@ -8,6 +8,7 @@ export interface AnalyticsEvent {
 export class Analytics {
   private static instance: Analytics
   private enabled = true
+  private posthog: ReturnType<typeof usePostHog> | null = null
 
   private constructor() {
     // Check for Do Not Track
@@ -18,27 +19,14 @@ export class Analytics {
       return
     }
 
-    // Initialize PostHog with cookieless mode
-    if (import.meta.env.VITE_POSTHOG_KEY && import.meta.env.VITE_POSTHOG_HOST) {
-      posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
-        api_host: import.meta.env.VITE_POSTHOG_HOST,
-        persistence: 'memory', // Cookieless mode - data stored in memory only
-        disable_session_recording: true, // Respect privacy
-        disable_persistence: true, // No localStorage or cookies
-        loaded: (posthog) => {
-          if (import.meta.env.DEV) {
-            console.log('PostHog loaded in development mode')
-          }
-        }
-      })
-
-      // Disable automatic pageview tracking for manual control
-      posthog.opt_out_capturing()
-    } else if (import.meta.env.DEV) {
-      console.log('PostHog not configured - running in development mode without analytics')
-      this.enabled = false
-    } else {
-      console.warn('PostHog configuration missing in production')
+    // PostHog is initialized via PostHogProvider in main.tsx
+    // We'll get the instance using the hook where needed
+    if (!import.meta.env.VITE_PUBLIC_POSTHOG_KEY || !import.meta.env.VITE_PUBLIC_POSTHOG_HOST) {
+      if (import.meta.env.DEV) {
+        console.log('PostHog not configured - running in development mode without analytics')
+      } else {
+        console.warn('PostHog configuration missing in production')
+      }
       this.enabled = false
     }
   }
@@ -50,11 +38,15 @@ export class Analytics {
     return Analytics.instance
   }
 
+  setPostHogInstance(instance: ReturnType<typeof usePostHog>) {
+    this.posthog = instance
+  }
+
   track(event: AnalyticsEvent): void {
-    if (!this.enabled) return
+    if (!this.enabled || !this.posthog) return
 
     try {
-      posthog.capture(event.name, event.properties)
+      this.posthog.capture(event.name, event.properties)
       if (import.meta.env.DEV) {
         console.log('Analytics event:', event)
       }
@@ -64,10 +56,10 @@ export class Analytics {
   }
 
   pageView(page: string): void {
-    if (!this.enabled) return
+    if (!this.enabled || !this.posthog) return
 
     try {
-      posthog.capture('$pageview', { page })
+      this.posthog.capture('$pageview', { page })
       if (import.meta.env.DEV) {
         console.log('Page view:', page)
       }
@@ -77,10 +69,10 @@ export class Analytics {
   }
 
   identify(userId: string, properties?: Record<string, unknown>): void {
-    if (!this.enabled) return
+    if (!this.enabled || !this.posthog) return
 
     try {
-      posthog.identify(userId, properties)
+      this.posthog.identify(userId, properties)
       if (import.meta.env.DEV) {
         console.log('User identified:', userId, properties)
       }

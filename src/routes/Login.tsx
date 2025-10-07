@@ -158,7 +158,7 @@ export default function Login() {
         <meta property="og:url" content="https://solun.app/login" />
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="flex min-h-screen items-center justify-center section bg-[#FFF8E7]">
+      <div className="flex min-h-screen items-center justify-center section">
       <div className="w-full max-w-md">
         <div className="card-hover">
           <div className="mb-8 text-center">

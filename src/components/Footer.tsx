@@ -16,7 +16,7 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="backdrop-blur supports-[backdrop-filter]:bg-[color:var(--bg)]/75 border-t border-black/5" role="contentinfo">
+    <footer className="bg-[var(--solun-cream)] border-t border-black/5" role="contentinfo">
       <div className="container py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-3">

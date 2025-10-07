@@ -11,9 +11,7 @@ export default function Root() {
         <meta name="theme-color" content="#0B3D2E" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Helmet>
-      <div className="min-h-screen bg-[color:var(--bg)] text-[color:var(--ink)] selection:bg-[#1E7F5C]/20">
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 }

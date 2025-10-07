@@ -23,10 +23,16 @@ export default function InkflowCanvas({ className, paused=false, onReady }: Prop
       u_time: { value: 0 },
       u_res:  { value: new THREE.Vector2(1,1) },
     };
-    const mat = new THREE.ShaderMaterial({ vertexShader: vert, fragmentShader: frag, uniforms, transparent: true });
+    const mat = new THREE.ShaderMaterial({ 
+      vertexShader: vert, 
+      fragmentShader: frag, 
+      uniforms, 
+      transparent: true,
+      glslVersion: THREE.GLSL1
+    });
     const geo = new THREE.BufferGeometry();
-    const verts = new Float32Array([-1,-1,  3,-1,  -1,3]);
-    geo.setAttribute("position", new THREE.BufferAttribute(verts, 2)); // fullscreen triangle
+    const verts = new Float32Array([-1,-1,0,  3,-1,0,  -1,3,0]);
+    geo.setAttribute("position", new THREE.BufferAttribute(verts, 3)); // fullscreen triangle
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
     state.current = { renderer, scene, camera, uniforms };

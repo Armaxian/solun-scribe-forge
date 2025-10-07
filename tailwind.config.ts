@@ -33,6 +33,7 @@ export default {
           light: "hsl(var(--olive-light))",
         },
         cream: "hsl(var(--cream))",
+        'bg-cream': "var(--solun-cream)",
         ink: "hsl(var(--ink))",
         
         primary: {

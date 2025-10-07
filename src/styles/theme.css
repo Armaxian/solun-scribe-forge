@@ -1,0 +1,11 @@
+/* Solun Color Contract */
+:root {
+  --solun-cream: #f5f2e8;
+  --solun-green: #3b7253;
+  --ink-900: #0e1411;
+}
+
+html {
+  color-scheme: light;
+}
+

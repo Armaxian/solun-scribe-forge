@@ -159,9 +159,9 @@ export default function Home() {
           })}
         </script>
       </Helmet>
-      <div className="flex min-h-screen flex-col bg-[#FFF8E7]">
+      <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden space-section bg-[#FFF8E7]" aria-labelledby="hero-heading">
+      <section className="relative overflow-hidden space-section" aria-labelledby="hero-heading">
         <Suspense fallback={null}>
           <HeroCanvas />
         </Suspense>
@@ -222,7 +222,7 @@ export default function Home() {
       <hr className="mx-auto max-w-5xl border-t border-black/10 my-10" />
 
       {/* Features Grid */}
-      <section className="space-section bg-[#FFF8E7]" aria-labelledby="features-heading">
+      <section className="space-section" aria-labelledby="features-heading">
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <h2 id="features-heading" className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
@@ -246,7 +246,7 @@ export default function Home() {
       </section>
 
       {/* Visual Preview */}
-      <section className="section bg-[#FFF8E7]" aria-label="Product preview">
+      <section className="section" aria-label="Product preview">
         <div className="container">
           <div className="mx-auto max-w-4xl">
             <div className="card-hover overflow-hidden">
@@ -262,7 +262,7 @@ export default function Home() {
       </section>
 
       {/* Security & Privacy */}
-      <section className="section-tight bg-[#FFF8E7]" aria-labelledby="security-heading">
+      <section className="section-tight" aria-labelledby="security-heading">
         <div className="container">
           <div className="card-hover max-w-4xl mx-auto text-center">
             <Shield className="h-12 w-12 mx-auto mb-4 text-success" aria-hidden="true" />
@@ -278,7 +278,7 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="section border-t border-border/50 bg-[#FFF8E7]" aria-labelledby="cta-heading">
+      <section className="section border-t border-border/50" aria-labelledby="cta-heading">
         <div className="container text-center space-y-6">
           <h2 id="cta-heading" className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
             Start writing today

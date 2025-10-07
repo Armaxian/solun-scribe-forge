@@ -148,7 +148,7 @@ export default function Account() {
 
   if (sessionLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FFF8E7]">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo"></div>
       </div>
     );
@@ -169,7 +169,7 @@ export default function Account() {
         <link rel="canonical" href="https://solun.app/account" />
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="min-h-screen section py-8 bg-[#FFF8E7]">
+      <div className="min-h-screen section py-8">
       <div className="container max-w-2xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Account Settings</h1>

@@ -159,7 +159,7 @@ export default function BlogPost() {
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFF8E7]">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold">Post not found</h1>
           <p className="text-muted-foreground">The blog post you're looking for doesn't exist.</p>
@@ -192,7 +192,7 @@ export default function BlogPost() {
         <meta name="author" content={post.author} />
       </Helmet>
 
-      <div className="min-h-screen bg-[#FFF8E7]">
+      <div className="min-h-screen">
         {/* Back Navigation */}
         <section className="section-tight border-b border-border/50">
           <div className="container">

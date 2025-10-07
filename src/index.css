@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import './styles/theme.css';
 
 @tailwind base;
 @tailwind components;
@@ -87,7 +88,6 @@
   }
 
   body {
-    background-color: hsl(43 100% 96%);
     @apply text-foreground font-sans antialiased text-[15px] sm:text-[16px];
     font-feature-settings: 'cv11', 'ss01';
   }
@@ -114,12 +114,12 @@
 @layer components {
   /* Glass morphism effects */
   .glass {
-    @apply bg-white/80 backdrop-blur-xl border-b border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)];
+    @apply bg-white/80 border-b border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)];
     box-shadow: var(--shadow-soft);
   }
   
   .glass-strong {
-    @apply bg-white/90 backdrop-blur-2xl border border-white/30;
+    @apply bg-white/90 border border-white/30;
     box-shadow: var(--shadow-medium);
   }
   
@@ -225,9 +225,9 @@
     width: 60%;
   }
 
-  /* Text gradient utility */
+  /* Text gradient utility - aurora inspired */
   .text-gradient {
-    background: linear-gradient(90deg,#0B3D2E 0%,#1E7F5C 55%,#556B2F 100%);
+    background: linear-gradient(135deg, #8A2BE2 0%, #00CED1 35%, #FF69B4 65%, #FFD700 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;

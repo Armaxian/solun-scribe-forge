@@ -15,7 +15,7 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-[#FFF8E7]/95 border-b border-black/5 py-3.5" role="banner">
+    <header className="sticky top-0 z-40 bg-[var(--solun-cream)] border-b border-black/5 py-3.5" role="banner">
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="Solun - Home">

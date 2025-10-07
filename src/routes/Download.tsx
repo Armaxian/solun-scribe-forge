@@ -101,7 +101,7 @@ export default function Download() {
         <meta name="twitter:description" content="Get Solun for free. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
         <meta name="twitter:image" content="https://solun.app/og-image-download.png" />
       </Helmet>
-      <div className="flex min-h-screen flex-col bg-[#FFF8E7]">
+      <div className="flex min-h-screen flex-col">
       <section className="section">
         <div className="container max-w-4xl">
           <div className="text-center mb-12">

@@ -52,12 +52,13 @@ export default function InkflowTitle({ text="Write worlds.", className="", pause
             </div>
           </foreignObject>
         </g>
-        {/* subtle paper vignette so ink pops on cream */}
-        <rect width="100%" height="100%" fill="url(#paper-vignette)" opacity="0.25"/>
+        {/* subtle glow effect to enhance the vibrant shader */}
+        <rect width="100%" height="100%" fill="url(#text-glow)" opacity="0.4"/>
         <defs>
-          <radialGradient id="paper-vignette" cx="50%" cy="38%" r="60%">
-            <stop offset="0%"  stopColor="rgba(11,61,46,0.10)"/>
-            <stop offset="100%" stopColor="rgba(0,0,0,0)"/>
+          <radialGradient id="text-glow" cx="50%" cy="50%" r="70%">
+            <stop offset="0%"  stopColor="rgba(138, 43, 226, 0.15)"/>
+            <stop offset="50%" stopColor="rgba(0, 206, 209, 0.10)"/>
+            <stop offset="100%" stopColor="rgba(255, 105, 180, 0.05)"/>
           </radialGradient>
         </defs>
       </svg>

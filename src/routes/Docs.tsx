@@ -137,7 +137,7 @@ export default function Docs() {
         <meta name="twitter:image" content="https://solun.app/og-image-docs.png" />
       </Helmet>
 
-      <div className="min-h-screen bg-[#FFF8E7]">
+      <div className="min-h-screen">
         {/* Hero Section */}
         <section className="section">
           <div className="container mx-auto px-4">
