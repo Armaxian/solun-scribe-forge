@@ -1,96 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Solun Design System - Premium minimal aesthetic */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Brand Colors - Phthalo Green & Olive */
+    --phthalo: 168 59% 13%;      /* #0B3D2E - Primary deep green */
+    --phthalo-light: 168 59% 25%; /* Lighter variant */
+    --olive: 75 39% 30%;          /* #556B2F - Secondary */
+    --olive-light: 75 39% 45%;
+    
+    /* Base Palette */
+    --cream: 43 100% 96%;         /* #FFF8E7 - Background */
+    --ink: 0 0% 5%;               /* #0C0C0C - Text */
+    --muted: 42 24% 91%;          /* #E7E2D7 - Muted elements */
+    
+    /* Semantic Colors */
+    --success: 160 62% 31%;       /* #1E7F5C */
+    --info: 171 65% 25%;          /* #136F63 */
+    --warning: 45 100% 36%;       /* #B58900 */
+    --error: 348 98% 35%;         /* #B00020 */
+    
+    /* UI Tokens */
+    --background: var(--cream);
+    --foreground: var(--ink);
+    
+    --card: 43 100% 98%;
+    --card-foreground: var(--ink);
+    
+    --primary: var(--phthalo);
+    --primary-foreground: var(--cream);
+    
+    --secondary: var(--olive);
+    --secondary-foreground: var(--cream);
+    
+    --accent: var(--olive-light);
+    --accent-foreground: var(--ink);
+    
+    --muted: 42 24% 91%;
+    --muted-foreground: 0 0% 40%;
+    
+    --border: 42 20% 85%;
+    --input: 42 20% 90%;
+    --ring: var(--phthalo);
+    
+    --destructive: var(--error);
+    --destructive-foreground: var(--cream);
+    
+    --radius: 14px;
+    
+    /* Shadows & Effects */
+    --shadow-soft: 0 8px 30px rgba(11, 61, 46, 0.06);
+    --shadow-medium: 0 12px 40px rgba(11, 61, 46, 0.1);
+    --shadow-strong: 0 20px 60px rgba(11, 61, 46, 0.15);
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--phthalo)) 0%, hsl(var(--olive)) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--cream)) 0%, hsl(var(--muted)) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,248,231,0.9) 0%, rgba(255,248,231,0.7) 100%);
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --cream: 0 0% 6%;            /* Dark background */
+      --ink: 43 11% 97%;           /* Light text */
+      --muted: 0 0% 11%;
+      --phthalo: 168 70% 25%;      /* Brighter in dark mode */
+      --olive: 75 45% 45%;
+      --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.3);
+      --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.4);
+      --shadow-strong: 0 25px 70px rgba(0, 0, 0, 0.5);
+    }
   }
 }
 
@@ -100,6 +84,78 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Glass morphism effects */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .glass-strong {
+    @apply bg-white/90 backdrop-blur-2xl border border-white/30;
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Premium button styles */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  .btn-hero {
+    @apply btn bg-gradient-to-br from-phthalo to-olive text-cream shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98];
+  }
+  
+  .btn-ghost {
+    @apply btn bg-transparent border-2 border-current text-ink hover:bg-ink/5 hover:scale-[1.02];
+  }
+  
+  .btn-secondary {
+    @apply btn bg-olive text-cream hover:bg-olive-light hover:scale-[1.02];
+  }
+  
+  /* Card styles */
+  .card {
+    @apply rounded-2xl border border-border/50 bg-card p-8 shadow-sm transition-all duration-300;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-medium hover:border-border hover:-translate-y-1;
+  }
+  
+  /* Section spacing */
+  .section {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+  
+  .section-tight {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  
+  .container-narrow {
+    @apply container max-w-4xl;
+  }
+  
+  /* Animated underline */
+  .link-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full;
   }
 }
