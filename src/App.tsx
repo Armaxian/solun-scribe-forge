@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -5,25 +6,37 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Account from "./routes/Account";
-import Blog from "./routes/Blog";
-import BlogPost from "./routes/BlogPost";
-import Docs from "./routes/Docs";
-import Download from "./routes/Download";
-import Features from "./routes/Features";
-import Home from "./routes/Home";
-import Login from "./routes/Login";
-import NotFound from "./routes/NotFound";
-import Pricing from "./routes/Pricing";
-import Privacy from "./routes/Privacy";
-import Root from "./routes/Root";
-import Terms from "./routes/Terms";
+
+// Lazy load all route components for code splitting
+const Account = lazy(() => import("./routes/Account"));
+const Blog = lazy(() => import("./routes/Blog"));
+const BlogPost = lazy(() => import("./routes/BlogPost"));
+const Docs = lazy(() => import("./routes/Docs"));
+const Download = lazy(() => import("./routes/Download"));
+const Features = lazy(() => import("./routes/Features"));
+const Home = lazy(() => import("./routes/Home"));
+const Login = lazy(() => import("./routes/Login"));
+const NotFound = lazy(() => import("./routes/NotFound"));
+const Pricing = lazy(() => import("./routes/Pricing"));
+const Privacy = lazy(() => import("./routes/Privacy"));
+const Root = lazy(() => import("./routes/Root"));
+const Terms = lazy(() => import("./routes/Terms"));
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const queryClient = new QueryClient();
+
+// Loading fallback component for lazy-loaded routes
+const LoadingFallback = () => (
+  <div className="flex min-h-screen items-center justify-center">
+    <div className="text-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-phthalo border-t-transparent mx-auto mb-4" />
+      <p className="text-muted-foreground">Loading...</p>
+    </div>
+  </div>
+);
 
 const App = () => (
   <HelmetProvider>
@@ -35,26 +48,28 @@ const App = () => (
           <div className="flex min-h-screen flex-col">
             <Header />
             <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Root />}>
-                  <Route index element={<Home />} />
-                  <Route path="download" element={<Download />} />
-                  <Route path="features" element={<Features />} />
-                  <Route path="pricing" element={<Pricing />} />
-                  <Route path="docs" element={<Docs />} />
-                  <Route path="blog" element={<Blog />} />
-                  <Route path="blog/:slug" element={<BlogPost />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="account" element={
-                    <ProtectedRoute>
-                      <Account />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="terms" element={<Terms />} />
-                  <Route path="privacy" element={<Privacy />} />
-                  <Route path="*" element={<NotFound />} />
-                </Route>
-              </Routes>
+              <Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                  <Route path="/" element={<Root />}>
+                    <Route index element={<Home />} />
+                    <Route path="download" element={<Download />} />
+                    <Route path="features" element={<Features />} />
+                    <Route path="pricing" element={<Pricing />} />
+                    <Route path="docs" element={<Docs />} />
+                    <Route path="blog" element={<Blog />} />
+                    <Route path="blog/:slug" element={<BlogPost />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="account" element={
+                      <ProtectedRoute>
+                        <Account />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="terms" element={<Terms />} />
+                    <Route path="privacy" element={<Privacy />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
+                </Routes>
+              </Suspense>
             </main>
             <Footer />
           </div>

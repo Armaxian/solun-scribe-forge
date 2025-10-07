@@ -1,9 +1,12 @@
+import { Suspense, lazy } from "react";
 import { ArrowRight, Database, Sparkles, BookOpen, Shield, Layers, GitBranch } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
-import { HeroCanvas } from "@/components/HeroCanvas";
 import { Button } from "@/components/ui/button";
+
+// Lazy load HeroCanvas to defer Three.js loading
+const HeroCanvas = lazy(() => import("@/components/HeroCanvas").then(module => ({ default: module.HeroCanvas })));
 
 
 const features = [
@@ -105,11 +108,13 @@ export default function Home() {
       </Helmet>
       <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden section">
-        <HeroCanvas />
+      <section className="relative overflow-hidden section" aria-labelledby="hero-heading">
+        <Suspense fallback={null}>
+          <HeroCanvas />
+        </Suspense>
         <div className="container relative z-10">
           <div className="mx-auto max-w-3xl text-center space-y-8">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter">
+            <h1 id="hero-heading" className="text-5xl md:text-7xl font-bold tracking-tighter">
               Write worlds.
               <br />
               <span className="bg-gradient-hero bg-clip-text text-transparent">
@@ -124,7 +129,7 @@ export default function Home() {
               <Button size="lg" className="btn-hero group" asChild>
                 <Link to="/download">
                   Download Now
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="btn-ghost" asChild>
@@ -141,22 +146,22 @@ export default function Home() {
       </section>
 
       {/* Trust Indicators */}
-      <section className="py-8 border-y border-border/50 bg-muted/20">
+      <section className="py-8 border-y border-border/50 bg-muted/20" aria-label="Trusted by companies">
         <div className="container">
           <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
             <span className="text-sm font-medium">TRUSTED BY WRITERS AT</span>
-            <div className="h-8 w-24 rounded bg-muted" />
-            <div className="h-8 w-24 rounded bg-muted" />
-            <div className="h-8 w-24 rounded bg-muted" />
+            <div className="h-8 w-24 rounded bg-muted" aria-hidden="true" />
+            <div className="h-8 w-24 rounded bg-muted" aria-hidden="true" />
+            <div className="h-8 w-24 rounded bg-muted" aria-hidden="true" />
           </div>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section className="section">
+      <section className="section" aria-labelledby="features-heading">
         <div className="container">
           <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+            <h2 id="features-heading" className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
               Everything you need to craft coherent stories
             </h2>
             <p className="text-lg text-muted-foreground">
@@ -167,7 +172,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature) => (
               <div key={feature.title} className="card-hover group">
-                <feature.icon className="h-10 w-10 mb-4 text-phthalo transition-colors group-hover:text-olive" />
+                <feature.icon className="h-10 w-10 mb-4 text-phthalo transition-colors group-hover:text-olive" aria-hidden="true" />
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
               </div>
@@ -177,7 +182,7 @@ export default function Home() {
       </section>
 
       {/* Visual Preview */}
-      <section className="section bg-gradient-subtle">
+      <section className="section bg-gradient-subtle" aria-label="Product preview">
         <div className="container">
           <div className="mx-auto max-w-4xl">
             <div className="card-hover overflow-hidden">
@@ -193,15 +198,15 @@ export default function Home() {
       </section>
 
       {/* Security & Privacy */}
-      <section className="section-tight">
+      <section className="section-tight" aria-labelledby="security-heading">
         <div className="container">
           <div className="card-hover max-w-4xl mx-auto text-center">
-            <Shield className="h-12 w-12 mx-auto mb-4 text-success" />
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            <Shield className="h-12 w-12 mx-auto mb-4 text-success" aria-hidden="true" />
+            <h2 id="security-heading" className="text-2xl md:text-3xl font-bold mb-3">
               Your data, your device
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Solun runs entirely on your machine. SQLite database with vector extension for blazing-fast 
+              Solun runs entirely on your machine. SQLite database with vector extension for blazing-fast
               search, encrypted at rest. No cloud dependency, no data mining.
             </p>
           </div>
@@ -209,9 +214,9 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="section border-t border-border/50">
+      <section className="section border-t border-border/50" aria-labelledby="cta-heading">
         <div className="container text-center space-y-6">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+          <h2 id="cta-heading" className="text-3xl md:text-5xl font-bold tracking-tight">
             Start writing today
           </h2>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto">

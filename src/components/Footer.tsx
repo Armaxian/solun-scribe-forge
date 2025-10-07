@@ -15,7 +15,7 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 bg-muted/30">
+    <footer className="border-t border-border/50 bg-muted/30" role="contentinfo">
       <div className="container py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-3">
@@ -32,16 +32,18 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Follow Solun on Twitter"
               >
-                <Twitter className="h-5 w-5" />
+                <Twitter className="h-5 w-5" aria-hidden="true" />
               </a>
               <a
                 href="https://github.com/solun"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="View Solun on GitHub"
               >
-                <Github className="h-5 w-5" />
+                <Github className="h-5 w-5" aria-hidden="true" />
               </a>
             </div>
           </div>

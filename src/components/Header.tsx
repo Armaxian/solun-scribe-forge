@@ -12,17 +12,17 @@ const navigation = [
 
 export function Header() {
   const location = useLocation();
-  
+
   return (
-    <header className="sticky top-0 z-50 w-full glass">
+    <header className="sticky top-0 z-50 w-full glass" role="banner">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-            <div className="h-8 w-8 rounded-lg bg-gradient-hero" />
+          <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="Solun - Home">
+            <div className="h-8 w-8 rounded-lg bg-gradient-hero" aria-hidden="true" />
             <span className="text-xl font-semibold tracking-tight">Solun</span>
           </Link>
-          
-          <nav className="hidden md:flex items-center gap-6">
+
+          <nav className="hidden md:flex items-center gap-6" role="navigation" aria-label="Main navigation">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -42,13 +42,13 @@ export function Header() {
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" asChild>
             <Link to="/login">
-              <LogIn className="h-4 w-4" />
+              <LogIn className="h-4 w-4" aria-hidden="true" />
               Log in
             </Link>
           </Button>
           <Button className="btn-hero" size="sm" asChild>
             <Link to="/download">
-              <FileDown className="h-4 w-4" />
+              <FileDown className="h-4 w-4" aria-hidden="true" />
               Download
             </Link>
           </Button>
