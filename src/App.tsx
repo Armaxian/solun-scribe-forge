@@ -21,6 +21,7 @@ const Pricing = lazy(() => import("./routes/Pricing"));
 const Privacy = lazy(() => import("./routes/Privacy"));
 const Root = lazy(() => import("./routes/Root"));
 const Terms = lazy(() => import("./routes/Terms"));
+const Cookies = lazy(() => import("./routes/Cookies"));
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -45,9 +46,10 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">
+          <div className="min-h-screen bg-[color:var(--bg)] text-[color:var(--ink)] selection:bg-[#1E7F5C]/20">
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1" role="main">
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
                   <Route path="/" element={<Root />}>
@@ -66,12 +68,14 @@ const App = () => (
                     } />
                     <Route path="terms" element={<Terms />} />
                     <Route path="privacy" element={<Privacy />} />
+                    <Route path="cookies" element={<Cookies />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
                 </Routes>
               </Suspense>
             </main>
             <Footer />
+            </div>
           </div>
         </BrowserRouter>
       </TooltipProvider>

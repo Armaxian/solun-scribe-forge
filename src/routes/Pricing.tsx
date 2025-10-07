@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Check, X, Star, Users, Crown, Sparkles, ChevronRight, Info } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import { analytics } from "@/lib/analytics";
 
 const plans = [
   {
@@ -72,6 +75,10 @@ const featureCategories = [
 ];
 
 export default function Pricing() {
+  useEffect(() => {
+    analytics.track({ name: 'pricing_view' });
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -89,11 +96,11 @@ export default function Pricing() {
         <meta name="twitter:image" content="https://solun.app/og-image-pricing.png" />
       </Helmet>
 
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-[#FFF8E7]">
         {/* Hero Section */}
         <section className="section">
-          <div className="container">
-            <div className="mx-auto max-w-3xl text-center space-y-6">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 Fair pricing for
                 <br />
@@ -159,7 +166,7 @@ export default function Pricing() {
                     <Link
                       to="/download"
                       className={`btn w-full ${
-                        plan.popular ? 'btn-hero' : 'btn-ghost'
+                        plan.popular ? 'btn-primary' : 'btn-ghost'
                       }`}
                     >
                       {plan.name === 'Free' ? 'Download Free' : `Get ${plan.name}`}
@@ -279,7 +286,7 @@ export default function Pricing() {
                   <Link to="/download" className="btn btn-ghost">
                     Web Version (Free)
                   </Link>
-                  <Link to="/download" className="btn btn-secondary">
+                  <Link to="/download" className="btn btn-primary">
                     Desktop App
                   </Link>
                 </div>
@@ -300,7 +307,7 @@ export default function Pricing() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/download"
-                className="btn btn-hero"
+                className="btn btn-primary"
               >
                 Start Free Today
                 <ChevronRight className="h-4 w-4" />

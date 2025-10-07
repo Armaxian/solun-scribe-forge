@@ -5,6 +5,7 @@ const footerLinks = {
   legal: [
     { name: "Terms", href: "/terms" },
     { name: "Privacy", href: "/privacy" },
+    { name: "Cookies", href: "/cookies" },
   ],
   resources: [
     { name: "Changelog", href: "/changelog" },
@@ -15,7 +16,7 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 bg-muted/30" role="contentinfo">
+    <footer className="backdrop-blur supports-[backdrop-filter]:bg-[color:var(--bg)]/75 border-t border-black/5" role="contentinfo">
       <div className="container py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-3">
@@ -91,7 +92,7 @@ export function Footer() {
                 placeholder="your@email.com"
                 className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
-              <button className="btn-secondary text-xs px-4">
+              <button className="btn btn-primary text-xs">
                 Subscribe
               </button>
             </div>

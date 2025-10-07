@@ -91,11 +91,11 @@ export default function Blog() {
         <meta name="twitter:image" content="https://solun.app/og-image-blog.png" />
       </Helmet>
 
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-[#FFF8E7]">
         {/* Hero Section */}
         <section className="section">
-          <div className="container">
-            <div className="mx-auto max-w-3xl text-center space-y-6">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 Stories &
                 <br />
@@ -255,7 +255,7 @@ export default function Blog() {
                   placeholder="Enter your email"
                   className="flex-1 px-4 py-3 rounded-xl border border-border bg-card text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-phthalo"
                 />
-                <button className="btn btn-hero whitespace-nowrap">
+                <button className="btn btn-primary whitespace-nowrap">
                   Subscribe
                 </button>
               </div>

@@ -15,7 +15,7 @@
     --olive-light: 75 39% 45%;
     
     /* Base Palette */
-    --cream: 43 100% 96%;         /* #FFF8E7 - Background */
+    --cream: 43 100% 99%;         /* #FFFEFC - Background */
     --ink: 0 0% 5%;               /* #0C0C0C - Text */
     --muted: 42 24% 91%;          /* #E7E2D7 - Muted elements */
     
@@ -43,7 +43,10 @@
     
     --muted: 42 24% 91%;
     --muted-foreground: 0 0% 35%;
-    
+
+    --bg: #FFF8E7;
+    --ink: #0C0C0C;
+
     --border: 42 20% 85%;
     --input: 42 20% 90%;
     --ring: var(--phthalo);
@@ -84,8 +87,13 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    background-color: hsl(43 100% 96%);
+    @apply text-foreground font-sans antialiased text-[15px] sm:text-[16px];
     font-feature-settings: 'cv11', 'ss01';
+  }
+
+  ::selection {
+    background-color: rgba(30, 127, 92, 0.2);
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -106,7 +114,7 @@
 @layer components {
   /* Glass morphism effects */
   .glass {
-    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+    @apply bg-white/80 backdrop-blur-xl border-b border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.08)];
     box-shadow: var(--shadow-soft);
   }
   
@@ -117,19 +125,53 @@
   
   /* Premium button styles */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 14px;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    transition: transform 0.15s, opacity 0.15s;
+    min-height: 44px;
   }
-  
-  .btn-hero {
-    @apply btn bg-gradient-to-br from-phthalo to-olive text-cream shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98];
+
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06), 0 0 0 2px #0B3D2E;
   }
-  
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    background: #0B3D2E;
+    color: #fff;
+  }
+
   .btn-ghost {
-    @apply btn bg-transparent border-2 border-current text-ink hover:bg-ink/5 hover:scale-[1.02];
+    background: transparent;
+    color: #0B3D2E;
   }
-  
-  .btn-secondary {
-    @apply btn bg-olive text-cream hover:bg-olive-light hover:scale-[1.02];
+
+  .btn-ghost:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .btn-hero {
+    background: linear-gradient(135deg, hsl(var(--phthalo)), hsl(var(--olive)));
+    color: hsl(var(--cream));
+    box-shadow: var(--shadow-medium);
+  }
+
+  .btn-hero:hover {
+    box-shadow: var(--shadow-strong);
+    transform: scale(1.02);
+  }
+
+  .btn-hero:active {
+    transform: scale(0.98);
   }
   
   /* Card styles */
@@ -145,17 +187,49 @@
   .section {
     @apply py-16 md:py-24 lg:py-32;
   }
-  
+
   .section-tight {
     @apply py-12 md:py-16 lg:py-20;
   }
-  
+
+  .space-section {
+    padding-block: clamp(56px, 8vw, 96px);
+  }
+
   .container-narrow {
-    @apply container max-w-4xl;
+    max-width: 60rem;
   }
   
   /* Animated underline */
   .link-underline {
-    @apply relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full;
+    @apply relative after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:-translate-x-1/2 hover:after:w-full;
+  }
+
+  /* Premium nav link with animated underline */
+  .nav-link {
+    position: relative;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: #0B3D2E;
+    transition: .25s;
+    transform: translateX(-50%);
+  }
+  .nav-link[aria-current="page"]::after,
+  .nav-link:hover::after {
+    width: 60%;
+  }
+
+  /* Text gradient utility */
+  .text-gradient {
+    background: linear-gradient(90deg,#0B3D2E 0%,#1E7F5C 55%,#556B2F 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }

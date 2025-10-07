@@ -40,22 +40,20 @@ export function HeroCanvas() {
     
     const materials = [
       new THREE.MeshPhysicalMaterial({
-        color: 0x0B3D2E, // Phthalo
-        metalness: 0.1,
-        roughness: 0.1,
-        transmission: 0.9,
-        thickness: 0.5,
+        color: new THREE.Color('#0B3D2E'),
+        transmission: 0.85,
+        roughness: 0.2,
+        thickness: 0.6,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.8,
       }),
       new THREE.MeshPhysicalMaterial({
-        color: 0x556B2F, // Olive
-        metalness: 0.1,
-        roughness: 0.15,
-        transmission: 0.85,
-        thickness: 0.4,
+        color: new THREE.Color('#556B2F'),
+        transmission: 0.8,
+        roughness: 0.25,
+        thickness: 0.5,
         transparent: true,
-        opacity: 0.5,
+        opacity: 0.7,
       }),
     ];
 
@@ -144,8 +142,8 @@ export function HeroCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-40"
-      style={{ mixBlendMode: "multiply" }}
+      className="absolute inset-0 pointer-events-none opacity-30"
+      style={{ mixBlendMode: "soft-light" }}
     />
   );
 }

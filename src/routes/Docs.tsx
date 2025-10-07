@@ -137,11 +137,11 @@ export default function Docs() {
         <meta name="twitter:image" content="https://solun.app/og-image-docs.png" />
       </Helmet>
 
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-[#FFF8E7]">
         {/* Hero Section */}
         <section className="section">
-          <div className="container">
-            <div className="mx-auto max-w-3xl text-center space-y-6">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 Documentation &
                 <br />
@@ -376,7 +376,7 @@ export default function Docs() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/download"
-                className="btn btn-hero"
+                className="btn btn-primary"
               >
                 Download Free
                 <ChevronRight className="h-4 w-4" />

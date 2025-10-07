@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { signInWithEmail, signInWithMagicLink, signInWithOAuth } from "@/lib/supabase";
+import { analytics } from "@/lib/analytics";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,14 +22,36 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
 
+    // Track signup/login start
+    analytics.track({
+      name: 'signup_start',
+      properties: {
+        method: useMagicLink ? 'magic_link' : 'email_password'
+      }
+    });
+
     try {
       if (useMagicLink) {
         const { error } = await signInWithMagicLink(email);
         if (error) {
+          analytics.track({
+            name: 'signup_start',
+            properties: {
+              method: 'magic_link',
+              status: 'failed',
+              error: error.message
+            }
+          });
           toast.error("Failed to send magic link", {
             description: error.message,
           });
         } else {
+          analytics.track({
+            name: 'signup_success',
+            properties: {
+              method: 'magic_link'
+            }
+          });
           toast.success("Magic link sent!", {
             description: "Check your email for the login link.",
           });
@@ -36,15 +59,37 @@ export default function Login() {
       } else {
         const { error } = await signInWithEmail(email, password);
         if (error) {
+          analytics.track({
+            name: 'signup_start',
+            properties: {
+              method: 'email_password',
+              status: 'failed',
+              error: error.message
+            }
+          });
           toast.error("Login failed", {
             description: error.message,
           });
         } else {
+          analytics.track({
+            name: 'signup_success',
+            properties: {
+              method: 'email_password'
+            }
+          });
           toast.success("Welcome back!");
           navigate("/account");
         }
       }
     } catch (error) {
+      analytics.track({
+        name: 'signup_start',
+        properties: {
+          method: useMagicLink ? 'magic_link' : 'email_password',
+          status: 'error',
+          error: 'unexpected_error'
+        }
+      });
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -53,15 +98,48 @@ export default function Login() {
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setOauthLoading(provider);
+
+    // Track OAuth signup/login start
+    analytics.track({
+      name: 'signup_start',
+      properties: {
+        method: `oauth_${provider}`
+      }
+    });
+
     try {
       const { error } = await signInWithOAuth(provider);
       if (error) {
+        analytics.track({
+          name: 'signup_start',
+          properties: {
+            method: `oauth_${provider}`,
+            status: 'failed',
+            error: error.message
+          }
+        });
         toast.error(`${provider} login failed`, {
           description: error.message,
+        });
+      } else {
+        // OAuth will redirect, track success when user returns
+        analytics.track({
+          name: 'signup_success',
+          properties: {
+            method: `oauth_${provider}`
+          }
         });
       }
       // OAuth will redirect, so no need to handle success here
     } catch (error) {
+      analytics.track({
+        name: 'signup_start',
+        properties: {
+          method: `oauth_${provider}`,
+          status: 'error',
+          error: 'unexpected_error'
+        }
+      });
       toast.error("An unexpected error occurred");
     } finally {
       setOauthLoading(null);
@@ -80,7 +158,7 @@ export default function Login() {
         <meta property="og:url" content="https://solun.app/login" />
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="flex min-h-screen items-center justify-center section">
+      <div className="flex min-h-screen items-center justify-center section bg-[#FFF8E7]">
       <div className="w-full max-w-md">
         <div className="card-hover">
           <div className="mb-8 text-center">
@@ -125,7 +203,7 @@ export default function Login() {
               </Label>
             </div>
 
-            <Button className="w-full btn-hero" type="submit" disabled={loading}>
+            <Button className="w-full btn btn-primary" type="submit" disabled={loading}>
               {loading ? "Sending..." : useMagicLink ? "Send Magic Link" : "Continue"}
             </Button>
           </form>
