@@ -1,5 +1,6 @@
 import { Download as DownloadIcon, Check, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 import { Button } from "@/components/ui/button";
 import { detectPlatform, getPlatformLabel, type Platform } from "@/lib/platform";
@@ -30,7 +31,22 @@ export default function Download() {
   const currentInstallers = platform !== 'unknown' ? installers[platform] : [];
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <>
+      <Helmet>
+        <title>Download Solun - Free Writing Software for World-Builders</title>
+        <meta name="description" content="Download Solun for free. Available for Windows, macOS, and Linux. Premium AI writing workspace with Lore Vault, RAG-powered chat, and distraction-free editor." />
+        <link rel="canonical" href="https://solun.app/download" />
+        <meta property="og:title" content="Download Solun - Premium AI Writing Workspace" />
+        <meta property="og:description" content="Get Solun for free. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://solun.app/download" />
+        <meta property="og:image" content="https://solun.app/og-image-download.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Download Solun - Premium AI Writing Workspace" />
+        <meta name="twitter:description" content="Get Solun for free. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
+        <meta name="twitter:image" content="https://solun.app/og-image-download.png" />
+      </Helmet>
+      <div className="flex min-h-screen flex-col">
       <section className="section">
         <div className="container max-w-4xl">
           <div className="text-center mb-12">
@@ -175,5 +191,6 @@ export default function Download() {
         </div>
       </section>
     </div>
+    </>
   );
 }

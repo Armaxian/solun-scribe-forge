@@ -4,7 +4,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Account from "./routes/Account";
 import Blog from "./routes/Blog";
+import BlogPost from "./routes/BlogPost";
 import Docs from "./routes/Docs";
 import Download from "./routes/Download";
 import Features from "./routes/Features";
@@ -40,7 +43,13 @@ const App = () => (
                   <Route path="pricing" element={<Pricing />} />
                   <Route path="docs" element={<Docs />} />
                   <Route path="blog" element={<Blog />} />
+                  <Route path="blog/:slug" element={<BlogPost />} />
                   <Route path="login" element={<Login />} />
+                  <Route path="account" element={
+                    <ProtectedRoute>
+                      <Account />
+                    </ProtectedRoute>
+                  } />
                   <Route path="terms" element={<Terms />} />
                   <Route path="privacy" element={<Privacy />} />
                   <Route path="*" element={<NotFound />} />

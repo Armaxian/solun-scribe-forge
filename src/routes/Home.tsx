@@ -43,8 +43,65 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Solun - Write worlds. Keep them true.</title>
-        <meta name="description" content="A premium AI workspace for writers and world-builders. Distraction-free editor, Lore Vault, and RAG-powered chat working in harmony." />
+        <title>Solun - Premium AI Writing Workspace for World-Builders</title>
+        <meta name="description" content="Write worlds. Keep them true. Premium AI workspace with Lore Vault, RAG-powered chat, and distraction-free editor. Offline-first, local-first architecture for serious world-building." />
+        <link rel="canonical" href="https://solun.app/" />
+        <meta property="og:title" content="Solun - Premium AI Writing Workspace for World-Builders" />
+        <meta property="og:description" content="Write worlds. Keep them true. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://solun.app/" />
+        <meta property="og:image" content="https://solun.app/og-image-home.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Solun - Premium AI Writing Workspace for World-Builders" />
+        <meta name="twitter:description" content="Write worlds. Keep them true. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
+        <meta name="twitter:image" content="https://solun.app/og-image-home.png" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Solun",
+            "description": "A premium AI workspace for writers and world-builders. Distraction-free editor, Lore Vault, and RAG-powered chat working in harmony.",
+            "brand": {
+              "@type": "Brand",
+              "name": "Solun"
+            },
+            "manufacturer": {
+              "@type": "Organization",
+              "name": "Solun",
+              "url": "https://solun.app"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD",
+              "description": "Free tier with unlimited basic features"
+            },
+            "applicationCategory": "ProductivityApplication",
+            "operatingSystem": "Windows, macOS, Linux",
+            "softwareVersion": "1.0.0",
+            "fileSize": "85 MB",
+            "url": "https://solun.app/download",
+            "screenshot": "https://solun.app/screenshot.png"
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Solun",
+            "url": "https://solun.app",
+            "description": "Premium AI writing workspace for world-builders and authors",
+            "foundingDate": "2024",
+            "sameAs": [
+              "https://twitter.com/solun_app"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer service",
+              "url": "https://solun.app/support"
+            }
+          })}
+        </script>
       </Helmet>
       <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
