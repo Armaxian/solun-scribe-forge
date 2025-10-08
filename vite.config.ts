@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
           assetFileNames: 'assets/[name]-[hash].[ext]',
         },
       },
-      // Enable source maps for production debugging
+      // Disable source maps for production
       sourcemap: false,
       // Minimize bundle size
       minify: 'esbuild',

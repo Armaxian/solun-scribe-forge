@@ -1,49 +1,131 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Database, Sparkles, BookOpen, Shield, Layers, GitBranch } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import {
+  FileText,
+  Database,
+  MessageSquare,
+  GitBranch,
+  Shield,
+  Palette,
+  ChevronRight,
+  BookOpen,
+  Layers
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { GradientButton } from "@/components/ui/gradient-button";
-import { TypewriterText } from "@/components/ui/TypewriterText";
+import { TypewriterTextInk } from "@/components/ui/TypewriterTextInk";
 import InkflowTitle from "@/components/Inkflow/InkflowTitle";
 import PrismDemo from "@/components/ui/prism-demo";
+import { ThreeSplineScene } from "@/components/ui/three-spline-scene";
 import { analytics } from "@/lib/analytics";
 import { getDetailedPlatformInfo, getPlatformLabel, type Platform } from "@/lib/platform";
 import { useInView } from "@/hooks/useInView";
 
-
-
-const features = [
+const featuresDetailed = [
+  {
+    icon: FileText,
+    title: "Distraction-Free Editor",
+    subtitle: "Write worlds, not code",
+    description:
+      "A cozy, page-by-page writing experience with elegant pagination. Focus on your story with a clean interface that feels like writing on parchment. Smooth page transitions and minimal distractions keep you in the flow.",
+    illustration: "editor-pagination",
+    details: [
+      "Page-by-page navigation with smooth transitions",
+      "Minimal, parchment-like interface",
+      "Auto-save with local encryption",
+      "Distraction-free fullscreen mode",
+    ],
+  },
   {
     icon: Database,
     title: "Lore Vault",
-    description: "Characters, places, items, timelines, and relationships—all organized and interconnected.",
+    subtitle: "Your world's memory",
+    description:
+      "Store characters, places, items, relationships, and timelines in an interconnected knowledge base. Every entity links to others, creating a web of relationships that maintains your world's consistency.",
+    illustration: "lore-vault",
+    hasSpline: true,
+    splineScene: "https://prod.spline.design/klSoItsFh7uXybAi/scene.splinecode",
+    details: [
+      "Interconnected entities and relationships",
+      "Rich metadata for characters, places, and items",
+      "Timeline tracking and chronology",
+      "Quick search and cross-references",
+    ],
   },
   {
-    icon: Sparkles,
-    title: "Context-Aware AI",
-    description: "RAG-powered chat keeps your story continuity intact with vector search and embeddings.",
-  },
-  {
-    icon: BookOpen,
-    title: "Cozy Editor",
-    description: "Minimal, page-by-page writing experience with elegant Olive + Cream theme.",
-  },
-  {
-    icon: Shield,
-    title: "Local-First",
-    description: "SQLite with vector extension. Your data stays on your device, encrypted and private.",
+    icon: MessageSquare,
+    title: "RAG-Powered Chat",
+    subtitle: "AI that knows your world",
+    description:
+      "Context-aware conversations that draw from your Lore Vault. Ask questions about your characters, get plot suggestions, or explore world-building ideas—all informed by your existing content.",
+    illustration: "rag-chat",
+    details: [
+      "Vector search through your lore",
+      "Context-aware responses",
+      "Seamless editor integration",
+      "Export chat to editor or notes",
+    ],
   },
   {
     icon: Layers,
     title: "Continuity Engine",
-    description: "Track character arcs, plot threads, and timeline consistency effortlessly.",
+    subtitle: "Never forget a detail",
+    description:
+      "Track character arcs, plot threads, and timeline consistency effortlessly. The system automatically suggests continuity fixes and maintains narrative coherence across your entire work.",
+    illustration: "continuity",
+    hasSpline: true,
+    splineScene: "https://prod.spline.design/klSoItsFh7uXybAi/scene.splinecode",
+    details: [
+      "Automatic continuity checking",
+      "Character arc tracking",
+      "Plot thread management",
+      "Timeline validation",
+    ],
   },
   {
     icon: GitBranch,
-    title: "Version Control",
-    description: "Built-in versioning keeps every draft. Never lose a brilliant idea.",
+    title: "Version Control & Drafts",
+    subtitle: "Every idea preserved",
+    description:
+      "Built-in versioning keeps every draft, revision, and idea. Branch your story, experiment with plot changes, and merge back when ready. Never lose a brilliant idea again.",
+    illustration: "versioning",
+    details: [
+      "Unlimited draft versions",
+      "Branch and merge storylines",
+      "Compare versions side-by-side",
+      "Restore any previous state",
+    ],
+  },
+  {
+    icon: Shield,
+    title: "Offline-First Architecture",
+    subtitle: "Your data, your control",
+    description:
+      "Runs entirely on your device with SQLite and vector extensions. No cloud dependency, no data mining. Your stories and lore remain private, encrypted, and under your complete control.",
+    illustration: "offline-first",
+    details: [
+      "SQLite with vector extensions",
+      "End-to-end encryption",
+      "No internet required",
+      "Cross-platform sync options",
+    ],
+  },
+  {
+    icon: Palette,
+    title: "Olive + Cream Theme",
+    subtitle: "Premium minimal aesthetic",
+    description:
+      "A carefully crafted color palette of deep phthalo greens and warm olive tones on cream backgrounds. Like writing on aged parchment with fine ink—comfortable for hours of creation.",
+    illustration: "theme",
+    details: [
+      "Phthalo green and olive accents",
+      "Warm cream backgrounds",
+      "Dark mode support",
+      "Accessibility-optimized contrast",
+    ],
   },
 ];
 
@@ -176,7 +258,7 @@ export default function Home() {
             <div className="space-y-8 animate-fade-in">
               <div ref={titleRef} className="w-full">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
-                  <TypewriterText 
+                  <TypewriterTextInk 
                     text={["Write worlds.", "Write stories.", "Write ideas.", "Write dreams.", "Write tales.", "Write narratives."]}
                     speed={120}
                     delay={800}
@@ -218,45 +300,119 @@ export default function Home() {
 
       <hr className="mx-auto max-w-5xl border-t border-black/10 my-10" />
 
-      {/* Features Grid */}
-      <section style={{ paddingBlock: 'var(--space-section)' }} aria-labelledby="features-heading">
+      {/* Features Page Content injected under hero */}
+      {/* Features Grid (detailed) */}
+      <section className="section-tight">
         <div className="container">
-          <div className="mx-auto max-w-2xl text-center mb-12 flex flex-col items-center">
-            <h2 id="features-heading" className="text-3xl md:text-4xl font-semibold tracking-[-0.01em] text-foreground mb-6 typewriter">
-              Everything you need to craft coherent stories
-            </h2>
-            <div className="h-px w-12 bg-[#0B3D2E]/30 mb-8" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {features.map((feature, index) => (
+          <div className="space-y-20">
+            {featuresDetailed.map((feature, index) => (
               <div
                 key={feature.title}
-                className={`group sticker-card opacity-0 animate-fade-in stagger-${index + 1}`}
+                className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${
+                  index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
+                }`}
               >
-                <div className="size-12 rounded-xl bg-gradient-to-br from-[#0B3D2E]/15 to-[#0B3D2E]/20 flex items-center justify-center text-[#0B3D2E] group-hover:from-[#0B3D2E]/20 group-hover:to-[#0B3D2E]/25 transition-all duration-300 mb-4 shadow-sm">
-                  <feature.icon className="w-6 h-6" aria-hidden="true" />
+                {/* Content */}
+                <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 rounded-xl bg-phthalo/10">
+                        <feature.icon className="h-8 w-8 text-phthalo" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl md:text-3xl font-bold">{feature.title}</h2>
+                        {('subtitle' in feature) && (
+                          <p className="text-phthalo font-medium">{(feature as any).subtitle}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <p className="text-lg text-muted-foreground leading-relaxed">
+                      {feature.description}
+                    </p>
+
+                    {'details' in feature && (
+                      <ul className="space-y-3">
+                        {(feature as any).details.map((detail: string, detailIndex: number) => (
+                          <li key={detailIndex} className="flex items-start gap-3">
+                            <ChevronRight className="h-5 w-5 text-phthalo mt-0.5 flex-shrink-0" />
+                            <span className="text-muted-foreground">{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-[#0B3D2E] mb-2 typewriter">{feature.title}</h3>
-                <p className="text-sm text-[#0B3D2E]/75 leading-relaxed typewriter">{feature.description}</p>
+
+                {/* Illustration Placeholder or Spline Scene */}
+                <div className={index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}>
+                  <div className="card-hover">
+                    {(feature as any).hasSpline ? (
+                      <div className="aspect-video bg-gradient-subtle rounded-lg overflow-hidden">
+                        <ThreeSplineScene
+                          sceneUrl={(feature as any).splineScene}
+                          className="w-full h-full"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-video bg-gradient-subtle rounded-lg flex items-center justify-center">
+                        <div className="text-center space-y-4">
+                          <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" />
+                          <p className="text-muted-foreground font-medium">
+                            {feature.illustration.replace('-', ' ').toUpperCase()}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Illustration coming soon
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Visual Preview */}
-      <section style={{ paddingBlock: 'var(--space-section)' }} aria-label="Product preview">
+      {/* Feature Comparison */}
+      <section className="section bg-gradient-subtle">
         <div className="container">
           <div className="mx-auto max-w-4xl">
-            <div className="rounded-2xl overflow-hidden border border-border/50 bg-card shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="aspect-video bg-muted flex items-center justify-center">
-                <p className="text-muted-foreground font-medium typewriter">Product Screenshot Placeholder</p>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Everything working together
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Features that enhance each other, creating a seamless writing experience
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="card-hover text-center">
+                <BookOpen className="h-12 w-12 mx-auto mb-4 text-phthalo" />
+                <h3 className="text-xl font-semibold mb-2">Write</h3>
+                <p className="text-muted-foreground">
+                  Distraction-free editor with pagination
+                </p>
+              </div>
+
+              <div className="card-hover text-center">
+                <Database className="h-12 w-12 mx-auto mb-4 text-olive" />
+                <h3 className="text-xl font-semibold mb-2">Connect</h3>
+                <p className="text-muted-foreground">
+                  Lore Vault links everything together
+                </p>
+              </div>
+
+              <div className="card-hover text-center">
+                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-phthalo" />
+                <h3 className="text-xl font-semibold mb-2">Explore</h3>
+                <p className="text-muted-foreground">
+                  AI chat informed by your world
+                </p>
               </div>
             </div>
-            <p className="text-center mt-6 text-sm text-muted-foreground typewriter">
-              Clean, minimal interface that lets you focus on what matters: your story
-            </p>
           </div>
         </div>
       </section>

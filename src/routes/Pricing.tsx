@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Check, X, Star, Users, Crown, Sparkles, ChevronRight, Info } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Pricing as PricingBlock } from "@/components/ui/pricing";
+import { PaperBackground } from "@/components/ui/PaperBackground";
 
 import { analytics } from "@/lib/analytics";
 
@@ -79,6 +81,60 @@ export default function Pricing() {
     analytics.track({ name: 'pricing_view' });
   }, []);
 
+  const pricingPlans = [
+    {
+      name: "Free",
+      price: "0",
+      yearlyPrice: "0",
+      period: "forever",
+      features: [
+        "Distraction-free editor",
+        "Basic Lore Vault (up to 100 entities)",
+        "Local AI chat (limited)",
+        "Version control (3 versions)",
+        "Offline-first architecture",
+      ],
+      description: "Perfect for exploring Solun and getting started",
+      buttonText: "Download Free",
+      href: "/download",
+      isPopular: false,
+    },
+    {
+      name: "Pro",
+      price: "19",
+      yearlyPrice: "15",
+      period: "per month",
+      features: [
+        "Unlimited Lore Vault entities",
+        "Full RAG-powered AI chat",
+        "Unlimited version control",
+        "Advanced continuity engine",
+        "Priority email support",
+      ],
+      description: "Everything you need for serious world-building",
+      buttonText: "Get Pro",
+      href: "/download",
+      isPopular: true,
+    },
+    {
+      name: "Team",
+      price: "49",
+      yearlyPrice: "39",
+      period: "per month",
+      features: [
+        "Everything in Pro",
+        "Up to 10 team members",
+        "Real-time collaboration",
+        "Shared Lore Vault",
+        "Cloud sync & backup",
+      ],
+      description: "Collaborative world-building for groups",
+      buttonText: "Contact Sales",
+      href: "/contact",
+      isPopular: false,
+    },
+  ];
+
   return (
     <>
       <Helmet>
@@ -115,67 +171,16 @@ export default function Pricing() {
           </div>
         </section>
 
-        {/* Pricing Cards */}
+        {/* Pricing Cards (replaced with unified Pricing block) */}
         <section className="section-tight">
           <div className="container">
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {plans.map((plan) => (
-                <div
-                  key={plan.name}
-                  className={`card-hover relative ${
-                    plan.popular ? 'ring-2 ring-phthalo shadow-medium' : ''
-                  }`}
-                >
-                  {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="bg-gradient-hero text-cream px-4 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-                        <Star className="h-3 w-3" />
-                        Most Popular
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="text-center mb-6">
-                    <div className="inline-flex p-3 rounded-xl bg-muted mb-4">
-                      <plan.icon className={`h-8 w-8 ${plan.popular ? 'text-phthalo' : 'text-olive'}`} />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                    <p className="text-muted-foreground mb-4">{plan.description}</p>
-                    <div className="mb-6">
-                      <span className="text-4xl font-bold">{plan.price}</span>
-                      <span className="text-muted-foreground">/{plan.period}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 mb-6">
-                    {plan.features.slice(0, 5).map((feature, index) => (
-                      <div key={index} className="flex items-center gap-3">
-                        {feature.included ? (
-                          <Check className="h-5 w-5 text-success flex-shrink-0" />
-                        ) : (
-                          <X className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                        )}
-                        <span className={feature.included ? 'text-foreground' : 'text-muted-foreground'}>
-                          {feature.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="pt-6 border-t border-border/50">
-                    <Link
-                      to="/download"
-                      className={`btn w-full ${
-                        plan.popular ? 'btn-primary' : 'btn-ghost'
-                      }`}
-                    >
-                      {plan.name === 'Free' ? 'Download Free' : `Get ${plan.name}`}
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <PaperBackground className="rounded-xl">
+              <PricingBlock
+                plans={pricingPlans}
+                title="Simple, Transparent Pricing"
+                description={"Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support."}
+              />
+            </PaperBackground>
           </div>
         </section>
 
