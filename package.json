@@ -63,6 +63,7 @@
     "framer-motion": "^12.23.22",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.462.0",
+    "ogl": "^1.0.11",
     "posthog-js": "^1.272.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
