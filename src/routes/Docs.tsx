@@ -13,6 +13,7 @@ import {
   Zap
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Spotlight } from "@/components/ui/spotlight";
 
 const quickStartSteps = [
   {
@@ -139,7 +140,8 @@ export default function Docs() {
 
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section className="section">
+        <section className="section relative overflow-hidden">
+          <Spotlight className="top-12 left-16" />
           <div className="container mx-auto px-4">
             <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">

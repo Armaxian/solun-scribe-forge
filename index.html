@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="color-scheme: light; background-color: #f5f2e8; color: #0C0C0C;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
     <title>Solun — Write worlds. Keep them true.</title>
     <meta name="description" content="A premium AI workspace for writers and world-builders. Distraction-free editor, Lore Vault, and RAG-powered chat working in harmony." />
     <meta name="author" content="Solun" />
@@ -24,9 +25,72 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <style>
+      /* Force light theme before any other CSS loads */
+      html, body {
+        background-color: #f5f2e8 !important;
+        color: #0C0C0C !important;
+        color-scheme: light !important;
+      }
+      /* Prevent dark mode */
+      html.dark, body.dark,
+      html[data-theme="dark"], body[data-theme="dark"],
+      html[data-mode="dark"], body[data-mode="dark"],
+      html[data-color-mode="dark"], body[data-color-mode="dark"] {
+        background-color: #f5f2e8 !important;
+        color: #0C0C0C !important;
+      }
+    </style>
   </head>
 
-  <body>
+  <body style="background-color: #f5f2e8; color: #0C0C0C;">
+     <script>
+       // Force light theme immediately before anything else loads
+       (function() {
+         const root = document.documentElement;
+         const body = document.body;
+         
+         // BLOCK DARKREADER IMMEDIATELY
+         const darkReaderAttrs = [
+           'data-darkreader-mode', 'data-darkreader-scheme', 'data-darkreader-proxy-injected',
+           'data-darkreader-inline-bgcolor', 'data-darkreader-inline-color'
+         ];
+         darkReaderAttrs.forEach(attr => {
+           root.removeAttribute(attr);
+           body.removeAttribute(attr);
+         });
+         
+         const darkReaderVars = [
+           '--darkreader-inline-bgcolor', '--darkreader-inline-color',
+           '--darkreader-bg--background', '--darkreader-bg--foreground',
+           '--darkreader-text--foreground', '--darkreader-bg--card',
+           '--darkreader-text--card-foreground', '--darkreader-bg--muted',
+           '--darkreader-text--muted', '--darkreader-border--muted',
+           '--darkreader-text--muted-foreground'
+         ];
+         darkReaderVars.forEach(varName => {
+           root.style.removeProperty(varName);
+           body.style.removeProperty(varName);
+         });
+         
+         // Set inline styles with !important
+         root.style.cssText = 'color-scheme: light !important; background-color: #FFFFFF !important; color: #0C0C0C !important;';
+         body.style.cssText = 'background-color: #FFFFFF !important; color: #0C0C0C !important;';
+         
+         // Remove any dark classes or attributes
+         ['dark'].forEach(cls => {
+           root.classList.remove(cls);
+           body.classList.remove(cls);
+         });
+         
+         ['data-theme', 'data-mode', 'data-color-mode'].forEach(attr => {
+           root.removeAttribute(attr);
+           body.removeAttribute(attr);
+           root.setAttribute(attr, 'light');
+           body.setAttribute(attr, 'light');
+         });
+       })();
+     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

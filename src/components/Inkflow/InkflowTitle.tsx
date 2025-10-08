@@ -8,17 +8,7 @@ export default function InkflowTitle({ text="Write worlds.", className="", pause
   const [isHidden, setIsHidden] = useState(false);
   const prefersReduced = usePrefersReducedMotion();
   const wrapRef = useRef<HTMLDivElement|null>(null);
-  const [box, setBox] = useState({ w: 0, h: 0 });
-
-  useEffect(() => {
-    if(!wrapRef.current) return;
-    const ro = new ResizeObserver(() => {
-      const r = wrapRef.current!.getBoundingClientRect();
-      setBox({ w: Math.ceil(r.width), h: Math.ceil(r.height) });
-    });
-    ro.observe(wrapRef.current);
-    return () => ro.disconnect();
-  }, []);
+  const maskId = useRef(`ink-text-mask-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
     const handleVisibility = () => setIsHidden(document.hidden);
@@ -27,47 +17,74 @@ export default function InkflowTitle({ text="Write worlds.", className="", pause
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, []);
 
+  // If reduced motion, just show gradient text
+  if (prefersReduced) {
+    return (
+      <div ref={wrapRef} className={`relative min-h-[200px] flex items-center justify-center ${className}`}>
+        <h1 className="text-gradient text-7xl sm:text-8xl md:text-9xl lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] font-extrabold tracking-tight text-center">
+          {text}
+        </h1>
+      </div>
+    );
+  }
+
   return (
-    <div ref={wrapRef} className={`relative min-h-[120px] ${className}`}>
-      {/* Fallback static gradient text for SSR / mask-less browsers */}
+    <div ref={wrapRef} className={`relative min-h-[250px] flex items-center justify-center ${className}`}>
       <h1 className="sr-only">{text}</h1>
-      <svg width={box.w || '100%'} height={box.h || 120} className="block" role="img" aria-label={text}>
+      
+      {/* Hidden SVG that defines the mask */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
         <defs>
-          <mask id="ink-mask" x="0" y="0" width="1" height="1">
+          <mask id={maskId.current}>
             <rect width="100%" height="100%" fill="black" />
-            <text x="50%" y="50%" dy=".32em"
-                  textAnchor="middle"
-                  fontWeight="800"
-                  fontSize={Math.max(48, Math.min(112, box.w * 0.11))}
-                  letterSpacing="-0.02em"
-                  fontFamily="Inter, system-ui, sans-serif"
-                  fill="white">{text}</text>
+            <text
+              x="50%"
+              y="55%"
+              dominantBaseline="middle"
+              textAnchor="middle"
+              fontSize="180"
+              fontWeight="800"
+              fontFamily="Courier New, Courier, monospace"
+              letterSpacing="-2px"
+              fill="white"
+            >
+              {text}
+            </text>
           </mask>
         </defs>
-        <g mask="url(#ink-mask)">
-          {/* canvas sits under the mask area */}
-          <foreignObject x="0" y="0" width="100%" height="100%">
-            <div {...({'xmlns': 'http://www.w3.org/1999/xhtml'} as any)} style={{width:"100%",height:"100%", background:"transparent"}}>
-              <InkflowCanvas className="w-full h-full" paused={paused || isHidden} onReady={()=>setReady(true)} />
-            </div>
-          </foreignObject>
-        </g>
-        {/* subtle glow effect to enhance the vibrant shader */}
-        <rect width="100%" height="100%" fill="url(#text-glow)" opacity="0.4"/>
-        <defs>
-          <radialGradient id="text-glow" cx="50%" cy="50%" r="70%">
-            <stop offset="0%"  stopColor="rgba(138, 43, 226, 0.15)"/>
-            <stop offset="50%" stopColor="rgba(0, 206, 209, 0.10)"/>
-            <stop offset="100%" stopColor="rgba(255, 105, 180, 0.05)"/>
-          </radialGradient>
-        </defs>
       </svg>
-      {/* Static CSS gradient fallback when JS/WebGL unavailable */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <span className={`text-gradient text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight transition-opacity duration-500 ${ready && !prefersReduced ? 'opacity-0' : 'opacity-100'}`}>
-          {text}
-        </span>
+
+      {/* Canvas container with CSS mask applied */}
+      <div 
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        style={{
+          WebkitMaskImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 250"><text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-size="180" font-weight="800" font-family="Courier New, Courier, monospace" letter-spacing="-2px" fill="white">${text}</text></svg>')`,
+          maskImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 250"><text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-size="180" font-weight="800" font-family="Courier New, Courier, monospace" letter-spacing="-2px" fill="white">${text}</text></svg>')`,
+          WebkitMaskSize: 'contain',
+          maskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          maskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'center',
+          maskPosition: 'center',
+        }}
+      >
+        <div style={{ width: '100%', maxWidth: '1000px', height: '250px' }}>
+          <InkflowCanvas 
+            className="w-full h-full" 
+            paused={paused || isHidden} 
+            onReady={()=>setReady(true)} 
+          />
+        </div>
       </div>
+
+      {/* Fallback gradient text shown until canvas is ready */}
+      {!ready && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+          <span className="text-gradient text-7xl sm:text-8xl md:text-9xl lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] font-extrabold tracking-tight px-4">
+            {text}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

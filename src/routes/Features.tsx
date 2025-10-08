@@ -14,6 +14,7 @@ import {
   Layers
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ThreeSplineScene } from "@/components/ui/three-spline-scene";
 
 const features = [
   {
@@ -35,6 +36,8 @@ const features = [
     subtitle: "Your world's memory",
     description: "Store characters, places, items, relationships, and timelines in an interconnected knowledge base. Every entity links to others, creating a web of relationships that maintains your world's consistency.",
     illustration: "lore-vault",
+    hasSpline: true,
+    splineScene: "https://prod.spline.design/klSoItsFh7uXybAi/scene.splinecode",
     details: [
       "Interconnected entities and relationships",
       "Rich metadata for characters, places, and items",
@@ -61,6 +64,8 @@ const features = [
     subtitle: "Never forget a detail",
     description: "Track character arcs, plot threads, and timeline consistency effortlessly. The system automatically suggests continuity fixes and maintains narrative coherence across your entire work.",
     illustration: "continuity",
+    hasSpline: true,
+    splineScene: "https://prod.spline.design/klSoItsFh7uXybAi/scene.splinecode",
     details: [
       "Automatic continuity checking",
       "Character arc tracking",
@@ -185,20 +190,29 @@ export default function Features() {
                     </div>
                   </div>
 
-                  {/* Illustration Placeholder */}
+                  {/* Illustration Placeholder or Spline Scene */}
                   <div className={index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}>
                     <div className="card-hover">
-                      <div className="aspect-video bg-gradient-subtle rounded-lg flex items-center justify-center">
-                        <div className="text-center space-y-4">
-                          <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" />
-                          <p className="text-muted-foreground font-medium">
-                            {feature.illustration.replace('-', ' ').toUpperCase()}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            Illustration coming soon
-                          </p>
+                      {feature.hasSpline ? (
+                        <div className="aspect-video bg-gradient-subtle rounded-lg overflow-hidden">
+                          <ThreeSplineScene
+                            sceneUrl={feature.splineScene}
+                            className="w-full h-full"
+                          />
                         </div>
-                      </div>
+                      ) : (
+                        <div className="aspect-video bg-gradient-subtle rounded-lg flex items-center justify-center">
+                          <div className="text-center space-y-4">
+                            <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" />
+                            <p className="text-muted-foreground font-medium">
+                              {feature.illustration.replace('-', ' ').toUpperCase()}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Illustration coming soon
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

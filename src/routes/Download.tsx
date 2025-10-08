@@ -201,10 +201,10 @@ export default function Download() {
                         </div>
                       </details>
 
-                      <div className="mt-3 p-2 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded">
+                      <div className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded">
                         <div className="flex items-start gap-2">
                           <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
-                          <div className="text-xs text-amber-800 dark:text-amber-200">
+                          <div className="text-xs text-amber-800">
                             <strong>Security Notice:</strong> Always verify file hashes before installation. Never run executables from untrusted sources.
                           </div>
                         </div>
@@ -335,7 +335,7 @@ export default function Download() {
                     <strong>Installation:</strong> Open the .dmg file and drag Solun to your Applications folder.
                     First launch: right-click → Open to bypass Gatekeeper if needed.
                   </div>
-                  <div className="text-xs text-amber-600 dark:text-amber-400 mt-2">
+                  <div className="text-xs text-amber-600 mt-2">
                     <strong>Tip:</strong> Check "About This Mac" → "Overview" tab to see your chip type.
                   </div>
                 </div>
@@ -354,9 +354,9 @@ export default function Download() {
           </div>
 
           {/* Security Footer */}
-          <div className="mt-12 p-6 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border">
+          <div className="mt-12 p-6 bg-white rounded-lg border">
             <div className="flex items-start gap-4">
-              <div className="p-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
                 <Shield className="h-6 w-6 text-phthalo" />
               </div>
               <div className="flex-1">
@@ -384,8 +384,8 @@ export default function Download() {
                       </ul>
                     </div>
                   </div>
-                  <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded">
-                    <p className="text-xs text-amber-800 dark:text-amber-200">
+                  <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded">
+                    <p className="text-xs text-amber-800">
                       <strong>Important:</strong> Only download Solun from this official website.
                       Third-party sources may distribute modified or malicious versions.
                     </p>

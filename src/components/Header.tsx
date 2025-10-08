@@ -2,6 +2,7 @@ import { FileDown, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 import { Button } from "./ui/button";
+import { GradientButton } from "./ui/gradient-button";
 import { analytics } from "@/lib/analytics";
 
 const navigation = [
@@ -15,12 +16,12 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-40 bg-[var(--solun-cream)] border-b border-black/5 py-3.5" role="banner">
+    <header className="sticky top-0 z-50 py-3.5" role="banner" style={{ backgroundColor: 'transparent' }}>
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="Solun - Home">
-            <div className="h-8 w-8 rounded-lg bg-gradient-hero" aria-hidden="true" />
-            <span className="text-xl font-semibold tracking-tight">Solun</span>
+            <img src="/fevicon.ico" alt="Solun Logo" className="h-8 w-8" />
+            <span className="text-xl font-semibold tracking-tight typewriter">Solun</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6" role="navigation" aria-label="Main navigation">
@@ -28,7 +29,7 @@ export function Header() {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`text-sm font-medium transition-colors tracking-tight nav-link ${
+                className={`text-sm font-medium transition-colors tracking-tight nav-link typewriter ${
                   location.pathname === item.href
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -42,7 +43,7 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" className="typewriter" asChild>
             <Link
               to="/login"
               onClick={() => analytics.track({ name: 'cta_click', properties: { location: 'header', destination: 'login' } })}
@@ -51,15 +52,19 @@ export function Header() {
               Log in
             </Link>
           </Button>
-          <Button className="btn btn-primary" asChild>
+          <GradientButton
+            size="sm"
+            className="min-w-[100px] px-4 py-2 text-sm typewriter"
+            asChild
+          >
             <Link
               to="/download"
               onClick={() => analytics.track({ name: 'cta_click', properties: { location: 'header', destination: 'download' } })}
             >
-              <FileDown className="h-4 w-4" aria-hidden="true" />
+              <FileDown className="h-4 w-4 mr-2" aria-hidden="true" />
               Download
             </Link>
-          </Button>
+          </GradientButton>
         </div>
       </div>
     </header>

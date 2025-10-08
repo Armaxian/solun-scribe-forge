@@ -2,7 +2,6 @@ import { Suspense, lazy, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { usePostHog } from "posthog-js/react";
 
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -28,6 +27,155 @@ const Cookies = lazy(() => import("./routes/Cookies"));
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { PaperBackground } from "@/components/ui/PaperBackground";
+
+const LIGHT_BACKGROUND_COLOR = "#f5f2e8";
+const LIGHT_TEXT_COLOR = "#0C0C0C";
+const LIGHT_THEME_VARS: Record<string, string> = {
+  "--background": "0 0% 100%",
+  "--foreground": "0 0% 5%",
+  "--card": "0 0% 100%",
+  "--card-foreground": "0 0% 5%",
+  "--popover": "0 0% 100%",
+  "--popover-foreground": "0 0% 5%",
+  "--muted": "0 0% 95%",
+  "--muted-foreground": "0 0% 35%",
+  "--bg": "#FFFFFF",
+  "--ink": "#0C0C0C",
+};
+
+const THEME_ATTRS = ["data-theme", "data-mode", "data-color-mode"];
+
+const LightThemeGuard = () => {
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const root = document.documentElement;
+    const body = document.body;
+    if (!root || !body) return;
+
+    const enforce = () => {
+      // Check for DarkReader extension and block it
+      const hasDarkReader = root.hasAttribute('data-darkreader-mode') || 
+                           root.hasAttribute('data-darkreader-scheme') ||
+                           body.hasAttribute('data-darkreader-inline-bgcolor');
+      
+      if (hasDarkReader) {
+        // Remove all DarkReader attributes
+        const darkReaderAttrs = [
+          'data-darkreader-mode', 'data-darkreader-scheme', 'data-darkreader-proxy-injected',
+          'data-darkreader-inline-bgcolor', 'data-darkreader-inline-color'
+        ];
+        darkReaderAttrs.forEach(attr => {
+          root.removeAttribute(attr);
+          body.removeAttribute(attr);
+        });
+        
+        // Remove DarkReader CSS variables
+        const darkReaderVars = [
+          '--darkreader-inline-bgcolor', '--darkreader-inline-color',
+          '--darkreader-bg--background', '--darkreader-bg--foreground',
+          '--darkreader-text--foreground', '--darkreader-bg--card',
+          '--darkreader-text--card-foreground', '--darkreader-bg--muted',
+          '--darkreader-text--muted', '--darkreader-border--muted',
+          '--darkreader-text--muted-foreground'
+        ];
+        darkReaderVars.forEach(varName => {
+          root.style.removeProperty(varName);
+          body.style.removeProperty(varName);
+        });
+      }
+
+      [root, body].forEach((node) => {
+        node.classList.remove("dark");
+        THEME_ATTRS.forEach((attr) => {
+          const value = node.getAttribute(attr);
+          if (value && value.toLowerCase() === "dark") {
+            node.setAttribute(attr, "light");
+          }
+        });
+      });
+
+      Object.entries(LIGHT_THEME_VARS).forEach(([token, value]) => {
+        root.style.setProperty(token, value);
+      });
+
+      root.style.colorScheme = "light";
+      root.style.backgroundColor = LIGHT_BACKGROUND_COLOR;
+      root.style.color = LIGHT_TEXT_COLOR;
+      body.style.backgroundColor = LIGHT_BACKGROUND_COLOR;
+      body.style.color = LIGHT_TEXT_COLOR;
+    };
+
+    enforce();
+
+    const observer = new MutationObserver(enforce);
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ["class", ...THEME_ATTRS, "data-darkreader-mode", "data-darkreader-scheme", "data-darkreader-proxy-injected", "data-darkreader-inline-bgcolor", "data-darkreader-inline-color"],
+    });
+    observer.observe(body, {
+      attributes: true,
+      attributeFilter: ["class", ...THEME_ATTRS, "data-darkreader-mode", "data-darkreader-scheme", "data-darkreader-proxy-injected", "data-darkreader-inline-bgcolor", "data-darkreader-inline-color"],
+    });
+
+    const schemeWatcher = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSchemeChange = () => enforce();
+    schemeWatcher.addEventListener("change", handleSchemeChange);
+
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        enforce();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    // Aggressive DarkReader blocking - run every 100ms
+    const darkReaderBlocker = setInterval(() => {
+      const hasDarkReader = root.hasAttribute('data-darkreader-mode') || 
+                           root.hasAttribute('data-darkreader-scheme') ||
+                           body.hasAttribute('data-darkreader-inline-bgcolor');
+      if (hasDarkReader) {
+        const darkReaderAttrs = [
+          'data-darkreader-mode', 'data-darkreader-scheme', 'data-darkreader-proxy-injected',
+          'data-darkreader-inline-bgcolor', 'data-darkreader-inline-color'
+        ];
+        darkReaderAttrs.forEach(attr => {
+          root.removeAttribute(attr);
+          body.removeAttribute(attr);
+        });
+        
+        const darkReaderVars = [
+          '--darkreader-inline-bgcolor', '--darkreader-inline-color',
+          '--darkreader-bg--background', '--darkreader-bg--foreground',
+          '--darkreader-text--foreground', '--darkreader-bg--card',
+          '--darkreader-text--card-foreground', '--darkreader-bg--muted',
+          '--darkreader-text--muted', '--darkreader-border--muted',
+          '--darkreader-text--muted-foreground'
+        ];
+        darkReaderVars.forEach(varName => {
+          root.style.removeProperty(varName);
+          body.style.removeProperty(varName);
+        });
+        
+        // Force light theme again
+        root.style.setProperty('background-color', '#FFFFFF', 'important');
+        root.style.setProperty('color', '#0C0C0C', 'important');
+        body.style.setProperty('background-color', '#FFFFFF', 'important');
+        body.style.setProperty('color', '#0C0C0C', 'important');
+      }
+    }, 100);
+
+    return () => {
+      observer.disconnect();
+      schemeWatcher.removeEventListener("change", handleSchemeChange);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      clearInterval(darkReaderBlocker);
+    };
+  }, []);
+
+  return null;
+};
 
 const queryClient = new QueryClient();
 
@@ -42,18 +190,16 @@ const LoadingFallback = () => (
 );
 
 const AppContent = () => {
-  const posthog = usePostHog();
-
-  useEffect(() => {
-    // Connect PostHog instance to our analytics singleton
-    if (posthog) {
-      analytics.setPostHogInstance(posthog);
-    }
-  }, [posthog]);
-
   return (
-    <BrowserRouter>
-      <div className="flex min-h-screen flex-col selection:bg-[#1E7F5C]/20">
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}
+    >
+      <LightThemeGuard />
+      <PaperBackground />
+      <div className="flex min-h-screen flex-col text-[#0C0C0C] selection:bg-[#1E7F5C]/20">
         <Header />
         <main className="flex-1" role="main">
           <Suspense fallback={<LoadingFallback />}>

@@ -1,11 +1,12 @@
 /* Solun Color Contract */
 :root {
-  --solun-cream: #f5f2e8;
-  --solun-green: #3b7253;
-  --ink-900: #0e1411;
+  --solun-cream: #f5f2e8;    /* paper */
+  --solun-ink:   #0e1411;    /* ink */
+  --solun-green: #3b7253;    /* brand */
 }
 
-html {
-  color-scheme: light;
+html, body {
+  background: var(--solun-cream);
+  color: var(--solun-ink);
 }
 

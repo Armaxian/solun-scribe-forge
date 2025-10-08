@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
-  darkMode: ["class"],
+  darkMode: ["class", "[data-theme='dark']"], // Disable dark mode - only light theme
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
@@ -15,7 +15,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        typewriter: ['Courier Prime', 'Courier', 'monospace'],
+        serif: ['Courier New', 'Courier', 'monospace'],
+        mono: ['Courier New', 'Courier', 'monospace'],
+        sans: ['Courier New', 'Courier', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",

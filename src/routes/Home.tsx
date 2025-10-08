@@ -1,16 +1,17 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Database, Sparkles, BookOpen, Shield, Layers, GitBranch } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import { GradientButton } from "@/components/ui/gradient-button";
+import { TypewriterText } from "@/components/ui/TypewriterText";
 import InkflowTitle from "@/components/Inkflow/InkflowTitle";
+import PrismDemo from "@/components/ui/prism-demo";
 import { analytics } from "@/lib/analytics";
 import { getDetailedPlatformInfo, getPlatformLabel, type Platform } from "@/lib/platform";
 import { useInView } from "@/hooks/useInView";
 
-// Lazy load HeroCanvas to defer Three.js loading
-const HeroCanvas = lazy(() => import("@/components/HeroCanvas").then(module => ({ default: module.HeroCanvas })));
 
 
 const features = [
@@ -49,6 +50,7 @@ const features = [
 export default function Home() {
   const [detectedPlatform, setDetectedPlatform] = useState<Platform>('unknown');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
   const { ref: titleRef, inView } = useInView<HTMLDivElement>("100px");
 
   useEffect(() => {
@@ -159,62 +161,57 @@ export default function Home() {
           })}
         </script>
       </Helmet>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col relative">
+      
       {/* Hero Section */}
-      <section className="relative overflow-hidden space-section" aria-labelledby="hero-heading">
-        <Suspense fallback={null}>
-          <HeroCanvas />
-        </Suspense>
-        <div className="absolute inset-0 -z-10 pointer-events-none">
-          <div className="mx-auto h-[56vh] max-w-5xl bg-[radial-gradient(60%_50%_at_50%_35%,rgba(11,61,46,0.10),transparent_60%)]" />
+      <section className="relative overflow-hidden" style={{ paddingBlock: 'var(--space-hero)' }} aria-labelledby="hero-heading">
+        {/* Prism Background */}
+        <div className="absolute inset-0 z-0">
+          <PrismDemo />
         </div>
+        
+        {/* Typewriter Heading Over Prism */}
         <div className="container relative z-10">
-          <div className="mx-auto max-w-3xl text-center space-y-8">
-            <div ref={titleRef} className="w-full">
-              <InkflowTitle className="w-full" text="Write worlds." paused={!inView} />
-            </div>
-            <div className="relative">
-              <div className="mt-7 inline-flex items-stretch rounded-2xl shadow-sm border border-black/10 overflow-hidden">
-                <button
-                  className="inline-flex items-center justify-center gap-2 rounded-none px-5 py-3 text-sm font-medium transition-all duration-300 bg-gradient-to-br from-phthalo to-olive text-cream shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phthalo"
+          <div className="flex flex-col items-center justify-center text-center min-h-[600px]">
+            <div className="space-y-8 animate-fade-in">
+              <div ref={titleRef} className="w-full">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
+                  <TypewriterText 
+                    text={["Write worlds.", "Write stories.", "Write ideas.", "Write dreams.", "Write tales.", "Write narratives."]}
+                    speed={120}
+                    delay={800}
+                    className="typewriter-subtle"
+                    onComplete={() => setIsTypingComplete(true)}
+                    loop={true}
+                    pauseTime={3000}
+                  />
+                </h1>
+              </div>
+              <div className={`flex flex-col items-center gap-4 transition-all duration-1000 ${isTypingComplete ? 'opacity-100 transform translate-y-0' : 'opacity-60 transform translate-y-2'}`}>
+                <GradientButton
+                  className="relative z-10 typewriter"
                   onClick={() => handleDownload()}
                 >
                   Download for {detectedLabel}
-                </button>
-                <button
-                  className="px-3 py-3 bg-white hover:bg-black/5"
-                  aria-label="Choose platform"
-                  onClick={toggleDropdown}
-                >
-                  ▾
-                </button>
-              </div>
-
-              {isDropdownOpen && (
-                <div className="absolute top-full mt-2 w-full min-w-[200px] bg-white border border-black/10 rounded-2xl shadow-lg z-10">
-                  {platformOptions.map((option) => (
-                    <button
-                      key={option.platform}
-                      className={`w-full text-left px-4 py-3 hover:bg-black/5 transition-colors ${
-                        option.platform === detectedPlatform ? 'bg-black/5 font-medium' : ''
-                      }`}
-                      onClick={() => {
-                        handleDownload(option.platform);
-                        setIsDropdownOpen(false);
-                      }}
-                    >
-                      {option.label}
-                      {option.platform === detectedPlatform && (
-                        <span className="ml-2 text-xs text-black/60">(Detected)</span>
-                      )}
-                    </button>
-                  ))}
+                </GradientButton>
+                <div className="flex flex-wrap items-center justify-center gap-1 text-sm text-muted-foreground typewriter">
+                  <span>Also available for</span>
+                  {platformOptions
+                    .filter(opt => opt.platform !== detectedPlatform)
+                    .map((opt, i, arr) => (
+                      <span key={opt.platform} className="inline-flex items-center">
+                        <button
+                          onClick={() => handleDownload(opt.platform)}
+                          className="underline hover:text-[#0B3D2E] transition-colors font-medium typewriter"
+                        >
+                          {opt.label}
+                        </button>
+                        {i < arr.length - 1 && <span className="mx-1">{i === arr.length - 2 ? ' and' : ','}</span>}
+                      </span>
+                    ))}
                 </div>
-              )}
+              </div>
             </div>
-            <p className="mt-2 text-sm text-black/70">
-              Available for Windows, macOS, and Linux
-            </p>
           </div>
         </div>
       </section>
@@ -222,23 +219,26 @@ export default function Home() {
       <hr className="mx-auto max-w-5xl border-t border-black/10 my-10" />
 
       {/* Features Grid */}
-      <section className="space-section" aria-labelledby="features-heading">
+      <section style={{ paddingBlock: 'var(--space-section)' }} aria-labelledby="features-heading">
         <div className="container">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 id="features-heading" className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
+          <div className="mx-auto max-w-2xl text-center mb-12 flex flex-col items-center">
+            <h2 id="features-heading" className="text-3xl md:text-4xl font-semibold tracking-[-0.01em] text-foreground mb-6 typewriter">
               Everything you need to craft coherent stories
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Powerful tools that work together seamlessly
-            </p>
+            <div className="h-px w-12 bg-[#0B3D2E]/30 mb-8" />
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => (
-              <div key={feature.title} className="card bg-white/80 dark:bg-[#0D0F0E] border border-black/10 dark:border-white/10 group hover:shadow-medium hover:border-phthalo/20 hover:-translate-y-1 transition-all duration-300 p-6 rounded-2xl">
-                <feature.icon className="h-10 w-10 mb-4 stroke-[#0B3D2E] dark:stroke-white/90 transition-colors group-hover:stroke-olive" aria-hidden="true" />
-                <h3 className="text-xl font-semibold mb-2 text-cream dark:text-cream">{feature.title}</h3>
-                <p className="text-cream/70 dark:text-cream/70 leading-relaxed" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{feature.description}</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={feature.title}
+                className={`group sticker-card opacity-0 animate-fade-in stagger-${index + 1}`}
+              >
+                <div className="size-12 rounded-xl bg-gradient-to-br from-[#0B3D2E]/15 to-[#0B3D2E]/20 flex items-center justify-center text-[#0B3D2E] group-hover:from-[#0B3D2E]/20 group-hover:to-[#0B3D2E]/25 transition-all duration-300 mb-4 shadow-sm">
+                  <feature.icon className="w-6 h-6" aria-hidden="true" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#0B3D2E] mb-2 typewriter">{feature.title}</h3>
+                <p className="text-sm text-[#0B3D2E]/75 leading-relaxed typewriter">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -246,53 +246,48 @@ export default function Home() {
       </section>
 
       {/* Visual Preview */}
-      <section className="section" aria-label="Product preview">
+      <section style={{ paddingBlock: 'var(--space-section)' }} aria-label="Product preview">
         <div className="container">
           <div className="mx-auto max-w-4xl">
-            <div className="card-hover overflow-hidden">
-              <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                <p className="text-muted-foreground">Product Screenshot Placeholder</p>
+            <div className="rounded-2xl overflow-hidden border border-border/50 bg-card shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="aspect-video bg-muted flex items-center justify-center">
+                <p className="text-muted-foreground font-medium typewriter">Product Screenshot Placeholder</p>
               </div>
             </div>
-            <p className="text-center mt-6 text-sm text-muted-foreground">
+            <p className="text-center mt-6 text-sm text-muted-foreground typewriter">
               Clean, minimal interface that lets you focus on what matters: your story
             </p>
           </div>
         </div>
       </section>
 
-      {/* Security & Privacy */}
-      <section className="section-tight" aria-labelledby="security-heading">
-        <div className="container">
-          <div className="card-hover max-w-4xl mx-auto text-center">
-            <Shield className="h-12 w-12 mx-auto mb-4 text-success" aria-hidden="true" />
-            <h2 id="security-heading" className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
-              Your data, your device
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Solun runs entirely on your machine. SQLite database with vector extension for blazing-fast
-              search, encrypted at rest. No cloud dependency, no data mining.
-            </p>
-          </div>
-        </div>
-      </section>
+
 
       {/* Final CTA */}
-      <section className="section border-t border-border/50" aria-labelledby="cta-heading">
-        <div className="container text-center space-y-6">
-          <h2 id="cta-heading" className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
+      <section style={{ paddingBlock: 'var(--space-section)' }} className="border-t border-border/40" aria-labelledby="cta-heading">
+        <div className="container text-center space-y-8 flex flex-col items-center">
+          <h2 id="cta-heading" className="text-3xl md:text-4xl font-semibold tracking-[-0.01em] text-foreground mb-6 typewriter">
             Start writing today
           </h2>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+          <div className="h-px w-12 bg-[#0B3D2E]/30 mb-8" />
+          <p className="text-lg text-muted-foreground max-w-xl typewriter">
             Join writers crafting immersive worlds with confidence
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="btn-hero" asChild>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <GradientButton
+              asChild
+              className="typewriter"
+            >
               <Link to="/download">
                 Download for Free
               </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="btn-ghost" asChild>
+            </GradientButton>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-2 border-[#0B3D2E] text-[#0B3D2E] hover:bg-[#0B3D2E]/5 px-8 py-4 text-lg font-semibold rounded-xl typewriter"
+              asChild
+            >
               <Link to="/login">
                 Log In
               </Link>

@@ -103,16 +103,16 @@ export function PlatformDetect({
         </div>
 
         {guidance && (
-          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
               <strong>Note:</strong> {guidance}
             </p>
           </div>
         )}
 
         {isMac && platformInfo.platform === 'mac-arm' && (
-          <div className="p-3 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
-            <p className="text-sm text-green-800 dark:text-green-200">
+          <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-sm text-green-800">
               <strong>Apple Silicon detected:</strong> This installer is optimized for M1/M2/M3 Macs and will run natively for best performance.
             </p>
           </div>
