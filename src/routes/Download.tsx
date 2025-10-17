@@ -14,21 +14,13 @@ const installers = {
   windows: [
     {
       type: ".exe",
-      size: "~85 MB",
-      sha256: "a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890",
+      size: "~192 MB",
+      sha256: "sha256:410bea8874a627e57251b28d97ca97e84d9d165aaf4e200b6d74f1385b490f51",
       recommended: true,
       signature: "Code signed by Solun Technologies Pty Ltd",
-      description: "Standard installer with auto-updater"
-    },
-    {
-      type: ".msi",
-      size: "~82 MB",
-      sha256: "b2c3d4e5f6789012345678901234567890123456789012345678901234567890a1",
-      recommended: false,
-      signature: "Code signed by Solun Technologies Pty Ltd",
-      description: "Enterprise deployment package"
-    },
-  ],
+      description: "Standard installer with auto-updater",
+      downloadUrl: "https://github.com/Armaxian/Solun/releases/latest/download/win-unpacked.zip"
+}],
   'mac-intel': [
     {
       type: ".dmg",
@@ -36,7 +28,8 @@ const installers = {
       sha256: "c3d4e5f6789012345678901234567890123456789012345678901234567890a1b2",
       recommended: true,
       signature: "Developer ID signed and notarized by Apple",
-      description: "Optimized for Intel-based Macs"
+      description: "Optimized for Intel-based Macs",
+      downloadUrl: undefined
     },
   ],
   'mac-arm': [
@@ -46,7 +39,8 @@ const installers = {
       sha256: "d4e5f6789012345678901234567890123456789012345678901234567890a1b2c3",
       recommended: true,
       signature: "Developer ID signed and notarized by Apple",
-      description: "Native Apple Silicon performance"
+      description: "Native Apple Silicon performance",
+      downloadUrl: undefined
     },
   ],
   linux: [
@@ -56,7 +50,8 @@ const installers = {
       sha256: "e5f6789012345678901234567890123456789012345678901234567890a1b2c3d4",
       recommended: true,
       signature: "GPG signed",
-      description: "Universal Linux package"
+      description: "Universal Linux package",
+      downloadUrl: undefined
     },
     {
       type: ".deb",
@@ -64,7 +59,8 @@ const installers = {
       sha256: "f6789012345678901234567890123456789012345678901234567890a1b2c3d4e5",
       recommended: false,
       signature: "GPG signed",
-      description: "Debian/Ubuntu package"
+      description: "Debian/Ubuntu package",
+      downloadUrl: undefined
     },
   ],
 };
@@ -153,14 +149,19 @@ export default function Download() {
                     </div>
                     <Button
                       className="btn btn-primary ml-4"
-                      onClick={() => analytics.track({
-                        name: 'download_click',
-                        properties: {
-                          platform: installer.type,
-                          recommended: installer.recommended,
-                          location: 'recommended_downloads'
+                      onClick={() => {
+                        analytics.track({
+                          name: 'download_click',
+                          properties: {
+                            platform: installer.type,
+                            recommended: installer.recommended,
+                            location: 'recommended_downloads'
+                          }
+                        });
+                        if (installer.downloadUrl) {
+                          window.open(installer.downloadUrl, '_blank', 'noopener,noreferrer');
                         }
-                      })}
+                      }}
                     >
                       <DownloadIcon className="h-4 w-4" />
                       Download
@@ -262,14 +263,19 @@ export default function Download() {
                             size="sm"
                             variant="outline"
                             className="btn btn-ghost ml-4"
-                            onClick={() => analytics.track({
-                              name: 'download_click',
-                              properties: {
-                                platform: installer.type,
-                                recommended: installer.recommended,
-                                location: 'all_platforms'
+                            onClick={() => {
+                              analytics.track({
+                                name: 'download_click',
+                                properties: {
+                                  platform: installer.type,
+                                  recommended: installer.recommended,
+                                  location: 'all_platforms'
+                                }
+                              });
+                              if (installer.downloadUrl) {
+                                window.open(installer.downloadUrl, '_blank', 'noopener,noreferrer');
                               }
-                            })}
+                            }}
                           >
                             <DownloadIcon className="h-3 w-3" />
                             Download

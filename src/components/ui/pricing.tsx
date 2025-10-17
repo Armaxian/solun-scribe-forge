@@ -68,17 +68,19 @@ export function Pricing({
   };
 
   return (
-    <div className="container py-20">
-      <div className="text-center space-y-4 mb-12">
-        <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          {title}
-        </h2>
-        <p className="text-muted-foreground text-lg whitespace-pre-line">
-          {description}
-        </p>
-      </div>
+    <div className="container py-8">
+      {title && (
+        <div className="text-center space-y-4 mb-8">
+          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            {title}
+          </h2>
+          <p className="text-muted-foreground text-lg whitespace-pre-line">
+            {description}
+          </p>
+        </div>
+      )}
 
-      <div className="flex justify-center mb-10">
+      <div className="flex justify-center mb-6">
         <label className="relative inline-flex items-center cursor-pointer">
           <Label>
             <Switch
@@ -129,7 +131,6 @@ export function Pricing({
               index === 0 && "origin-right",
               index === 2 && "origin-left"
             )}
-          |
           >
             {plan.isPopular && (
               <div className="absolute top-0 right-0 bg-primary py-0.5 px-2 rounded-bl-xl rounded-tr-xl flex items-center">

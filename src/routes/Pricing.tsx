@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet-async";
 import { Check, X, Star, Users, Crown, Sparkles, ChevronRight, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Pricing as PricingBlock } from "@/components/ui/pricing";
-import { PaperBackground } from "@/components/ui/PaperBackground";
 
 import { analytics } from "@/lib/analytics";
 
@@ -154,7 +153,7 @@ export default function Pricing() {
 
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section className="section">
+        <section className="py-8 md:py-12 lg:py-16">
           <div className="container mx-auto px-4">
             <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
@@ -171,16 +170,14 @@ export default function Pricing() {
           </div>
         </section>
 
-        {/* Pricing Cards (replaced with unified Pricing block) */}
+        {/* Pricing Cards */}
         <section className="section-tight">
           <div className="container">
-            <PaperBackground className="rounded-xl">
-              <PricingBlock
-                plans={pricingPlans}
-                title="Simple, Transparent Pricing"
-                description={"Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support."}
-              />
-            </PaperBackground>
+            <PricingBlock
+              plans={pricingPlans}
+              title=""
+              description=""
+            />
           </div>
         </section>
 
