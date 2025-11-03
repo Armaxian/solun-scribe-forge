@@ -1,0 +1,27 @@
+/**
+ * Centralized query keys for React Query
+ * This ensures consistent cache invalidation and prevents key mismatches
+ */
+
+export const queryKeys = {
+  // Profile queries
+  profile: {
+    all: ['profile'] as const,
+    detail: (userId: string) => ['profile', userId] as const,
+  },
+  
+  // License queries
+  license: {
+    all: ['license'] as const,
+    entitlements: (userId: string) => ['license', 'entitlements', userId] as const,
+  },
+  
+  // Download/release queries
+  downloads: {
+    all: ['downloads'] as const,
+    releases: ['downloads', 'releases'] as const,
+  },
+  
+  // Newsletter (no queries, only mutations)
+} as const;
+

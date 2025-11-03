@@ -11,9 +11,21 @@ export default {
       padding: "1.5rem",
       screens: {
         "2xl": "1400px",
+        "3xl": "1680px",
+        "4xl": "1920px",
       },
     },
     extend: {
+      screens: {
+        '3xl': '1920px',  // Ultra-wide screens (4K and large monitors)
+      },
+      maxWidth: {
+        '7xl': '80rem',   // 1280px
+        '8xl': '88rem',   // 1408px
+        '9xl': '96rem',   // 1536px
+        'prose-readable': '65ch', // Optimal reading width
+        'prose-comfortable': '75ch', // Slightly wider for comfort
+      },
       fontFamily: {
         typewriter: ['Courier Prime', 'Courier', 'monospace'],
         serif: ['Courier New', 'Courier', 'monospace'],

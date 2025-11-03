@@ -22,6 +22,20 @@
 [[headers]]
   for = "/*"
   [headers.values]
+    # Content Security Policy - strict policy allowing only required origins
+    # Note: For Supabase, CSP doesn't support wildcard subdomains reliably. 
+    # Replace 'your-project.supabase.co' below with your actual Supabase project URL, or 
+    # use 'https:' (less secure but compatible) to allow all HTTPS connections for Supabase.
+    # For production, specify your exact Supabase domain: https://your-project-id.supabase.co
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://*.supabase.com https://us.i.posthog.com https://eu.i.posthog.com https://app.posthog.com https://cdn.spline.design https://spline.design; frame-src 'self' https://*.supabase.co https://*.supabase.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
+    
+    # HTTP Strict Transport Security - force HTTPS with 1 year max-age, include subdomains, and preload
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    
+    # Permissions Policy - deny sensitive features by default
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+    
+    # Existing security headers
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"

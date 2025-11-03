@@ -190,11 +190,19 @@ export default function Home() {
         <meta property="og:description" content="Write worlds. Keep them true. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/" />
+        <meta property="og:site_name" content="Solun" />
         <meta property="og:image" content="https://solun.app/og-image-home.png" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Solun - Premium AI Writing Workspace for World-Builders" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@solun_app" />
+        <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content="Solun - Premium AI Writing Workspace for World-Builders" />
         <meta name="twitter:description" content="Write worlds. Keep them true. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
         <meta name="twitter:image" content="https://solun.app/og-image-home.png" />
+        <meta name="twitter:image:alt" content="Solun - Premium AI Writing Workspace for World-Builders" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -253,7 +261,7 @@ export default function Home() {
         </div>
         
         {/* Typewriter Heading Over Prism */}
-        <div className="container relative z-10">
+        <div className="container max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl relative z-10">
           <div className="flex flex-col items-center justify-center text-center min-h-[600px]">
             <div className="space-y-8 animate-fade-in">
               <div ref={titleRef} className="w-full">
@@ -284,7 +292,7 @@ export default function Home() {
                       <span key={opt.platform} className="inline-flex items-center">
                         <button
                           onClick={() => handleDownload(opt.platform)}
-                          className="underline hover:text-[#0B3D2E] transition-colors font-medium typewriter"
+                          className="underline hover:text-[#0B3D2E] transition-colors font-medium typewriter py-1 px-2 min-h-[44px] inline-flex items-center"
                         >
                           {opt.label}
                         </button>
@@ -298,12 +306,12 @@ export default function Home() {
         </div>
       </section>
 
-      <hr className="mx-auto max-w-5xl border-t border-black/10 my-10" />
+      <hr className="mx-auto max-w-5xl xl:max-w-6xl 2xl:max-w-7xl border-t border-black/10 my-10" />
 
       {/* Features Page Content injected under hero */}
       {/* Features Grid (detailed) */}
       <section className="section-tight">
-        <div className="container">
+        <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
           <div className="space-y-20">
             {featuresDetailed.map((feature, index) => (
               <div
@@ -317,7 +325,7 @@ export default function Home() {
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="p-3 rounded-xl bg-phthalo/10">
-                        <feature.icon className="h-8 w-8 text-phthalo" />
+                        <feature.icon className="h-8 w-8 text-phthalo" aria-hidden="true" />
                       </div>
                       <div>
                         <h2 className="text-2xl md:text-3xl font-bold">{feature.title}</h2>
@@ -335,7 +343,7 @@ export default function Home() {
                       <ul className="space-y-3">
                         {(feature as any).details.map((detail: string, detailIndex: number) => (
                           <li key={detailIndex} className="flex items-start gap-3">
-                            <ChevronRight className="h-5 w-5 text-phthalo mt-0.5 flex-shrink-0" />
+                            <ChevronRight className="h-5 w-5 text-phthalo mt-0.5 flex-shrink-0" aria-hidden="true" />
                             <span className="text-muted-foreground">{detail}</span>
                           </li>
                         ))}
@@ -357,7 +365,7 @@ export default function Home() {
                     ) : (
                       <div className="aspect-video bg-gradient-subtle rounded-lg flex items-center justify-center">
                         <div className="text-center space-y-4">
-                          <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" />
+                          <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" aria-hidden="true" />
                           <p className="text-muted-foreground font-medium">
                             {feature.illustration.replace('-', ' ').toUpperCase()}
                           </p>
@@ -377,8 +385,8 @@ export default function Home() {
 
       {/* Feature Comparison */}
       <section className="section bg-gradient-subtle">
-        <div className="container">
-          <div className="mx-auto max-w-4xl">
+        <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+          <div className="mx-auto max-w-4xl xl:max-w-5xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Everything working together
@@ -390,7 +398,7 @@ export default function Home() {
 
             <div className="grid md:grid-cols-3 gap-6">
               <div className="card-hover text-center">
-                <BookOpen className="h-12 w-12 mx-auto mb-4 text-phthalo" />
+                <BookOpen className="h-12 w-12 mx-auto mb-4 text-phthalo" aria-hidden="true" />
                 <h3 className="text-xl font-semibold mb-2">Write</h3>
                 <p className="text-muted-foreground">
                   Distraction-free editor with pagination
@@ -398,7 +406,7 @@ export default function Home() {
               </div>
 
               <div className="card-hover text-center">
-                <Database className="h-12 w-12 mx-auto mb-4 text-olive" />
+                <Database className="h-12 w-12 mx-auto mb-4 text-olive" aria-hidden="true" />
                 <h3 className="text-xl font-semibold mb-2">Connect</h3>
                 <p className="text-muted-foreground">
                   Lore Vault links everything together
@@ -406,7 +414,7 @@ export default function Home() {
               </div>
 
               <div className="card-hover text-center">
-                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-phthalo" />
+                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-phthalo" aria-hidden="true" />
                 <h3 className="text-xl font-semibold mb-2">Explore</h3>
                 <p className="text-muted-foreground">
                   AI chat informed by your world
@@ -421,12 +429,12 @@ export default function Home() {
 
       {/* Final CTA */}
       <section style={{ paddingBlock: 'var(--space-section)' }} className="border-t border-border/40" aria-labelledby="cta-heading">
-        <div className="container text-center space-y-8 flex flex-col items-center">
+        <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl text-center space-y-8 flex flex-col items-center">
           <h2 id="cta-heading" className="text-3xl md:text-4xl font-semibold tracking-[-0.01em] text-foreground mb-6 typewriter">
             Start writing today
           </h2>
           <div className="h-px w-12 bg-[#0B3D2E]/30 mb-8" />
-          <p className="text-lg text-muted-foreground max-w-xl typewriter">
+          <p className="text-lg text-muted-foreground max-w-xl prose-reading-comfortable typewriter">
             Join writers crafting immersive worlds with confidence
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">

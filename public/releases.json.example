@@ -1,0 +1,16 @@
+{
+  "windows": [
+    {
+      "downloadUrl": "https://github.com/Armaxian/Solun/releases/latest/download/win-unpacked.zip",
+      "sha256": "410bea8874a627e57251b28d97ca97e84d9d165aaf4e200b6d74f1385b490f51",
+      "size": "~192 MB",
+      "recommended": true,
+      "signature": "Code signed by Solun Technologies Pty Ltd",
+      "description": "Standard installer with auto-updater"
+    }
+  ],
+  "mac-intel": [],
+  "mac-arm": [],
+  "linux": []
+}
+

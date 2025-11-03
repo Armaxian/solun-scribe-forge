@@ -147,7 +147,7 @@
     --accent-foreground: 0 0% 5%;
     
     --muted: 0 0% 95%;        /* Light gray */
-    --muted-foreground: 0 0% 35%;
+    --muted-foreground: 0 0% 45%; /* Improved contrast for WCAG AA compliance (45% vs 35%) */
 
     --popover: 0 0% 100% !important;     /* White popover */
     --popover-foreground: 0 0% 5% !important;
@@ -274,10 +274,10 @@
     gap: 0.5rem;
     border-radius: 14px;
     padding: 0.75rem 1rem;
+    min-height: 44px;
     font-weight: 600;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
     transition: transform 0.15s, opacity 0.15s;
-    min-height: 44px;
   }
 
   .btn:focus-visible {
@@ -381,6 +381,27 @@
 
   .container-narrow {
     max-width: 60rem;
+  }
+
+  /* Responsive container utilities for large screens */
+  .container-wide {
+    @apply container;
+    @apply max-w-5xl xl:max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl;
+  }
+
+  /* Reading-optimized width - stays consistent for text content */
+  .prose-reading {
+    max-width: 65ch;
+  }
+
+  .prose-reading-comfortable {
+    max-width: 75ch;
+  }
+
+  /* Ultra-wide layout with optional sidebar */
+  .layout-ultrawide {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl;
   }
   
   /* Animated underline */

@@ -135,7 +135,7 @@ export default function Features() {
       <div className="min-h-screen">
         {/* Hero Section */}
         <section className="section">
-          <div className="container mx-auto px-4">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4">
             <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 Powerful tools for
@@ -153,7 +153,7 @@ export default function Features() {
 
         {/* Features Grid */}
         <section className="section-tight">
-          <div className="container">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
             <div className="space-y-20">
               {features.map((feature, index) => (
                 <div
@@ -167,7 +167,7 @@ export default function Features() {
                     <div className="space-y-6">
                       <div className="flex items-center gap-3">
                         <div className="p-3 rounded-xl bg-phthalo/10">
-                          <feature.icon className="h-8 w-8 text-phthalo" />
+                          <feature.icon className="h-8 w-8 text-phthalo" aria-hidden="true" />
                         </div>
                         <div>
                           <h2 className="text-2xl md:text-3xl font-bold">{feature.title}</h2>
@@ -182,7 +182,7 @@ export default function Features() {
                       <ul className="space-y-3">
                         {feature.details.map((detail, detailIndex) => (
                           <li key={detailIndex} className="flex items-start gap-3">
-                            <ChevronRight className="h-5 w-5 text-phthalo mt-0.5 flex-shrink-0" />
+                            <ChevronRight className="h-5 w-5 text-phthalo mt-0.5 flex-shrink-0" aria-hidden="true" />
                             <span className="text-muted-foreground">{detail}</span>
                           </li>
                         ))}
@@ -203,7 +203,7 @@ export default function Features() {
                       ) : (
                         <div className="aspect-video bg-gradient-subtle rounded-lg flex items-center justify-center">
                           <div className="text-center space-y-4">
-                            <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" />
+                            <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" aria-hidden="true" />
                             <p className="text-muted-foreground font-medium">
                               {feature.illustration.replace('-', ' ').toUpperCase()}
                             </p>
@@ -223,8 +223,8 @@ export default function Features() {
 
         {/* Feature Comparison */}
         <section className="section bg-gradient-subtle">
-          <div className="container">
-            <div className="mx-auto max-w-4xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   Everything working together
@@ -236,23 +236,23 @@ export default function Features() {
 
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="card-hover text-center">
-                  <BookOpen className="h-12 w-12 mx-auto mb-4 text-phthalo" />
-                  <h3 className="text-xl font-semibold mb-2">Write</h3>
-                  <p className="text-muted-foreground">
-                    Distraction-free editor with pagination
-                  </p>
-                </div>
+                  <BookOpen className="h-12 w-12 mx-auto mb-4 text-phthalo" aria-hidden="true" />
+                <h3 className="text-xl font-semibold mb-2">Write</h3>
+                <p className="text-muted-foreground">
+                  Distraction-free editor with pagination
+                </p>
+              </div>
 
-                <div className="card-hover text-center">
-                  <Database className="h-12 w-12 mx-auto mb-4 text-olive" />
-                  <h3 className="text-xl font-semibold mb-2">Connect</h3>
-                  <p className="text-muted-foreground">
-                    Lore Vault links everything together
-                  </p>
-                </div>
+              <div className="card-hover text-center">
+                <Database className="h-12 w-12 mx-auto mb-4 text-olive" aria-hidden="true" />
+                <h3 className="text-xl font-semibold mb-2">Connect</h3>
+                <p className="text-muted-foreground">
+                  Lore Vault links everything together
+                </p>
+              </div>
 
-                <div className="card-hover text-center">
-                  <MessageSquare className="h-12 w-12 mx-auto mb-4 text-phthalo" />
+              <div className="card-hover text-center">
+                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-phthalo" aria-hidden="true" />
                   <h3 className="text-xl font-semibold mb-2">Explore</h3>
                   <p className="text-muted-foreground">
                     AI chat informed by your world
@@ -265,11 +265,11 @@ export default function Features() {
 
         {/* CTA Section */}
         <section className="section border-t border-border/50">
-          <div className="container text-center space-y-6">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl text-center space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold">
               Ready to start building worlds?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl prose-reading-comfortable mx-auto">
               Join writers who are creating immersive stories with confidence
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -278,7 +278,7 @@ export default function Features() {
                 className="btn btn-primary"
               >
                 Download Free
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 to="/pricing"

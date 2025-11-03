@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { OfflineBanner } from "./components/OfflineBanner";
 import { analytics } from "./lib/analytics";
 
 // Lazy load all route components for code splitting
@@ -177,7 +179,32 @@ const LightThemeGuard = () => {
   return null;
 };
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes - data is fresh for 5 min
+      gcTime: 1000 * 60 * 30, // 30 minutes (formerly cacheTime)
+      retry: (failureCount, error) => {
+        // Don't retry on 4xx errors (client errors)
+        if (error instanceof Error && 'status' in error) {
+          const status = (error as { status?: number }).status;
+          if (status && status >= 400 && status < 500) {
+            return false;
+          }
+        }
+        // Retry up to 3 times for other errors
+        return failureCount < 3;
+      },
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff: 1s, 2s, 4s, max 30s
+      refetchOnWindowFocus: false, // Don't refetch on window focus
+      refetchOnReconnect: true, // Do refetch when reconnecting
+    },
+    mutations: {
+      retry: 1, // Retry mutations once
+      retryDelay: 1000, // 1 second delay
+    },
+  },
+});
 
 // Loading fallback component for lazy-loaded routes
 const LoadingFallback = () => (
@@ -199,6 +226,7 @@ const AppContent = () => {
     >
       <LightThemeGuard />
       <PaperBackground />
+      <OfflineBanner />
       <div className="flex min-h-screen flex-col text-[#0C0C0C] selection:bg-[#1E7F5C]/20">
         <Header />
         <main className="flex-1" role="main">
@@ -233,15 +261,17 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <AppContent />
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
+  <ErrorBoundary isRoot>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AppContent />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  </ErrorBoundary>
 );
 
 export default App;

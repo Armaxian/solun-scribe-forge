@@ -154,7 +154,7 @@ export default function Pricing() {
       <div className="min-h-screen">
         {/* Hero Section */}
         <section className="py-8 md:py-12 lg:py-16">
-          <div className="container mx-auto px-4">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4">
             <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 Fair pricing for
@@ -172,7 +172,7 @@ export default function Pricing() {
 
         {/* Pricing Cards */}
         <section className="section-tight">
-          <div className="container">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
             <PricingBlock
               plans={pricingPlans}
               title=""
@@ -183,8 +183,8 @@ export default function Pricing() {
 
         {/* Feature Comparison Table */}
         <section className="section bg-gradient-subtle">
-          <div className="container">
-            <div className="mx-auto max-w-6xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   Compare all features
@@ -214,9 +214,9 @@ export default function Pricing() {
                           {plans.map((plan) => (
                             <td key={plan.name} className="text-center p-6">
                               {plan.features[index].included ? (
-                                <Check className="h-5 w-5 text-success mx-auto" />
+                                <Check className="h-5 w-5 text-success mx-auto" aria-hidden="true" />
                               ) : (
-                                <X className="h-5 w-5 text-muted-foreground mx-auto" />
+                                <X className="h-5 w-5 text-muted-foreground mx-auto" aria-hidden="true" />
                               )}
                             </td>
                           ))}
@@ -232,8 +232,8 @@ export default function Pricing() {
 
         {/* FAQ Section */}
         <section className="section-tight">
-          <div className="container">
-            <div className="mx-auto max-w-3xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-3xl prose-reading-comfortable">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
                 <p className="text-muted-foreground">
@@ -276,10 +276,10 @@ export default function Pricing() {
 
         {/* Desktop App Notice */}
         <section className="section border-t border-border/50 bg-muted/20">
-          <div className="container">
-            <div className="mx-auto max-w-4xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="card-hover text-center">
-                <Info className="h-12 w-12 mx-auto mb-4 text-info" />
+                <Info className="h-12 w-12 mx-auto mb-4 text-info" aria-hidden="true" />
                 <h3 className="text-xl font-semibold mb-3">Desktop App License</h3>
                 <p className="text-muted-foreground mb-4">
                   The Solun desktop application is available as a separate purchase. It includes all web features plus native performance optimizations and offline capabilities.
@@ -299,11 +299,11 @@ export default function Pricing() {
 
         {/* Final CTA */}
         <section className="section border-t border-border/50">
-          <div className="container text-center space-y-6">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl text-center space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold">
               Ready to start writing?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl prose-reading-comfortable mx-auto">
               Join thousands of writers who trust Solun with their creative process
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -312,7 +312,7 @@ export default function Pricing() {
                 className="btn btn-primary"
               >
                 Start Free Today
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 to="/features"

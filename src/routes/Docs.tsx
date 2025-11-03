@@ -142,7 +142,7 @@ export default function Docs() {
         {/* Hero Section */}
         <section className="section relative overflow-hidden">
           <Spotlight className="top-12 left-16" />
-          <div className="container mx-auto px-4">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4">
             <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 Documentation &
@@ -160,8 +160,8 @@ export default function Docs() {
 
         {/* Quick Start Guide */}
         <section className="section-tight">
-          <div className="container">
-            <div className="mx-auto max-w-4xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   Quick Start Guide
@@ -205,8 +205,8 @@ export default function Docs() {
 
         {/* Lore Vault Section */}
         <section className="section bg-gradient-subtle">
-          <div className="container">
-            <div className="mx-auto max-w-4xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   Connect Your Lore Vault
@@ -286,8 +286,8 @@ export default function Docs() {
 
         {/* Documentation Sections */}
         <section className="section-tight">
-          <div className="container">
-            <div className="mx-auto max-w-6xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   Complete Documentation
@@ -319,8 +319,8 @@ export default function Docs() {
 
         {/* Help & Support */}
         <section className="section border-t border-border/50 bg-muted/20">
-          <div className="container">
-            <div className="mx-auto max-w-4xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-4">Need Help?</h2>
                 <p className="text-muted-foreground">
@@ -368,11 +368,11 @@ export default function Docs() {
 
         {/* CTA Section */}
         <section className="section border-t border-border/50">
-          <div className="container text-center space-y-6">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl text-center space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold">
               Ready to start building worlds?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl prose-reading-comfortable mx-auto">
               Download Solun and begin your world-building journey today
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

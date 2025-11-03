@@ -2,6 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, User, ArrowRight, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Spotlight } from "@/components/ui/spotlight";
+import { useState, useCallback, useRef } from "react";
+import { useNewsletter } from "@/hooks/use-newsletter";
 
 const blogPosts = [
   {
@@ -13,7 +15,7 @@ const blogPosts = [
     readTime: "5 min read",
     category: "Features",
     featured: true,
-    image: "/placeholder.svg"
+    image: "/blog/introducing-lore-vault.svg"
   },
   {
     slug: "writing-with-ai-context",
@@ -24,7 +26,7 @@ const blogPosts = [
     readTime: "7 min read",
     category: "AI",
     featured: false,
-    image: "/placeholder.svg"
+    image: "/blog/writing-with-ai-context.svg"
   },
   {
     slug: "offline-first-architecture",
@@ -35,7 +37,7 @@ const blogPosts = [
     readTime: "6 min read",
     category: "Technology",
     featured: false,
-    image: "/placeholder.svg"
+    image: "/blog/offline-first-architecture.svg"
   },
   {
     slug: "continuity-engine-deep-dive",
@@ -46,7 +48,7 @@ const blogPosts = [
     readTime: "8 min read",
     category: "Features",
     featured: false,
-    image: "/placeholder.svg"
+    image: "/blog/continuity-engine-deep-dive.svg"
   },
   {
     slug: "version-control-for-writers",
@@ -57,7 +59,7 @@ const blogPosts = [
     readTime: "4 min read",
     category: "Workflow",
     featured: false,
-    image: "/placeholder.svg"
+    image: "/blog/version-control-for-writers.svg"
   },
   {
     slug: "olive-cream-theme-story",
@@ -68,13 +70,50 @@ const blogPosts = [
     readTime: "3 min read",
     category: "Design",
     featured: false,
-    image: "/placeholder.svg"
+    image: "/blog/olive-cream-theme-story.svg"
   }
 ];
 
 const categories = ["All", "Features", "AI", "Technology", "Workflow", "Design"];
 
 export default function Blog() {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const { subscribe, isSubmitting } = useNewsletter();
+  const submitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSubscribe = useCallback(() => {
+    if (!email.trim()) {
+      return; // Empty email - validation will be handled by the mutation
+    }
+
+    if (isSubmitting) {
+      return; // Prevent double submission
+    }
+
+    subscribe({ email, source: 'blog' });
+    setEmail("");
+  }, [email, subscribe, isSubmitting]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Clear any existing timeout
+    if (submitTimeoutRef.current) {
+      clearTimeout(submitTimeoutRef.current);
+    }
+
+    // Prevent double submission
+    if (isSubmitting) {
+      return;
+    }
+
+    // Debounce the submission
+    submitTimeoutRef.current = setTimeout(() => {
+      handleSubscribe();
+    }, 300);
+  };
+
   return (
     <>
       <Helmet>
@@ -85,18 +124,26 @@ export default function Blog() {
         <meta property="og:description" content="Stories and insights from the Solun team about world-building, AI-powered creativity, and writing workflows." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/blog" />
+        <meta property="og:site_name" content="Solun" />
         <meta property="og:image" content="https://solun.app/og-image-blog.png" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Solun Blog - World-Building & AI Writing Insights" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@solun_app" />
+        <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content="Solun Blog - World-Building & AI Writing Insights" />
         <meta name="twitter:description" content="Stories and insights from the Solun team about world-building, AI-powered creativity, and writing workflows." />
         <meta name="twitter:image" content="https://solun.app/og-image-blog.png" />
+        <meta name="twitter:image:alt" content="Solun Blog - World-Building & AI Writing Insights" />
       </Helmet>
 
       <div className="min-h-screen">
         {/* Hero Section */}
         <section className="section relative overflow-hidden">
           <Spotlight className="top-12 left-16" />
-          <div className="container mx-auto px-4">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4">
             <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 Stories &
@@ -114,12 +161,13 @@ export default function Blog() {
 
         {/* Category Filter */}
         <section className="section-tight border-b border-border/50">
-          <div className="container">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
             <div className="flex flex-wrap justify-center gap-2">
               {categories.map((category) => (
                 <button
                   key={category}
                   className="px-4 py-2 rounded-full text-sm font-medium bg-muted hover:bg-muted/80 transition-colors"
+                  aria-label={`Filter posts by ${category} category`}
                 >
                   {category}
                 </button>
@@ -131,11 +179,11 @@ export default function Blog() {
         {/* Featured Post */}
         {blogPosts.find(post => post.featured) && (
           <section className="section-tight">
-            <div className="container">
-              <div className="mx-auto max-w-4xl">
+            <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+              <div className="mx-auto max-w-4xl xl:max-w-5xl">
                 <div className="text-center mb-8">
                   <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-phthalo/10 text-phthalo text-sm font-medium">
-                    <Tag className="h-3 w-3" />
+                    <Tag className="h-3 w-3" aria-hidden="true" />
                     Featured
                   </span>
                 </div>
@@ -145,21 +193,24 @@ export default function Blog() {
                   return (
                     <Link to={`/blog/${featuredPost.slug}`} className="block">
                       <div className="card-hover overflow-hidden">
-                        <div className="aspect-video bg-gradient-subtle flex items-center justify-center mb-6">
-                          <div className="text-center space-y-4">
-                            <Calendar className="h-12 w-12 text-phthalo/40 mx-auto" />
-                            <p className="text-muted-foreground font-medium">Featured Post Image</p>
-                          </div>
+                        <div className="aspect-video bg-gradient-subtle mb-6 rounded-lg overflow-hidden">
+                          <img
+                            src={featuredPost.image}
+                            alt={featuredPost.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                            decoding="async"
+                          />
                         </div>
 
                         <div className="space-y-4">
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <span className="flex items-center gap-1">
-                              <User className="h-4 w-4" />
+                              <User className="h-4 w-4" aria-hidden="true" />
                               {featuredPost.author}
                             </span>
                             <span className="flex items-center gap-1">
-                              <Calendar className="h-4 w-4" />
+                              <Calendar className="h-4 w-4" aria-hidden="true" />
                               {new Date(featuredPost.date).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
@@ -167,7 +218,7 @@ export default function Blog() {
                               })}
                             </span>
                             <span className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
+                              <Clock className="h-4 w-4" aria-hidden="true" />
                               {featuredPost.readTime}
                             </span>
                           </div>
@@ -182,7 +233,7 @@ export default function Blog() {
 
                           <div className="flex items-center gap-2 text-phthalo font-medium">
                             Read more
-                            <ArrowRight className="h-4 w-4" />
+                            <ArrowRight className="h-4 w-4" aria-hidden="true" />
                           </div>
                         </div>
                       </div>
@@ -196,16 +247,19 @@ export default function Blog() {
 
         {/* Blog Posts Grid */}
         <section className="section-tight">
-          <div className="container">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6">
               {blogPosts.filter(post => !post.featured).map((post) => (
                 <Link key={post.slug} to={`/blog/${post.slug}`} className="block h-full">
                   <div className="card-hover h-full">
-                    <div className="aspect-video bg-gradient-subtle rounded-lg mb-4 flex items-center justify-center">
-                      <div className="text-center space-y-2">
-                        <Calendar className="h-8 w-8 text-phthalo/40 mx-auto" />
-                        <p className="text-xs text-muted-foreground">Post Image</p>
-                      </div>
+                    <div className="aspect-video bg-gradient-subtle rounded-lg mb-4 overflow-hidden">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
 
                     <div className="space-y-3 flex-1">
@@ -240,8 +294,8 @@ export default function Blog() {
 
         {/* Newsletter Signup */}
         <section className="section bg-gradient-subtle">
-          <div className="container">
-            <div className="mx-auto max-w-2xl text-center space-y-6">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-2xl prose-reading-comfortable text-center space-y-6">
               <div className="space-y-4">
                 <h2 className="text-2xl md:text-3xl font-bold">
                   Stay in the loop
@@ -251,16 +305,41 @@ export default function Blog() {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 rounded-xl border border-border bg-card text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-phthalo"
-                />
-                <button className="btn btn-primary whitespace-nowrap">
-                  Subscribe
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-md mx-auto">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      // Clear error when user starts typing
+                      if (emailError) setEmailError(null);
+                    }}
+                    disabled={isSubmitting}
+                    className={`flex-1 px-4 py-3 rounded-xl border bg-card text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-phthalo disabled:opacity-50 disabled:cursor-not-allowed ${
+                      emailError ? "border-destructive" : "border-border"
+                    }`}
+                    aria-label="Email address for newsletter subscription"
+                    aria-invalid={!!emailError}
+                    aria-describedby={emailError ? "blog-email-error" : undefined}
+                    required
+                  />
+                <button 
+                  type="submit"
+                  className="btn btn-primary whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isSubmitting}
+                  aria-label="Subscribe to newsletter"
+                >
+                  {isSubmitting ? "Subscribing..." : "Subscribe"}
                 </button>
-              </div>
+                </div>
+                {emailError && (
+                  <p id="blog-email-error" className="text-sm font-medium text-destructive">
+                    {emailError}
+                  </p>
+                )}
+              </form>
 
               <p className="text-xs text-muted-foreground">
                 No spam, unsubscribe at any time.
@@ -271,10 +350,10 @@ export default function Blog() {
 
         {/* Pagination */}
         <section className="section border-t border-border/50">
-          <div className="container">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
             <div className="flex justify-center">
               <div className="flex items-center gap-2">
-                <button className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <button className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Go to previous page">
                   Previous
                 </button>
                 <button className="px-3 py-2 rounded-lg bg-phthalo text-cream hover:bg-phthalo/90 transition-colors">
@@ -286,7 +365,7 @@ export default function Blog() {
                 <button className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors">
                   3
                 </button>
-                <button className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors">
+                <button className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors" aria-label="Go to next page">
                   Next
                 </button>
               </div>

@@ -10,123 +10,120 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useSession } from "@/hooks/use-session";
-import { supabase, signOut, Database } from "@/lib/supabase";
+import { useProfile } from "@/hooks/use-profile";
+import { useLicense } from "@/hooks/use-license";
+import { signOut } from "@/lib/supabase";
+import { sanitizeLicenseKey } from "@/lib/validation";
+import { 
+  getTierDisplayName, 
+  getTierFeatures,
+} from "@/lib/license";
 import { User, LogOut, Monitor, CreditCard, Key, CheckCircle, AlertCircle } from "lucide-react";
-
-type Profile = Database['public']['Tables']['profiles']['Row'];
 
 type LicenseStatus = 'none' | 'valid' | 'expired' | 'invalid';
 
 export default function Account() {
   const navigate = useNavigate();
   const { user, loading: sessionLoading } = useSession();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { profile, loading: profileLoading } = useProfile();
+  const { entitlements, loading: licenseLoading, isValidating, validateLicenseAsync } = useLicense();
 
   // License state
   const [licenseKey, setLicenseKey] = useState('');
   const [licenseStatus, setLicenseStatus] = useState<LicenseStatus>('none');
-  const [licenseRedeeming, setLicenseRedeeming] = useState(false);
   const [licenseDetails, setLicenseDetails] = useState<{
     type: string;
     expiry: string;
     features: string[];
   } | null>(null);
 
+  // Update license status and details when entitlements change
+  useEffect(() => {
+    if (!licenseLoading && entitlements) {
+      if (entitlements.isValid && entitlements.tier) {
+        setLicenseStatus('valid');
+        setLicenseDetails({
+          type: getTierDisplayName(entitlements.tier),
+          expiry: entitlements.expiry || '',
+          features: getTierFeatures(entitlements.tier)
+        });
+      } else if (!entitlements.isValid) {
+        setLicenseStatus('expired');
+        setLicenseDetails(null);
+      } else {
+        setLicenseStatus('none');
+        setLicenseDetails(null);
+      }
+    } else if (!licenseLoading && !entitlements) {
+      setLicenseStatus('none');
+      setLicenseDetails(null);
+    }
+  }, [entitlements, licenseLoading]);
+
   useEffect(() => {
     if (!sessionLoading && !user) {
       navigate('/login');
       return;
     }
-
-    if (user) {
-      fetchProfile();
-    }
   }, [user, sessionLoading, navigate]);
 
-  const fetchProfile = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
-        console.error('Error fetching profile:', error);
-      } else {
-        setProfile(data);
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleRedeemLicense = async () => {
-    if (!licenseKey.trim()) {
-      toast.error("Please enter a license key");
+    // Validate and sanitize license key
+    const validation = sanitizeLicenseKey(licenseKey);
+    if (!validation.valid) {
+      toast.error("Invalid license key", {
+        description: validation.error || 'Please check your license key format.',
+      });
       return;
     }
-
-    setLicenseRedeeming(true);
+    
+    // Use sanitized key
+    const keyToUse = validation.sanitized || licenseKey;
 
     try {
-      // Simulate API call to backend license validation
-      // In a real implementation, this would call your license server
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate network delay
+      // Validate license via React Query mutation (automatically handles cache invalidation)
+      const result = await validateLicenseAsync(keyToUse);
 
-      // Mock license validation logic
-      const mockLicenses: Record<string, { type: string; expiry: string; features: string[] }> = {
-        'SOLUN-PRO-2024-DEMO': {
-          type: 'Professional',
-          expiry: '2025-12-31',
-          features: ['AI Writing Assistant', 'Lore Vault', 'Advanced Export', 'Priority Support']
-        },
-        'SOLUN-BASIC-2024': {
-          type: 'Basic',
-          expiry: '2024-12-31',
-          features: ['Basic Writing Tools', 'Local Storage', 'Standard Export']
-        }
-      };
-
-      const licenseData = mockLicenses[licenseKey.toUpperCase()];
-
-      if (licenseData) {
-        const expiryDate = new Date(licenseData.expiry);
-        const isExpired = expiryDate < new Date();
-
-        if (isExpired) {
+      if (result.valid && result.tier && result.expiry) {
+        const tierDisplayName = getTierDisplayName(result.tier);
+        toast.success("License activated successfully!", {
+          description: `${tierDisplayName} license is now active.`
+        });
+        setLicenseKey(''); // Clear the input
+        // The useLicense hook will automatically refetch entitlements due to cache invalidation
+      } else {
+        // Handle different error cases
+        if (result.error?.includes('expired')) {
           setLicenseStatus('expired');
           setLicenseDetails(null);
           toast.error("License key has expired", {
-            description: `This license expired on ${expiryDate.toLocaleDateString()}.`
+            description: result.expiry ? `This license expired on ${new Date(result.expiry).toLocaleDateString()}.` : result.error
+          });
+        } else if (result.error?.includes('already assigned')) {
+          setLicenseStatus('invalid');
+          setLicenseDetails(null);
+          toast.error("License key already in use", {
+            description: "This license key is already assigned to another user."
+          });
+        } else if (result.error?.includes('revoked')) {
+          setLicenseStatus('invalid');
+          setLicenseDetails(null);
+          toast.error("License key revoked", {
+            description: "This license key has been revoked and is no longer valid."
           });
         } else {
-          setLicenseStatus('valid');
-          setLicenseDetails(licenseData);
-          toast.success("License activated successfully!", {
-            description: `${licenseData.type} license is now active.`
+          setLicenseStatus('invalid');
+          setLicenseDetails(null);
+          toast.error("Invalid license key", {
+            description: result.error || "Please check your license key and try again."
           });
         }
-      } else {
-        setLicenseStatus('invalid');
-        setLicenseDetails(null);
-        toast.error("Invalid license key", {
-          description: "Please check your license key and try again."
-        });
+        setLicenseKey(''); // Clear the input
       }
-
-      setLicenseKey(''); // Clear the input
     } catch (error) {
-      toast.error("Failed to redeem license", {
-        description: "Please try again later or contact support."
-      });
-    } finally {
-      setLicenseRedeeming(false);
+      // Error handling is done in the mutation's onError, but handle UI state if needed
+      console.error('Error redeeming license:', error);
+      setLicenseKey(''); // Clear the input
     }
   };
 
@@ -134,19 +131,27 @@ export default function Account() {
     try {
       const { error } = await signOut();
       if (error) {
+        // Log full error for debugging
+        console.error('Sign out error:', error);
+        const userMessage = sanitizeSupabaseError(error, 'sign out');
         toast.error("Failed to sign out", {
-          description: error.message,
+          description: userMessage,
         });
       } else {
         toast.success("Signed out successfully");
         navigate('/');
       }
     } catch (error) {
-      toast.error("An unexpected error occurred");
+      // Log full error for debugging
+      console.error('Unexpected sign out error:', error);
+      const userMessage = sanitizeError(error, 'sign out');
+      toast.error("An unexpected error occurred", {
+        description: userMessage,
+      });
     }
   };
 
-  if (sessionLoading || loading) {
+  if (sessionLoading || profileLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo"></div>
@@ -196,7 +201,7 @@ export default function Account() {
                 <h3 className="text-lg font-semibold">{displayName}</h3>
                 <p className="text-muted-foreground">{user.email}</p>
                 <Badge className="mt-1">
-                  Free Plan
+                  {licenseDetails ? licenseDetails.type : 'Free Plan'}
                 </Badge>
               </div>
             </div>
@@ -216,7 +221,12 @@ export default function Account() {
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Current License Status */}
-            {licenseStatus === 'valid' && licenseDetails ? (
+            {licenseLoading ? (
+              <div className="text-center py-6 text-muted-foreground">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo mx-auto mb-4"></div>
+                <p className="text-sm">Loading license status...</p>
+              </div>
+            ) : licenseStatus === 'valid' && licenseDetails ? (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
@@ -269,16 +279,35 @@ export default function Account() {
                     type="text"
                     placeholder="Enter your license key (e.g., SOLUN-PRO-2024-DEMO)"
                     value={licenseKey}
-                    onChange={(e) => setLicenseKey(e.target.value.toUpperCase())}
+                    onChange={(e) => {
+                      setLicenseKey(e.target.value);
+                      // Clear error when user starts typing
+                      if (licenseKeyError) setLicenseKeyError(null);
+                    }}
+                    onBlur={() => {
+                      // Validate on blur if there's a value
+                      if (licenseKey.trim()) {
+                        const validation = sanitizeLicenseKey(licenseKey);
+                        if (!validation.valid) {
+                          setLicenseKeyError(validation.error || 'Invalid license key');
+                        } else {
+                          setLicenseKeyError(null);
+                          // Auto-uppercase and sanitize on blur
+                          if (validation.sanitized) {
+                            setLicenseKey(validation.sanitized);
+                          }
+                        }
+                      }
+                    }}
                     className="font-mono text-sm"
-                    disabled={licenseRedeeming}
+                    disabled={isValidating}
                   />
                   <Button
                     onClick={handleRedeemLicense}
-                    disabled={licenseRedeeming || !licenseKey.trim()}
+                    disabled={isValidating || !licenseKey.trim()}
                     className="flex items-center gap-2"
                   >
-                    {licenseRedeeming ? (
+                    {isValidating ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                         Redeeming...
@@ -291,6 +320,11 @@ export default function Account() {
                     )}
                   </Button>
                 </div>
+                {licenseKeyError && (
+                  <p id="license-key-error" className="text-sm font-medium text-destructive">
+                    {licenseKeyError}
+                  </p>
+                )}
                 <p className="text-xs text-muted-foreground">
                   License keys are case-insensitive. Example: SOLUN-PRO-2024-DEMO
                 </p>

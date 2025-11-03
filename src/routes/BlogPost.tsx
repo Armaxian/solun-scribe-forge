@@ -181,21 +181,29 @@ export default function BlogPost() {
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://solun.app/blog/${post.slug}`} />
-        <meta property="og:image" content={`https://solun.app/blog/${post.slug}/og-image.png`} />
+        <meta property="og:site_name" content="Solun" />
+        <meta property="og:image" content={`https://solun.app/blog/${post.slug}.jpg`} />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={post.title} />
         <meta property="article:published_time" content={post.date} />
         <meta property="article:author" content={post.author} />
         <meta property="article:section" content={post.category} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@solun_app" />
+        <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content={`${post.title} - Solun Blog`} />
         <meta name="twitter:description" content={post.excerpt} />
-        <meta name="twitter:image" content={`https://solun.app/blog/${post.slug}/og-image.png`} />
+        <meta name="twitter:image" content={`https://solun.app/blog/${post.slug}.jpg`} />
+        <meta name="twitter:image:alt" content={post.title} />
         <meta name="author" content={post.author} />
       </Helmet>
 
       <div className="min-h-screen">
         {/* Back Navigation */}
         <section className="section-tight border-b border-border/50">
-          <div className="container">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
             <Link
               to="/blog"
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -208,8 +216,8 @@ export default function BlogPost() {
 
         {/* Article Header */}
         <section className="section">
-          <div className="container">
-            <div className="mx-auto max-w-4xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-4xl prose-reading-comfortable">
               <div className="space-y-6">
                 {/* Category & Tags */}
                 <div className="flex items-center gap-2 flex-wrap">
@@ -259,20 +267,49 @@ export default function BlogPost() {
 
         {/* Article Content */}
         <section className="section-tight">
-          <div className="container">
-            <article className="mx-auto max-w-4xl prose prose-lg prose-invert">
-              <div
-                className="prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground prose-blockquote:text-muted-foreground prose-blockquote:border-l-phthalo prose-code:text-phthalo prose-pre:bg-muted"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
-            </article>
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl">
+            <div className="grid grid-cols-1 3xl:grid-cols-[1fr_320px] gap-12 3xl:gap-16">
+              {/* Main Article Content - Always stays at optimal reading width */}
+              <article className="mx-auto max-w-4xl 3xl:mx-0 3xl:max-w-none prose-reading-comfortable prose prose-lg prose-invert">
+                <div
+                  className="prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground prose-blockquote:text-muted-foreground prose-blockquote:border-l-phthalo prose-code:text-phthalo prose-pre:bg-muted"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              </article>
+              
+              {/* Secondary Column - Only visible on ultra-wide screens */}
+              <aside className="hidden 3xl:block sticky top-24 h-fit">
+                <div className="space-y-6">
+                  <div className="card-hover p-6">
+                    <h3 className="text-lg font-semibold mb-4">Related Topics</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <span key={tag} className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-sm">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="card-hover p-6">
+                    <h3 className="text-lg font-semibold mb-4">Read More</h3>
+                    <Link
+                      to="/blog"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Back to Blog
+                    </Link>
+                  </div>
+                </div>
+              </aside>
+            </div>
           </div>
         </section>
 
         {/* Article Footer */}
         <section className="section border-t border-border/50">
-          <div className="container">
-            <div className="mx-auto max-w-4xl">
+          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
+            <div className="mx-auto max-w-4xl prose-reading-comfortable">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-muted-foreground">Share this post:</span>

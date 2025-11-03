@@ -1,5 +1,7 @@
 import { Github, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useCallback, useRef } from "react";
+import { useNewsletter } from "@/hooks/use-newsletter";
 
 const footerLinks = {
   legal: [
@@ -15,10 +17,46 @@ const footerLinks = {
 };
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const { subscribe, isSubmitting } = useNewsletter();
+  const submitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSubscribe = useCallback(() => {
+    if (!email.trim()) {
+      return; // Empty email - validation will be handled by the mutation
+    }
+
+    if (isSubmitting) {
+      return; // Prevent double submission
+    }
+
+    subscribe({ email, source: 'footer' });
+    setEmail("");
+  }, [email, subscribe, isSubmitting]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Clear any existing timeout
+    if (submitTimeoutRef.current) {
+      clearTimeout(submitTimeoutRef.current);
+    }
+
+    // Prevent double submission
+    if (isSubmitting) {
+      return;
+    }
+
+    // Debounce the submission
+    submitTimeoutRef.current = setTimeout(() => {
+      handleSubscribe();
+    }, 300);
+  };
+
   return (
-    <footer className="bg-background border-t border-border/40" role="contentinfo">
+      <footer className="bg-background border-t border-border/40" role="contentinfo">
       <div className="container py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <div className="h-6 w-6 rounded-lg bg-gradient-hero" />
@@ -27,12 +65,12 @@ export function Footer() {
             <p className="text-sm text-muted-foreground typewriter">
               Write worlds. Keep them true.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <a
                 href="https://twitter.com/solun"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-foreground p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Follow Solun on X"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -43,7 +81,7 @@ export function Footer() {
                 href="https://github.com/solun"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-foreground p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="View Solun on GitHub"
               >
                 <Github className="h-5 w-5" aria-hidden="true" />
@@ -52,7 +90,7 @@ export function Footer() {
                 href="https://instagram.com/solunapp"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-foreground p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Follow Solun on Instagram"
               >
                 <Instagram className="h-5 w-5" aria-hidden="true" />
@@ -62,12 +100,12 @@ export function Footer() {
           
           <div>
             <h3 className="mb-3 text-sm font-semibold typewriter">Legal</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground link-underline typewriter"
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground link-underline typewriter inline-block py-2 px-1 min-h-[44px] flex items-center"
                   >
                     {link.name}
                   </Link>
@@ -78,12 +116,12 @@ export function Footer() {
           
           <div>
             <h3 className="mb-3 text-sm font-semibold typewriter">Resources</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground link-underline typewriter"
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground link-underline typewriter inline-block py-2 px-1 min-h-[44px] flex items-center"
                   >
                     {link.name}
                   </Link>
@@ -97,16 +135,33 @@ export function Footer() {
             <p className="text-sm text-muted-foreground mb-3 typewriter">
               Stay updated with the latest features.
             </p>
-            <div className="flex gap-2">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring typewriter"
-              />
-              <button className="btn btn-primary text-xs typewriter">
-                Subscribe
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    // Clear error when user starts typing
+                  }}
+                  disabled={isSubmitting}
+                  className={`flex-1 rounded-lg border bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring typewriter disabled:opacity-50 disabled:cursor-not-allowed ${
+"border-input"
+                  }`}
+                  aria-label="Email address for newsletter subscription"
+                  required
+                />
+              <button 
+                type="submit"
+                className="btn btn-primary text-xs typewriter disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] px-4 py-2"
+                disabled={isSubmitting}
+                aria-label="Subscribe to newsletter"
+              >
+                {isSubmitting ? "Subscribing..." : "Subscribe"}
               </button>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
         

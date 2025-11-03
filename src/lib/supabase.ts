@@ -33,6 +33,102 @@ export type Database = {
           updated_at?: string
         }
       }
+      licenses: {
+        Row: {
+          id: string
+          key: string
+          status: 'active' | 'expired' | 'revoked' | 'pending'
+          tier: 'basic' | 'professional' | 'team'
+          assigned_user: string | null
+          expiry: string
+          created_at: string
+          updated_at: string
+          created_by: string | null
+          notes: string | null
+        }
+        Insert: {
+          id?: string
+          key: string
+          status: 'active' | 'expired' | 'revoked' | 'pending'
+          tier: 'basic' | 'professional' | 'team'
+          assigned_user?: string | null
+          expiry: string
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+          notes?: string | null
+        }
+        Update: {
+          id?: string
+          key?: string
+          status?: 'active' | 'expired' | 'revoked' | 'pending'
+          tier?: 'basic' | 'professional' | 'team'
+          assigned_user?: string | null
+          expiry?: string
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+          notes?: string | null
+        }
+      }
+      user_entitlements: {
+        Row: {
+          id: string
+          user_id: string
+          license_id: string | null
+          tier: 'basic' | 'professional' | 'team'
+          is_valid: boolean
+          expires_at: string | null
+          validated_at: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          license_id?: string | null
+          tier: 'basic' | 'professional' | 'team'
+          is_valid?: boolean
+          expires_at?: string | null
+          validated_at?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          license_id?: string | null
+          tier?: 'basic' | 'professional' | 'team'
+          is_valid?: boolean
+          expires_at?: string | null
+          validated_at?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      newsletter_subscribers: {
+        Row: {
+          id: string
+          email: string
+          source: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          source: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          source?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
   }
 }

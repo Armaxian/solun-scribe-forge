@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { signInWithEmail, signInWithMagicLink, signInWithOAuth } from "@/lib/supabase";
 import { analytics } from "@/lib/analytics";
+import { sanitizeSupabaseError, sanitizeError } from "@/lib/error-sanitizer";
+import { validateEmail, isNonEmpty } from "@/lib/validation";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,9 +19,34 @@ export default function Login() {
   const [useMagicLink, setUseMagicLink] = useState(false);
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<'google' | 'apple' | null>(null);
+  
+  // Validation error states
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Reset errors
+    setEmailError(null);
+    setPasswordError(null);
+    
+    // Validate email
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.valid) {
+      setEmailError(emailValidation.error || 'Invalid email');
+      return;
+    }
+    
+    // Validate password if not using magic link
+    if (!useMagicLink) {
+      const passwordValidation = isNonEmpty(password, 'Password');
+      if (!passwordValidation.valid) {
+        setPasswordError(passwordValidation.error || 'Password is required');
+        return;
+      }
+    }
+    
     setLoading(true);
 
     // Track signup/login start
@@ -31,9 +58,15 @@ export default function Login() {
     });
 
     try {
+      // Use sanitized email if available
+      const emailToUse = emailValidation.sanitized || email;
+      
       if (useMagicLink) {
-        const { error } = await signInWithMagicLink(email);
+        const { error } = await signInWithMagicLink(emailToUse);
         if (error) {
+          // Log full error for debugging
+          console.error('Magic link error:', error);
+          
           analytics.track({
             name: 'signup_start',
             properties: {
@@ -42,8 +75,10 @@ export default function Login() {
               error: error.message
             }
           });
+          
+          const userMessage = sanitizeSupabaseError(error, 'magic link');
           toast.error("Failed to send magic link", {
-            description: error.message,
+            description: userMessage,
           });
         } else {
           analytics.track({
@@ -57,8 +92,11 @@ export default function Login() {
           });
         }
       } else {
-        const { error } = await signInWithEmail(email, password);
+        const { error } = await signInWithEmail(emailToUse, password);
         if (error) {
+          // Log full error for debugging
+          console.error('Login error:', error);
+          
           analytics.track({
             name: 'signup_start',
             properties: {
@@ -67,8 +105,10 @@ export default function Login() {
               error: error.message
             }
           });
+          
+          const userMessage = sanitizeSupabaseError(error, 'email login');
           toast.error("Login failed", {
-            description: error.message,
+            description: userMessage,
           });
         } else {
           analytics.track({
@@ -82,6 +122,9 @@ export default function Login() {
         }
       }
     } catch (error) {
+      // Log full error for debugging
+      console.error('Unexpected login error:', error);
+      
       analytics.track({
         name: 'signup_start',
         properties: {
@@ -90,7 +133,11 @@ export default function Login() {
           error: 'unexpected_error'
         }
       });
-      toast.error("An unexpected error occurred");
+      
+      const userMessage = sanitizeError(error, 'login');
+      toast.error("An unexpected error occurred", {
+        description: userMessage,
+      });
     } finally {
       setLoading(false);
     }
@@ -110,6 +157,9 @@ export default function Login() {
     try {
       const { error } = await signInWithOAuth(provider);
       if (error) {
+        // Log full error for debugging
+        console.error(`OAuth ${provider} error:`, error);
+        
         analytics.track({
           name: 'signup_start',
           properties: {
@@ -118,8 +168,10 @@ export default function Login() {
             error: error.message
           }
         });
+        
+        const userMessage = sanitizeSupabaseError(error, `oauth ${provider}`);
         toast.error(`${provider} login failed`, {
-          description: error.message,
+          description: userMessage,
         });
       } else {
         // OAuth will redirect, track success when user returns
@@ -132,6 +184,9 @@ export default function Login() {
       }
       // OAuth will redirect, so no need to handle success here
     } catch (error) {
+      // Log full error for debugging
+      console.error(`Unexpected OAuth ${provider} error:`, error);
+      
       analytics.track({
         name: 'signup_start',
         properties: {
@@ -140,7 +195,11 @@ export default function Login() {
           error: 'unexpected_error'
         }
       });
-      toast.error("An unexpected error occurred");
+      
+      const userMessage = sanitizeError(error, `oauth ${provider}`);
+      toast.error("An unexpected error occurred", {
+        description: userMessage,
+      });
     } finally {
       setOauthLoading(null);
     }
@@ -174,9 +233,30 @@ export default function Login() {
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  // Clear error when user starts typing
+                  if (emailError) setEmailError(null);
+                }}
+                onBlur={() => {
+                  // Validate on blur
+                  const validation = validateEmail(email);
+                  if (!validation.valid) {
+                    setEmailError(validation.error || 'Invalid email');
+                  } else {
+                    setEmailError(null);
+                  }
+                }}
+                className={emailError ? "border-destructive" : ""}
                 required
+                aria-invalid={!!emailError}
+                aria-describedby={emailError ? "email-error" : undefined}
               />
+              {emailError && (
+                <p id="email-error" className="text-sm font-medium text-destructive">
+                  {emailError}
+                </p>
+              )}
             </div>
 
             {!useMagicLink && (
@@ -186,9 +266,30 @@ export default function Login() {
                   id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    // Clear error when user starts typing
+                    if (passwordError) setPasswordError(null);
+                  }}
+                  onBlur={() => {
+                    // Validate on blur
+                    const validation = isNonEmpty(password, 'Password');
+                    if (!validation.valid) {
+                      setPasswordError(validation.error || 'Password is required');
+                    } else {
+                      setPasswordError(null);
+                    }
+                  }}
+                  className={passwordError ? "border-destructive" : ""}
                   required
+                  aria-invalid={!!passwordError}
+                  aria-describedby={passwordError ? "password-error" : undefined}
                 />
+                {passwordError && (
+                  <p id="password-error" className="text-sm font-medium text-destructive">
+                    {passwordError}
+                  </p>
+                )}
               </div>
             )}
 
