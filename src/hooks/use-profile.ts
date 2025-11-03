@@ -3,6 +3,7 @@ import { useSession } from './use-session';
 import { supabase, type Database } from '@/lib/supabase';
 import { sanitizeSupabaseError, sanitizeError } from '@/lib/error-sanitizer';
 import { toast } from 'sonner';
+import { tone } from '@/copy/tone';
 import { queryKeys } from './query-keys';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
@@ -88,7 +89,10 @@ export function useProfile() {
       }
       // Optionally invalidate to ensure consistency
       queryClient.invalidateQueries({ queryKey: queryKeys.profile.all });
-      toast.success('Profile updated successfully');
+      const successToast = tone.toast("success");
+      toast.success(successToast.title, {
+        description: successToast.description,
+      });
     },
     onError: (error) => {
       console.error('Error updating profile:', error);
@@ -96,8 +100,9 @@ export function useProfile() {
         error as { code?: string; message?: string },
         'profile update'
       );
-      toast.error('Failed to update profile', {
-        description: userMessage,
+      const errorToast = tone.toast("error", userMessage);
+      toast.error(errorToast.title, {
+        description: errorToast.description,
       });
     },
   });

@@ -138,7 +138,15 @@ export function ThreeSplineScene({ sceneUrl, className }: ThreeSplineSceneProps)
     <div className={`relative w-full h-full ${className}`}>
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10">
-          <span className="animate-pulse text-sm text-black/50">Loading 3D…</span>
+          <div className="text-center">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-phthalo border-t-transparent mx-auto mb-2"></div>
+            <span className="text-sm text-muted-foreground">{(() => {
+              // Use dynamic import to avoid bundling tone in 3D scene component
+              // For now, use inline message similar to tone.loading()
+              const messages = ["Sharpening pencils…", "Warming the typewriter…", "Preparing your workspace…"];
+              return messages[Math.floor(Math.random() * messages.length)];
+            })()}</span>
+          </div>
         </div>
       )}
       <div ref={containerRef} className="w-full h-full" />

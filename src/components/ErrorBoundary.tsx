@@ -1,4 +1,7 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { tone } from '@/copy/tone';
 
 interface Props {
   children: ReactNode;
@@ -14,32 +17,72 @@ interface State {
 
 /**
  * Root-level fallback UI for critical application errors
+ * Focus management and friendly writer's-room vibe
  */
-const RootErrorFallback = () => (
-  <div className="min-h-screen flex items-center justify-center bg-[#f5f2e8] p-4">
-    <div className="max-w-md w-full text-center space-y-6">
-      <div className="space-y-2">
-        <div className="text-6xl mb-4">⚠️</div>
-        <h1 className="text-2xl font-bold text-[#0C0C0C]">Something went wrong</h1>
-        <p className="text-muted-foreground">
-          We encountered an unexpected error. Don't worry, your work is safe.
-        </p>
-      </div>
-      
-      <div className="space-y-3 pt-4">
-        <button
-          onClick={() => window.location.reload()}
-          className="w-full px-4 py-2 bg-[#1E7F5C] text-white rounded-md hover:bg-[#1a6b4d] transition-colors"
-        >
-          Reload Page
-        </button>
-        <p className="text-xs text-muted-foreground">
-          If the problem persists, please try refreshing your browser or contact support.
-        </p>
+const RootErrorFallback = () => {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    // Focus management for accessibility
+    headingRef.current?.focus();
+  }, []);
+
+  const supportiveQuips = [
+    "Take a sip of coffee, babe; we'll reload the scene.",
+    "Even the best stories have plot holes. Let's fix this one.",
+    "Writer's block, meet error block. We'll get past this together.",
+    "Time for a quick edit—let's refresh and get back to your story.",
+  ];
+  const quip = supportiveQuips[Math.floor(Math.random() * supportiveQuips.length)];
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f2e8] p-4">
+      <div className="max-w-md w-full text-center space-y-6">
+        <div className="space-y-4">
+          <div className="text-6xl mb-4" aria-hidden="true">📝</div>
+          <h1 
+            ref={headingRef}
+            className="text-2xl font-bold text-[#0C0C0C]"
+            tabIndex={-1}
+          >
+            Plot twist! Something broke.
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            {quip}
+          </p>
+        </div>
+        
+        <div className="space-y-3 pt-4">
+          <div className="flex flex-col gap-3">
+            <Button
+              onClick={() => window.location.reload()}
+              className="w-full min-h-[44px]"
+              size="lg"
+            >
+              Reload the page
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="w-full min-h-[44px]"
+              size="lg"
+            >
+              <Link to="/">Go Home</Link>
+            </Button>
+            <Button
+              asChild
+              variant="ghost"
+              className="w-full min-h-[44px]"
+              size="lg"
+            >
+              <Link to="/contact">Report this</Link>
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 /**
  * Default fallback UI for component-level errors (e.g., 3D scenes)
@@ -64,6 +107,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Always log to console for debugging, but never expose to users
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     
     // In development, log full error details
@@ -74,6 +118,7 @@ class ErrorBoundary extends Component<Props, State> {
         componentStack: errorInfo.componentStack,
       });
     }
+    // In production, we still log but don't expose stack traces to UI
   }
 
   public render() {

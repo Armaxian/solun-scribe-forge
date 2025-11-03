@@ -72,7 +72,13 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   if (!isClient) {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <span className="animate-pulse text-sm text-black/50">Loading 3D…</span>
+        <div className="text-center">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#0B3D2E] border-t-transparent mx-auto mb-2"></div>
+          <span className="text-sm text-muted-foreground">{(() => {
+            const messages = ["Sharpening pencils…", "Warming the typewriter…", "Preparing your workspace…"];
+            return messages[Math.floor(Math.random() * messages.length)];
+          })()}</span>
+        </div>
       </div>
     )
   }
@@ -122,7 +128,13 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
       <Suspense 
         fallback={
           <div className="w-full h-full flex items-center justify-center">
-            <span className="animate-pulse text-sm text-black/50">Loading 3D…</span>
+            <div className="text-center">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#0B3D2E] border-t-transparent mx-auto mb-2"></div>
+              <span className="text-sm text-muted-foreground">{(() => {
+                const messages = ["Sharpening pencils…", "Warming the typewriter…", "Preparing your workspace…"];
+                return messages[Math.floor(Math.random() * messages.length)];
+              })()}</span>
+            </div>
           </div>
         }
       >

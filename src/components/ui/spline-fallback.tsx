@@ -21,8 +21,12 @@ export function SplineFallback({ className }: SplineFallbackProps) {
     return (
       <div className={`w-full h-full flex items-center justify-center ${className}`}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0B3D2E] mx-auto mb-4"></div>
-          <p className="text-sm text-gray-600">Loading 3D scene...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0B3D2E] border-t-transparent mx-auto mb-4"></div>
+          <p className="text-sm text-muted-foreground">{(() => {
+            // Use inline message similar to tone.loading()
+            const messages = ["Sharpening pencils…", "Warming the typewriter…", "Preparing your workspace…"];
+            return messages[Math.floor(Math.random() * messages.length)];
+          })()}</p>
         </div>
       </div>
     )

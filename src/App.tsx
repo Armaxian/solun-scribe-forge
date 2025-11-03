@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { tone } from "@/copy/tone";
 
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -11,20 +12,25 @@ import { OfflineBanner } from "./components/OfflineBanner";
 import { analytics } from "./lib/analytics";
 
 // Lazy load all route components for code splitting
+const About = lazy(() => import("./routes/About"));
 const Account = lazy(() => import("./routes/Account"));
 const Blog = lazy(() => import("./routes/Blog"));
 const BlogPost = lazy(() => import("./routes/BlogPost"));
+const Contact = lazy(() => import("./routes/Contact"));
+const Cookies = lazy(() => import("./routes/Cookies"));
 const Docs = lazy(() => import("./routes/Docs"));
+const FAQs = lazy(() => import("./routes/FAQs"));
 const Download = lazy(() => import("./routes/Download"));
 const Features = lazy(() => import("./routes/Features"));
 const Home = lazy(() => import("./routes/Home"));
+const Legal = lazy(() => import("./routes/Legal"));
 const Login = lazy(() => import("./routes/Login"));
 const NotFound = lazy(() => import("./routes/NotFound"));
 const Pricing = lazy(() => import("./routes/Pricing"));
 const Privacy = lazy(() => import("./routes/Privacy"));
 const Root = lazy(() => import("./routes/Root"));
+const Story = lazy(() => import("./routes/Story"));
 const Terms = lazy(() => import("./routes/Terms"));
-const Cookies = lazy(() => import("./routes/Cookies"));
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -211,7 +217,7 @@ const LoadingFallback = () => (
   <div className="flex min-h-screen items-center justify-center">
     <div className="text-center">
       <div className="h-8 w-8 animate-spin rounded-full border-2 border-phthalo border-t-transparent mx-auto mb-4" />
-      <p className="text-muted-foreground">Loading...</p>
+      <p className="text-muted-foreground">{tone.loading('general')}</p>
     </div>
   </div>
 );
@@ -234,21 +240,26 @@ const AppContent = () => {
             <Routes>
               <Route path="/" element={<Root />}>
                 <Route index element={<Home />} />
+                <Route path="about" element={<About />} />
                 <Route path="download" element={<Download />} />
                 <Route path="features" element={<Features />} />
                 <Route path="pricing" element={<Pricing />} />
                 <Route path="docs" element={<Docs />} />
                 <Route path="blog" element={<Blog />} />
                 <Route path="blog/:slug" element={<BlogPost />} />
+                <Route path="story" element={<Story />} />
                 <Route path="login" element={<Login />} />
                 <Route path="account" element={
                   <ProtectedRoute>
                     <Account />
                   </ProtectedRoute>
                 } />
+                <Route path="legal" element={<Legal />} />
                 <Route path="terms" element={<Terms />} />
                 <Route path="privacy" element={<Privacy />} />
                 <Route path="cookies" element={<Cookies />} />
+                <Route path="contact" element={<Contact />} />
+                <Route path="faqs" element={<FAQs />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

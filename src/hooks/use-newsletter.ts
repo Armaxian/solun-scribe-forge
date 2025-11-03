@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { subscribeToNewsletter, type NewsletterSource, type NewsletterSubscriptionResult } from '@/lib/newsletter';
 import { toast } from 'sonner';
+import { tone } from '@/copy/tone';
 
 /**
  * Hook for subscribing to newsletter (mutation)
@@ -12,22 +13,22 @@ export function useNewsletter() {
     },
     onSuccess: (result) => {
       if (result.success) {
-        toast.success(
-          result.already_subscribed ? 'Already subscribed' : 'Subscribed!',
-          {
-            description: result.message,
-          }
-        );
+        const successToast = tone.toast("success", result.message);
+        toast.success(successToast.title, {
+          description: successToast.description,
+        });
       } else {
-        toast.error('Subscription failed', {
-          description: result.message,
+        const errorToast = tone.toast("error", result.message);
+        toast.error(errorToast.title, {
+          description: errorToast.description,
         });
       }
     },
     onError: (error) => {
       console.error('Newsletter subscription error:', error);
-      toast.error('Error', {
-        description: 'An unexpected error occurred. Please try again later.',
+      const errorToast = tone.toast("error", 'An unexpected error occurred. Please try again later.');
+      toast.error(errorToast.title, {
+        description: errorToast.description,
       });
     },
   });

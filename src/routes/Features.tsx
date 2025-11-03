@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ThreeSplineScene } from "@/components/ui/three-spline-scene";
+import { tone } from "@/copy/tone";
 
 const features = [
   {
@@ -276,15 +277,17 @@ export default function Features() {
               <Link
                 to="/download"
                 className="btn btn-primary"
+                aria-label="Download Solun for free"
               >
-                Download Free
+                {tone.cta('download')}
                 <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 to="/pricing"
                 className="btn btn-ghost"
+                aria-label="View pricing"
               >
-                View Pricing
+                {tone.cta('secondary')}
               </Link>
             </div>
           </div>

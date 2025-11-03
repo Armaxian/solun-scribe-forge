@@ -11,6 +11,7 @@ import { signInWithEmail, signInWithMagicLink, signInWithOAuth } from "@/lib/sup
 import { analytics } from "@/lib/analytics";
 import { sanitizeSupabaseError, sanitizeError } from "@/lib/error-sanitizer";
 import { validateEmail, isNonEmpty } from "@/lib/validation";
+import { tone } from "@/copy/tone";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -34,7 +35,8 @@ export default function Login() {
     // Validate email
     const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
-      setEmailError(emailValidation.error || 'Invalid email');
+      const emailForm = tone.form('email');
+      setEmailError(emailValidation.error || emailForm.validation.email || emailForm.validation.required);
       return;
     }
     
@@ -42,7 +44,8 @@ export default function Login() {
     if (!useMagicLink) {
       const passwordValidation = isNonEmpty(password, 'Password');
       if (!passwordValidation.valid) {
-        setPasswordError(passwordValidation.error || 'Password is required');
+        const passwordForm = tone.form('password');
+        setPasswordError(passwordValidation.error || passwordForm.validation.required);
         return;
       }
     }
@@ -77,8 +80,9 @@ export default function Login() {
           });
           
           const userMessage = sanitizeSupabaseError(error, 'magic link');
-          toast.error("Failed to send magic link", {
-            description: userMessage,
+          const errorToast = tone.toast("error", userMessage);
+          toast.error(errorToast.title, {
+            description: errorToast.description,
           });
         } else {
           analytics.track({
@@ -87,8 +91,9 @@ export default function Login() {
               method: 'magic_link'
             }
           });
-          toast.success("Magic link sent!", {
-            description: "Check your email for the login link.",
+          const successToast = tone.toast("success", "Check your email for the login link.");
+          toast.success(successToast.title, {
+            description: successToast.description,
           });
         }
       } else {
@@ -107,8 +112,9 @@ export default function Login() {
           });
           
           const userMessage = sanitizeSupabaseError(error, 'email login');
-          toast.error("Login failed", {
-            description: userMessage,
+          const errorToast = tone.toast("error", userMessage);
+          toast.error(errorToast.title, {
+            description: errorToast.description,
           });
         } else {
           analytics.track({
@@ -117,7 +123,10 @@ export default function Login() {
               method: 'email_password'
             }
           });
-          toast.success("Welcome back!");
+          const successToast = tone.toast("success");
+          toast.success(successToast.title, {
+            description: successToast.description,
+          });
           navigate("/account");
         }
       }
@@ -135,8 +144,9 @@ export default function Login() {
       });
       
       const userMessage = sanitizeError(error, 'login');
-      toast.error("An unexpected error occurred", {
-        description: userMessage,
+      const errorToast = tone.toast("error", userMessage);
+      toast.error(errorToast.title, {
+        description: errorToast.description,
       });
     } finally {
       setLoading(false);
@@ -170,8 +180,9 @@ export default function Login() {
         });
         
         const userMessage = sanitizeSupabaseError(error, `oauth ${provider}`);
-        toast.error(`${provider} login failed`, {
-          description: userMessage,
+        const errorToast = tone.toast("error", userMessage);
+        toast.error(errorToast.title, {
+          description: errorToast.description,
         });
       } else {
         // OAuth will redirect, track success when user returns
@@ -197,8 +208,9 @@ export default function Login() {
       });
       
       const userMessage = sanitizeError(error, `oauth ${provider}`);
-      toast.error("An unexpected error occurred", {
-        description: userMessage,
+      const errorToast = tone.toast("error", userMessage);
+      toast.error(errorToast.title, {
+        description: errorToast.description,
       });
     } finally {
       setOauthLoading(null);
@@ -242,7 +254,8 @@ export default function Login() {
                   // Validate on blur
                   const validation = validateEmail(email);
                   if (!validation.valid) {
-                    setEmailError(validation.error || 'Invalid email');
+                    const emailForm = tone.form('email');
+                    setEmailError(validation.error || emailForm.validation.email || emailForm.validation.required);
                   } else {
                     setEmailError(null);
                   }
@@ -275,7 +288,8 @@ export default function Login() {
                     // Validate on blur
                     const validation = isNonEmpty(password, 'Password');
                     if (!validation.valid) {
-                      setPasswordError(validation.error || 'Password is required');
+                      const passwordForm = tone.form('password');
+                      setPasswordError(validation.error || passwordForm.validation.required);
                     } else {
                       setPasswordError(null);
                     }

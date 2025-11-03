@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from './use-session';
 import { fetchUserEntitlements, hasValidLicense, validateLicense, type LicenseTier, type LicenseDetails, type ValidateLicenseResponse } from '@/lib/license';
 import { toast } from 'sonner';
+import { tone } from '@/copy/tone';
 import { queryKeys } from './query-keys';
 
 /**
@@ -35,8 +36,10 @@ export function useLicense() {
     },
     onError: (error) => {
       console.error('Error validating license:', error);
-      toast.error('Failed to validate license', {
-        description: error instanceof Error ? error.message : 'Please try again later.',
+      const errorMessage = error instanceof Error ? error.message : 'Please try again later.';
+      const errorToast = tone.toast("error", errorMessage);
+      toast.error(errorToast.title, {
+        description: errorToast.description,
       });
     },
   });

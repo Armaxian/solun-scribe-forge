@@ -1,0 +1,97 @@
+{
+  "description": "Phrases that should never appear in Solun's UI. Use tone.ts instead.",
+  "categories": {
+    "overly_formal": [
+      "We regret to inform you",
+      "Please be advised that",
+      "It has come to our attention",
+      "We would like to inform you",
+      "Kindly be informed",
+      "Please note that",
+      "We apologize for any inconvenience",
+      "At your earliest convenience",
+      "Please do not hesitate to",
+      "We appreciate your patience",
+      "An error has occurred",
+      "A system error was detected",
+      "The system is experiencing difficulties",
+      "We are currently experiencing technical difficulties",
+      "Your request has been processed",
+      "Transaction completed successfully"
+    ],
+    "scary_tech_errors": [
+      "Error 404: File Not Found",
+      "Fatal error",
+      "Critical system failure",
+      "Exception thrown",
+      "Stack trace",
+      "Null pointer exception",
+      "Invalid input detected",
+      "System exception",
+      "Application crash",
+      "Internal server error",
+      "Database connection failed",
+      "Authentication failed",
+      "Access denied",
+      "Permission denied"
+    ],
+    "filler": [
+      "Lorem ipsum",
+      "Lorem ipsum dolor sit amet",
+      "Placeholder text",
+      "Sample content",
+      "Content goes here",
+      "Add your text here",
+      "[Insert text here]",
+      "Coming soon",
+      "Under construction",
+      "This page is empty"
+    ],
+    "crass_edgy": [
+      "This sucks",
+      "You messed up",
+      "What the hell",
+      "Damn it",
+      "Crap",
+      "This is broken",
+      "You broke it",
+      "F***",
+      "Shit",
+      "WTF",
+      "Bruh, you forgot",
+      "Dude, what?",
+      "Oops, my bad"
+    ],
+    "generic_boilerplate": [
+      "Click here",
+      "Learn more",
+      "Read more",
+      "Find out more",
+      "Check it out",
+      "Try it now",
+      "Get started today",
+      "Sign up now",
+      "Don't miss out",
+      "Limited time offer",
+      "Act now",
+      "Hurry up",
+      "Your success is our priority",
+      "We're here for you",
+      "Customer satisfaction guaranteed"
+    ],
+    "assumptions": [
+      "As a writer, you know",
+      "Every author needs",
+      "Novelists love",
+      "Fiction writers will",
+      "If you're an experienced writer"
+    ]
+  },
+  "notes": [
+    "This list is not exhaustive—use it as a guide.",
+    "When in doubt, check tone.ts or guide.md",
+    "If you see banned phrases in code, replace them with tone.ts equivalents",
+    "Periodically review this list and add new problematic phrases"
+  ]
+}
+

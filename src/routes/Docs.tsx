@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Spotlight } from "@/components/ui/spotlight";
+import { tone } from "@/copy/tone";
 
 const quickStartSteps = [
   {
@@ -379,15 +380,17 @@ export default function Docs() {
               <Link
                 to="/download"
                 className="btn btn-primary"
+                aria-label="Download Solun for free"
               >
-                Download Free
+                {tone.cta('download')}
                 <ChevronRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/features"
                 className="btn btn-ghost"
+                aria-label="Explore features"
               >
-                Explore Features
+                {tone.cta('secondary')}
               </Link>
             </div>
           </div>

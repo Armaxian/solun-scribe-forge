@@ -9,6 +9,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { PlatformDetect } from "@/components/PlatformDetect";
 import { CopyableHash } from "@/components/CopyableHash";
 import { useDownloads } from "@/hooks/use-downloads";
+import { tone } from "@/copy/tone";
 import { 
   detectPlatform, 
   getPlatformLabel, 
@@ -158,6 +159,18 @@ export default function Download() {
               />
             </div>
 
+            {/* Loading State */}
+            {loading && (
+              <Card className="mb-8">
+                <CardContent className="py-12">
+                  <div className="text-center">
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-phthalo border-t-transparent mx-auto mb-4" />
+                    <p className="text-sm text-muted-foreground">{tone.loading('skeleton')}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Detected Platform Installers */}
             {!loading && detectedPlatform && currentInstallers.length > 0 && (
               <Card className="mb-8">
@@ -210,9 +223,10 @@ export default function Download() {
                               });
                               window.open(installer.downloadUrl, '_blank', 'noopener,noreferrer');
                             }}
+                            aria-label={`Download Solun for ${getPlatformLabel(platform)}`}
                           >
                             <DownloadIcon className="h-4 w-4" aria-hidden="true" />
-                            Download
+                            {tone.cta('download')}
                           </Button>
                         )}
                       </div>
@@ -360,9 +374,10 @@ export default function Download() {
                                               });
                                               window.open(installer.downloadUrl, '_blank', 'noopener,noreferrer');
                                             }}
+                                            aria-label={`Download ${installer.description || 'Solun installer'}`}
                                           >
                                             <DownloadIcon className="h-4 w-4" />
-                                            Download
+                                            {tone.cta('download')}
                                           </Button>
                                         )}
                                       </div>
@@ -405,11 +420,26 @@ export default function Download() {
                                 )}
                               </>
                             ) : (
-                              <div className="text-center py-8 text-muted-foreground">
-                                <Clock className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                                <p className="text-sm">
-                                  Downloads for {getPlatformLabel(platformKey as PlatformType)} are coming soon.
-                                </p>
+                              <div className="text-center py-8">
+                                <Clock className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                                {(() => {
+                                  const emptyState = tone.empty('downloads');
+                                  return (
+                                    <>
+                                      <h4 className="font-medium mb-2">{emptyState.title}</h4>
+                                      <p className="text-sm text-muted-foreground mb-4">
+                                        Downloads for {getPlatformLabel(platformKey as PlatformType)} are coming soon.
+                                      </p>
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => window.location.reload()}
+                                      >
+                                        {emptyState.cta}
+                                      </Button>
+                                    </>
+                                  );
+                                })()}
                               </div>
                             )}
                           </CardContent>

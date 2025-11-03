@@ -23,6 +23,7 @@ import { ThreeSplineScene } from "@/components/ui/three-spline-scene";
 import { analytics } from "@/lib/analytics";
 import { getDetailedPlatformInfo, getPlatformLabel, type Platform } from "@/lib/platform";
 import { useInView } from "@/hooks/useInView";
+import { tone } from "@/copy/tone";
 
 const featuresDetailed = [
   {
@@ -281,8 +282,9 @@ export default function Home() {
                 <GradientButton
                   className="relative z-10 typewriter"
                   onClick={() => handleDownload()}
+                  aria-label={`Download Solun for ${detectedLabel}`}
                 >
-                  Download for {detectedLabel}
+                  {tone.cta('download')}
                 </GradientButton>
                 <div className="flex flex-wrap items-center justify-center gap-1 text-sm text-muted-foreground typewriter">
                   <span>Also available for</span>
@@ -442,8 +444,8 @@ export default function Home() {
               asChild
               className="typewriter"
             >
-              <Link to="/download">
-                Download for Free
+              <Link to="/download" aria-label="Download Solun for free">
+                {tone.cta('download')}
               </Link>
             </GradientButton>
             <Button
@@ -452,7 +454,7 @@ export default function Home() {
               className="border-2 border-[#0B3D2E] text-[#0B3D2E] hover:bg-[#0B3D2E]/5 px-8 py-4 text-lg font-semibold rounded-xl typewriter"
               asChild
             >
-              <Link to="/login">
+              <Link to="/login" aria-label="Log in to Solun">
                 Log In
               </Link>
             </Button>

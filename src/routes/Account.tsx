@@ -14,10 +14,12 @@ import { useProfile } from "@/hooks/use-profile";
 import { useLicense } from "@/hooks/use-license";
 import { signOut } from "@/lib/supabase";
 import { sanitizeLicenseKey } from "@/lib/validation";
+import { sanitizeSupabaseError, sanitizeError } from "@/lib/error-sanitizer";
 import { 
   getTierDisplayName, 
   getTierFeatures,
 } from "@/lib/license";
+import { tone } from "@/copy/tone";
 import { User, LogOut, Monitor, CreditCard, Key, CheckCircle, AlertCircle } from "lucide-react";
 
 type LicenseStatus = 'none' | 'valid' | 'expired' | 'invalid';
@@ -30,6 +32,7 @@ export default function Account() {
 
   // License state
   const [licenseKey, setLicenseKey] = useState('');
+  const [licenseKeyError, setLicenseKeyError] = useState<string | null>(null);
   const [licenseStatus, setLicenseStatus] = useState<LicenseStatus>('none');
   const [licenseDetails, setLicenseDetails] = useState<{
     type: string;
@@ -71,8 +74,12 @@ export default function Account() {
     // Validate and sanitize license key
     const validation = sanitizeLicenseKey(licenseKey);
     if (!validation.valid) {
-      toast.error("Invalid license key", {
-        description: validation.error || 'Please check your license key format.',
+      const licenseForm = tone.form('licenseKey');
+      const errorMessage = validation.error || licenseForm.validation.required || licenseForm.validation.pattern;
+      setLicenseKeyError(errorMessage);
+      const errorToast = tone.toast("error", errorMessage);
+      toast.error(errorToast.title, {
+        description: errorToast.description,
       });
       return;
     }
@@ -86,8 +93,10 @@ export default function Account() {
 
       if (result.valid && result.tier && result.expiry) {
         const tierDisplayName = getTierDisplayName(result.tier);
-        toast.success("License activated successfully!", {
-          description: `${tierDisplayName} license is now active.`
+        setLicenseKeyError(null);
+        const successToast = tone.toast("success", `${tierDisplayName} license is now active.`);
+        toast.success(successToast.title, {
+          description: successToast.description
         });
         setLicenseKey(''); // Clear the input
         // The useLicense hook will automatically refetch entitlements due to cache invalidation
@@ -96,26 +105,32 @@ export default function Account() {
         if (result.error?.includes('expired')) {
           setLicenseStatus('expired');
           setLicenseDetails(null);
-          toast.error("License key has expired", {
-            description: result.expiry ? `This license expired on ${new Date(result.expiry).toLocaleDateString()}.` : result.error
+          const errorDetail = result.expiry ? `This license expired on ${new Date(result.expiry).toLocaleDateString()}.` : result.error;
+          const errorToast = tone.toast("error", errorDetail);
+          toast.error(errorToast.title, {
+            description: errorToast.description
           });
         } else if (result.error?.includes('already assigned')) {
           setLicenseStatus('invalid');
           setLicenseDetails(null);
-          toast.error("License key already in use", {
-            description: "This license key is already assigned to another user."
+          const errorToast = tone.toast("error", "This license key is already assigned to another user.");
+          toast.error(errorToast.title, {
+            description: errorToast.description
           });
         } else if (result.error?.includes('revoked')) {
           setLicenseStatus('invalid');
           setLicenseDetails(null);
-          toast.error("License key revoked", {
-            description: "This license key has been revoked and is no longer valid."
+          const errorToast = tone.toast("error", "This license key has been revoked and is no longer valid.");
+          toast.error(errorToast.title, {
+            description: errorToast.description
           });
         } else {
           setLicenseStatus('invalid');
           setLicenseDetails(null);
-          toast.error("Invalid license key", {
-            description: result.error || "Please check your license key and try again."
+          const errorDetail = result.error || "Please check your license key and try again.";
+          const errorToast = tone.toast("error", errorDetail);
+          toast.error(errorToast.title, {
+            description: errorToast.description
           });
         }
         setLicenseKey(''); // Clear the input
@@ -134,19 +149,24 @@ export default function Account() {
         // Log full error for debugging
         console.error('Sign out error:', error);
         const userMessage = sanitizeSupabaseError(error, 'sign out');
-        toast.error("Failed to sign out", {
-          description: userMessage,
+        const errorToast = tone.toast("error", userMessage);
+        toast.error(errorToast.title, {
+          description: errorToast.description,
         });
       } else {
-        toast.success("Signed out successfully");
+        const successToast = tone.toast("success");
+        toast.success(successToast.title, {
+          description: successToast.description,
+        });
         navigate('/');
       }
     } catch (error) {
       // Log full error for debugging
       console.error('Unexpected sign out error:', error);
       const userMessage = sanitizeError(error, 'sign out');
-      toast.error("An unexpected error occurred", {
-        description: userMessage,
+      const errorToast = tone.toast("error", userMessage);
+      toast.error(errorToast.title, {
+        description: errorToast.description,
       });
     }
   };
@@ -154,7 +174,10 @@ export default function Account() {
   if (sessionLoading || profileLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo border-t-transparent mx-auto mb-4"></div>
+          <p className="text-sm text-muted-foreground">{tone.loading('general')}</p>
+        </div>
       </div>
     );
   }
@@ -222,9 +245,9 @@ export default function Account() {
           <CardContent className="space-y-6">
             {/* Current License Status */}
             {licenseLoading ? (
-              <div className="text-center py-6 text-muted-foreground">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo mx-auto mb-4"></div>
-                <p className="text-sm">Loading license status...</p>
+              <div className="text-center py-6">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo border-t-transparent mx-auto mb-4"></div>
+                <p className="text-sm text-muted-foreground">{tone.loading('skeleton')}</p>
               </div>
             ) : licenseStatus === 'valid' && licenseDetails ? (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
@@ -262,10 +285,10 @@ export default function Account() {
                 </div>
               </div>
             ) : (
-              <div className="text-center py-6 text-muted-foreground">
-                <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p className="mb-1">No active license</p>
-                <p className="text-sm">Redeem a license key below to unlock premium features</p>
+              <div className="text-center py-6">
+                <CreditCard className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                <p className="mb-1 font-medium">No active license</p>
+                <p className="text-sm text-muted-foreground">Redeem a license key below to unlock premium features</p>
               </div>
             )}
 
@@ -289,7 +312,8 @@ export default function Account() {
                       if (licenseKey.trim()) {
                         const validation = sanitizeLicenseKey(licenseKey);
                         if (!validation.valid) {
-                          setLicenseKeyError(validation.error || 'Invalid license key');
+                          const licenseForm = tone.form('licenseKey');
+                          setLicenseKeyError(validation.error || licenseForm.validation.required || licenseForm.validation.pattern);
                         } else {
                           setLicenseKeyError(null);
                           // Auto-uppercase and sanitize on blur
@@ -353,10 +377,10 @@ export default function Account() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-8 text-muted-foreground">
-              <Monitor className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No devices connected</p>
-              <p className="text-sm">Devices will appear here when you start using Solun</p>
+            <div className="text-center py-8">
+              <Monitor className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <p className="mb-1 font-medium">No devices connected</p>
+              <p className="text-sm text-muted-foreground">Devices will appear here when you start using Solun</p>
             </div>
           </CardContent>
         </Card>

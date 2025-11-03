@@ -13,6 +13,7 @@ import {
   SheetClose,
 } from "./ui/sheet";
 import { analytics } from "@/lib/analytics";
+import { tone } from "@/copy/tone";
 
 const navigation = [
   { name: "Pricing", href: "/pricing" },
@@ -74,9 +75,10 @@ export function Header() {
               <Link
                 to="/download"
                 onClick={() => analytics.track({ name: 'cta_click', properties: { location: 'header', destination: 'download' } })}
+                aria-label="Download Solun"
               >
                 <FileDown className="h-4 w-4 mr-2" aria-hidden="true" />
-                Download
+                {tone.cta('download')}
               </Link>
             </GradientButton>
           </div>
@@ -146,9 +148,10 @@ export function Header() {
                     <Link
                       to="/download"
                       onClick={() => analytics.track({ name: 'cta_click', properties: { location: 'header_mobile', destination: 'download' } })}
+                      aria-label="Download Solun"
                     >
                       <FileDown className="h-4 w-4 mr-2" aria-hidden="true" />
-                      Download
+                      {tone.cta('download')}
                     </Link>
                   </GradientButton>
                 </SheetClose>

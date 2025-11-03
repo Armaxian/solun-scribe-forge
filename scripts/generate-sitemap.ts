@@ -4,14 +4,18 @@ import { join } from 'path';
 // Static routes to include in sitemap
 const staticRoutes = [
   '',
+  '/about',
   '/download',
   '/features',
   '/pricing',
   '/docs',
   '/blog',
+  '/story',
   '/login',
   '/terms',
-  '/privacy'
+  '/privacy',
+  '/contact',
+  '/faqs'
 ];
 
 // Blog posts from the blog data
