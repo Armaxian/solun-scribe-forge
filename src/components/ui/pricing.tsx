@@ -1,15 +1,19 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Loader2 } from "lucide-react";
 import confetti from "canvas-confetti";
 import NumberFlow from "@number-flow/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useSession } from "@/hooks/use-session";
+import { useSubscription } from "@/hooks/use-subscription";
 import { cn } from "@/lib/utils";
+import { STRIPE_LOOKUP_KEYS, type StripeLookupKey } from "@/lib/stripe";
+import { analytics } from "@/lib/analytics";
 
 export interface PricingPlan {
   name: string;
@@ -21,6 +25,14 @@ export interface PricingPlan {
   buttonText: string;
   href: string;
   isPopular: boolean;
+  /** If true, this is a free plan that doesn't require Stripe */
+  isFree?: boolean;
+  /** Stripe lookup key for monthly billing */
+  stripeLookupKeyMonthly?: StripeLookupKey;
+  /** Stripe lookup key for yearly billing */
+  stripeLookupKeyYearly?: StripeLookupKey;
+  /** If true, this plan requires contacting sales */
+  isContactSales?: boolean;
 }
 
 export interface PricingProps {
@@ -35,8 +47,13 @@ export function Pricing({
   description = "Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support.",
 }: PricingProps) {
   const [isMonthly, setIsMonthly] = useState(true);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const switchRef = useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
+  
+  const { user, loading: sessionLoading } = useSession();
+  const { startCheckoutAsync, isCheckingOut, isActive, subscription } = useSubscription();
 
   const handleToggle = (checked: boolean) => {
     setIsMonthly(!checked);
@@ -65,6 +82,121 @@ export function Pricing({
         shapes: ["circle"],
       });
     }
+  };
+
+  const handlePlanClick = async (plan: PricingPlan) => {
+    // Track analytics
+    analytics.track({
+      name: 'pricing_plan_clicked',
+      properties: {
+        plan_name: plan.name,
+        billing_period: isMonthly ? 'monthly' : 'yearly',
+        is_free: plan.isFree,
+        is_contact_sales: plan.isContactSales,
+      }
+    });
+
+    // Free plan - just navigate to download
+    if (plan.isFree) {
+      navigate(plan.href);
+      return;
+    }
+
+    // Contact sales - navigate to contact page
+    if (plan.isContactSales) {
+      navigate(plan.href);
+      return;
+    }
+
+    // Paid plan - need to be logged in
+    if (!user) {
+      // Redirect to login with return URL
+      navigate(`/login?redirect=/pricing&plan=${plan.name.toLowerCase()}&billing=${isMonthly ? 'monthly' : 'yearly'}`);
+      return;
+    }
+
+    // User already has active subscription
+    if (isActive) {
+      navigate('/account');
+      return;
+    }
+
+    // Get the appropriate lookup key
+    const lookupKey = isMonthly 
+      ? plan.stripeLookupKeyMonthly 
+      : plan.stripeLookupKeyYearly;
+
+    if (!lookupKey) {
+      console.error('No lookup key configured for plan:', plan.name);
+      return;
+    }
+
+    setLoadingPlan(plan.name);
+
+    try {
+      const result = await startCheckoutAsync({
+        lookupKey,
+        successUrl: `${window.location.origin}/account?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${window.location.origin}/pricing?checkout=cancelled`,
+      });
+
+      // If we got a URL, the redirect happens in the mutation
+      // If there's an error, it's handled by the mutation's onError
+      if (result.error && !result.url) {
+        console.error('Checkout failed:', result.error);
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
+
+  const getButtonText = (plan: PricingPlan) => {
+    if (loadingPlan === plan.name || (isCheckingOut && loadingPlan === plan.name)) {
+      return (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+          Processing...
+        </>
+      );
+    }
+
+    if (isActive && !plan.isFree && !plan.isContactSales) {
+      // Check if this is their current plan
+      const currentTier = subscription?.tier;
+      if (currentTier === 'professional' && plan.name === 'Pro') {
+        return 'Current Plan';
+      }
+      if (currentTier === 'team' && plan.name === 'Team') {
+        return 'Current Plan';
+      }
+      return 'Manage Subscription';
+    }
+
+    if (!user && !plan.isFree && !plan.isContactSales) {
+      return 'Sign In to Subscribe';
+    }
+
+    return plan.buttonText;
+  };
+
+  const isButtonDisabled = (plan: PricingPlan) => {
+    if (loadingPlan === plan.name) return true;
+    if (isCheckingOut) return true;
+    
+    // Disable if this is their current plan
+    if (isActive && !plan.isFree && !plan.isContactSales) {
+      const currentTier = subscription?.tier;
+      if (currentTier === 'professional' && plan.name === 'Pro') {
+        return true;
+      }
+      if (currentTier === 'team' && plan.name === 'Team') {
+        return true;
+      }
+    }
+    
+    return false;
   };
 
   return (
@@ -165,15 +297,15 @@ export function Pricing({
                     className="font-variant-numeric: tabular-nums"
                   />
                 </span>
-                {plan.period !== "Next 3 months" && (
+                {plan.period !== "Next 3 months" && plan.period !== "forever" && (
                   <span className="text-sm font-semibold leading-6 tracking-wide text-muted-foreground">
-                    / {plan.period}
+                    / month
                   </span>
                 )}
               </div>
 
               <p className="text-xs leading-5 text-muted-foreground">
-                {isMonthly ? "billed monthly" : "billed annually"}
+                {plan.isFree ? "Free forever" : isMonthly ? "billed monthly" : "billed annually"}
               </p>
 
               <ul className="mt-5 gap-2 flex flex-col">
@@ -187,21 +319,59 @@ export function Pricing({
 
               <hr className="w-full my-4" />
 
-              <Link
-                to={plan.href}
-                className={cn(
-                  buttonVariants({
-                    variant: "outline",
-                  }),
-                  "group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter",
-                  "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground",
-                  plan.isPopular
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-background text-foreground"
-                )}
-              >
-                {plan.buttonText}
-              </Link>
+              {/* Subscription button */}
+              {plan.isFree ? (
+                <Link
+                  to={plan.href}
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline",
+                    }),
+                    "w-full text-lg font-semibold tracking-tighter"
+                  )}
+                >
+                  {plan.buttonText}
+                </Link>
+              ) : plan.isContactSales ? (
+                <Link
+                  to={plan.href}
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline",
+                    }),
+                    "w-full text-lg font-semibold tracking-tighter"
+                  )}
+                >
+                  {plan.buttonText}
+                </Link>
+              ) : (
+                <Link
+                  to={user ? "#" : `/login?redirect=/pricing&plan=${plan.name.toLowerCase()}`}
+                  onClick={(e) => {
+                    if (user || isButtonDisabled(plan)) {
+                      e.preventDefault();
+                      if (!isButtonDisabled(plan)) {
+                        handlePlanClick(plan);
+                      }
+                    }
+                  }}
+                  className={cn(
+                    // Base button styles
+                    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-180 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:-translate-y-[1px] hover:shadow-soft [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+                    // Size
+                    "h-11 px-4 py-2 min-h-[44px] w-full text-lg font-semibold tracking-tighter",
+                    // Conditional styles based on user state
+                    !user && !plan.isFree && !plan.isContactSales 
+                      ? "bg-white border-2 border-primary text-black hover:bg-primary hover:text-white" 
+                      : buttonVariants({
+                          variant: plan.isPopular ? "default" : "outline",
+                        }),
+                    isButtonDisabled(plan) && "opacity-50 pointer-events-none"
+                  )}
+                >
+                  {getButtonText(plan)}
+                </Link>
+              )}
               <p className="mt-6 text-xs leading-5 text-muted-foreground">
                 {plan.description}
               </p>
@@ -212,5 +382,3 @@ export function Pricing({
     </div>
   );
 }
-
-

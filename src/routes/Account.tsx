@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,23 +12,52 @@ import { toast } from "sonner";
 import { useSession } from "@/hooks/use-session";
 import { useProfile } from "@/hooks/use-profile";
 import { useLicense } from "@/hooks/use-license";
+import { useSubscription } from "@/hooks/use-subscription";
 import { signOut } from "@/lib/supabase";
 import { sanitizeLicenseKey } from "@/lib/validation";
 import { sanitizeSupabaseError, sanitizeError } from "@/lib/error-sanitizer";
 import { 
-  getTierDisplayName, 
+  getTierDisplayName as getLicenseTierDisplayName, 
   getTierFeatures,
 } from "@/lib/license";
+import {
+  getTierDisplayName as getSubscriptionTierDisplayName,
+  formatPeriodEnd,
+  isExpiringsSoon,
+  SUBSCRIPTION_STATUS,
+} from "@/lib/stripe";
 import { tone } from "@/copy/tone";
-import { User, LogOut, Monitor, CreditCard, Key, CheckCircle, AlertCircle } from "lucide-react";
+import { 
+  User, 
+  LogOut, 
+  Monitor, 
+  CreditCard, 
+  Key, 
+  CheckCircle, 
+  AlertCircle, 
+  ExternalLink,
+  Clock,
+  CalendarDays,
+  Loader2,
+  RefreshCw,
+} from "lucide-react";
 
 type LicenseStatus = 'none' | 'valid' | 'expired' | 'invalid';
 
 export default function Account() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, loading: sessionLoading } = useSession();
   const { profile, loading: profileLoading } = useProfile();
   const { entitlements, loading: licenseLoading, isValidating, validateLicenseAsync } = useLicense();
+  const { 
+    subscription, 
+    loading: subscriptionLoading, 
+    isActive: hasActiveSubscription,
+    openPortal,
+    isOpeningPortal,
+    refresh: refreshSubscription,
+  } = useSubscription();
 
   // License state
   const [licenseKey, setLicenseKey] = useState('');
@@ -40,13 +69,35 @@ export default function Account() {
     features: string[];
   } | null>(null);
 
+  // Handle checkout success/cancelled from URL params
+  useEffect(() => {
+    const checkoutResult = searchParams.get('checkout');
+    const sessionId = searchParams.get('session_id');
+
+    if (checkoutResult === 'success' && sessionId) {
+      // Show success message
+      const successToast = tone.toast("success", "Your subscription is now active!");
+      toast.success(successToast.title, {
+        description: "Thank you for subscribing to Solun. Your premium features are now unlocked."
+      });
+      // Refresh subscription data
+      refreshSubscription();
+      // Clean up URL params
+      setSearchParams(prev => {
+        prev.delete('checkout');
+        prev.delete('session_id');
+        return prev;
+      });
+    }
+  }, [searchParams, setSearchParams, refreshSubscription]);
+
   // Update license status and details when entitlements change
   useEffect(() => {
     if (!licenseLoading && entitlements) {
       if (entitlements.isValid && entitlements.tier) {
         setLicenseStatus('valid');
         setLicenseDetails({
-          type: getTierDisplayName(entitlements.tier),
+          type: getLicenseTierDisplayName(entitlements.tier),
           expiry: entitlements.expiry || '',
           features: getTierFeatures(entitlements.tier)
         });
@@ -92,7 +143,7 @@ export default function Account() {
       const result = await validateLicenseAsync(keyToUse);
 
       if (result.valid && result.tier && result.expiry) {
-        const tierDisplayName = getTierDisplayName(result.tier);
+        const tierDisplayName = getLicenseTierDisplayName(result.tier);
         setLicenseKeyError(null);
         const successToast = tone.toast("success", `${tierDisplayName} license is now active.`);
         toast.success(successToast.title, {
@@ -171,6 +222,29 @@ export default function Account() {
     }
   };
 
+  const handleOpenPortal = () => {
+    openPortal(`${window.location.origin}/account`);
+  };
+
+  const getSubscriptionStatusBadge = () => {
+    if (!subscription) return null;
+
+    switch (subscription.status) {
+      case SUBSCRIPTION_STATUS.ACTIVE:
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>;
+      case SUBSCRIPTION_STATUS.TRIALING:
+        return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">Trial</Badge>;
+      case SUBSCRIPTION_STATUS.PAST_DUE:
+        return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Past Due</Badge>;
+      case SUBSCRIPTION_STATUS.CANCELED:
+        return <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-100">Canceled</Badge>;
+      case SUBSCRIPTION_STATUS.UNPAID:
+        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Unpaid</Badge>;
+      default:
+        return <Badge variant="outline">{subscription.status}</Badge>;
+    }
+  };
+
   if (sessionLoading || profileLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -188,6 +262,17 @@ export default function Account() {
 
   const displayName = profile?.display_name || user.email?.split('@')[0] || 'User';
   const initials = displayName.slice(0, 2).toUpperCase();
+
+  // Determine current plan name
+  const getCurrentPlanName = () => {
+    if (hasActiveSubscription && subscription?.tier) {
+      return getSubscriptionTierDisplayName(subscription.tier);
+    }
+    if (licenseDetails) {
+      return licenseDetails.type;
+    }
+    return 'Free Plan';
+  };
 
   return (
     <>
@@ -224,10 +309,191 @@ export default function Account() {
                 <h3 className="text-lg font-semibold">{displayName}</h3>
                 <p className="text-muted-foreground">{user.email}</p>
                 <Badge className="mt-1">
-                  {licenseDetails ? licenseDetails.type : 'Free Plan'}
+                  {getCurrentPlanName()}
                 </Badge>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Subscription Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5" />
+              Subscription
+            </CardTitle>
+            <CardDescription>
+              Manage your subscription and billing
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {subscriptionLoading ? (
+              <div className="text-center py-6">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo border-t-transparent mx-auto mb-4"></div>
+                <p className="text-sm text-muted-foreground">{tone.loading('skeleton')}</p>
+              </div>
+            ) : hasActiveSubscription && subscription ? (
+              <div className="space-y-4">
+                {/* Active Subscription Card */}
+                <div className={`p-4 rounded-lg border ${
+                  subscription.cancel_at_period_end 
+                    ? 'bg-yellow-50 border-yellow-200' 
+                    : isExpiringsSoon(subscription)
+                    ? 'bg-orange-50 border-orange-200'
+                    : 'bg-green-50 border-green-200'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className={`h-5 w-5 mt-0.5 ${
+                      subscription.cancel_at_period_end 
+                        ? 'text-yellow-600' 
+                        : isExpiringsSoon(subscription)
+                        ? 'text-orange-600'
+                        : 'text-green-600'
+                    }`} />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className={`font-semibold ${
+                          subscription.cancel_at_period_end 
+                            ? 'text-yellow-800' 
+                            : isExpiringsSoon(subscription)
+                            ? 'text-orange-800'
+                            : 'text-green-800'
+                        }`}>
+                          {getSubscriptionTierDisplayName(subscription.tier)} Plan
+                        </h4>
+                        {getSubscriptionStatusBadge()}
+                      </div>
+                      
+                      <div className="space-y-1 text-sm">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <CalendarDays className="h-4 w-4" />
+                          <span>
+                            {subscription.cancel_at_period_end 
+                              ? `Cancels on ${formatPeriodEnd(subscription.current_period_end)}`
+                              : `Renews on ${formatPeriodEnd(subscription.current_period_end)}`
+                            }
+                          </span>
+                        </div>
+                        
+                        {subscription.cancel_at_period_end && (
+                          <p className="text-yellow-700 mt-2">
+                            Your subscription will end at the current billing period. 
+                            You'll continue to have access until then.
+                          </p>
+                        )}
+                        
+                        {isExpiringsSoon(subscription) && !subscription.cancel_at_period_end && (
+                          <p className="text-orange-700 mt-2">
+                            <Clock className="h-4 w-4 inline mr-1" />
+                            Your subscription renews soon. Ensure your payment method is up to date.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Manage Subscription Button */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    onClick={handleOpenPortal}
+                    disabled={isOpeningPortal}
+                    className="flex-1"
+                  >
+                    {isOpeningPortal ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        Opening Portal...
+                      </>
+                    ) : (
+                      <>
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Manage Subscription
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => refreshSubscription()}
+                    className="sm:w-auto"
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Refresh
+                  </Button>
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  Use the customer portal to update payment methods, view invoices, 
+                  change plans, or cancel your subscription.
+                </p>
+              </div>
+            ) : subscription?.status === SUBSCRIPTION_STATUS.PAST_DUE ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold text-yellow-800">
+                        Payment Past Due
+                      </h4>
+                      <p className="text-sm text-yellow-700">
+                        Your payment failed. Please update your payment method to continue using premium features.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <Button onClick={handleOpenPortal} disabled={isOpeningPortal}>
+                  {isOpeningPortal ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      Opening Portal...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      Update Payment Method
+                    </>
+                  )}
+                </Button>
+              </div>
+            ) : subscription?.status === SUBSCRIPTION_STATUS.CANCELED ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-gray-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold text-gray-800">
+                        Subscription Canceled
+                      </h4>
+                      <p className="text-sm text-gray-700">
+                        Your subscription has been canceled. Subscribe again to restore access to premium features.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <Button asChild>
+                  <Link to="/pricing">
+                    View Plans
+                  </Link>
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="text-center py-6">
+                  <CreditCard className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                  <p className="mb-1 font-medium">No active subscription</p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Subscribe to a plan to unlock premium features
+                  </p>
+                  <Button asChild>
+                    <Link to="/pricing">
+                      View Plans
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -236,10 +502,10 @@ export default function Account() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Key className="h-5 w-5" />
-              License & Billing
+              License Key
             </CardTitle>
             <CardDescription>
-              Manage your license and redeem new license keys
+              Redeem a license key (for desktop app or promotional codes)
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -279,18 +545,12 @@ export default function Account() {
                       License Expired
                     </h4>
                     <p className="text-sm text-red-700">
-                      Your license has expired. Renew or purchase a new license to continue using premium features.
+                      Your license has expired. Redeem a new license key or subscribe to continue using premium features.
                     </p>
                   </div>
                 </div>
               </div>
-            ) : (
-              <div className="text-center py-6">
-                <CreditCard className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                <p className="mb-1 font-medium">No active license</p>
-                <p className="text-sm text-muted-foreground">Redeem a license key below to unlock premium features</p>
-              </div>
-            )}
+            ) : null}
 
             {/* License Redemption Form */}
             <div className="space-y-4">
@@ -333,7 +593,7 @@ export default function Account() {
                   >
                     {isValidating ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        <Loader2 className="h-4 w-4 animate-spin" />
                         Redeeming...
                       </>
                     ) : (
@@ -352,14 +612,6 @@ export default function Account() {
                 <p className="text-xs text-muted-foreground">
                   License keys are case-insensitive. Example: SOLUN-PRO-2024-DEMO
                 </p>
-              </div>
-
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p><strong>Demo licenses available:</strong></p>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li><code className="bg-muted px-1 py-0.5 rounded text-xs">SOLUN-PRO-2024-DEMO</code> - Professional license (expires Dec 31, 2025)</li>
-                  <li><code className="bg-muted px-1 py-0.5 rounded text-xs">SOLUN-BASIC-2024</code> - Basic license (expires Dec 31, 2024)</li>
-                </ul>
               </div>
             </div>
           </CardContent>

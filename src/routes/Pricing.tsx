@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Check, X, Star, Users, Crown, Sparkles, ChevronRight, Info } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Pricing as PricingBlock } from "@/components/ui/pricing";
+import { toast } from "sonner";
 
 import { analytics } from "@/lib/analytics";
+import { STRIPE_LOOKUP_KEYS } from "@/lib/stripe";
+import { tone } from "@/copy/tone";
 
 const plans = [
   {
@@ -76,9 +79,25 @@ const featureCategories = [
 ];
 
 export default function Pricing() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   useEffect(() => {
     analytics.track({ name: 'pricing_view' });
-  }, []);
+
+    // Handle checkout result from URL params
+    const checkoutResult = searchParams.get('checkout');
+    if (checkoutResult === 'cancelled') {
+      const cancelToast = tone.toast("info", "Checkout was cancelled.");
+      toast.info(cancelToast.title, {
+        description: "Your payment was not processed. Feel free to try again when you're ready."
+      });
+      // Clean up URL params
+      setSearchParams(prev => {
+        prev.delete('checkout');
+        return prev;
+      });
+    }
+  }, [searchParams, setSearchParams]);
 
   const pricingPlans = [
     {
@@ -97,6 +116,7 @@ export default function Pricing() {
       buttonText: "Download Free",
       href: "/download",
       isPopular: false,
+      isFree: true,
     },
     {
       name: "Pro",
@@ -112,8 +132,11 @@ export default function Pricing() {
       ],
       description: "Everything you need for serious world-building",
       buttonText: "Get Pro",
-      href: "/download",
+      href: "/pricing",
       isPopular: true,
+      isFree: false,
+      stripeLookupKeyMonthly: STRIPE_LOOKUP_KEYS.PRO_MONTHLY,
+      stripeLookupKeyYearly: STRIPE_LOOKUP_KEYS.PRO_YEARLY,
     },
     {
       name: "Team",
@@ -131,6 +154,8 @@ export default function Pricing() {
       buttonText: "Contact Sales",
       href: "/contact",
       isPopular: false,
+      isFree: false,
+      isContactSales: true,
     },
   ];
 

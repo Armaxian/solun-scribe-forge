@@ -16,6 +16,12 @@ export const queryKeys = {
     entitlements: (userId: string) => ['license', 'entitlements', userId] as const,
   },
   
+  // Subscription queries
+  subscription: {
+    all: ['subscription'] as const,
+    details: (userId: string) => ['subscription', 'details', userId] as const,
+  },
+  
   // Download/release queries
   downloads: {
     all: ['downloads'] as const,
