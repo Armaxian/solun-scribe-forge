@@ -89,15 +89,24 @@ export async function createCheckoutSession(
     return { error: 'Not authenticated. Please log in to continue.' }
   }
 
+  // Defensive check for environment variables
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Missing Supabase environment variables')
+    return { error: 'Payment system not configured. Please contact support.' }
+  }
+
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`,
+      `${supabaseUrl}/functions/v1/stripe-checkout`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+          'apikey': supabaseAnonKey,
         },
         body: JSON.stringify({
           lookup_key: lookupKey,
@@ -133,15 +142,24 @@ export async function createPortalSession(returnUrl?: string): Promise<PortalRes
     return { error: 'Not authenticated. Please log in to continue.' }
   }
 
+  // Defensive check for environment variables
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Missing Supabase environment variables')
+    return { error: 'Payment system not configured. Please contact support.' }
+  }
+
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-portal`,
+      `${supabaseUrl}/functions/v1/stripe-portal`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+          'apikey': supabaseAnonKey,
         },
         body: JSON.stringify({
           return_url: returnUrl,

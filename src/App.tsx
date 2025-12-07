@@ -28,6 +28,7 @@ const Login = lazy(() => import("./routes/Login"));
 const NotFound = lazy(() => import("./routes/NotFound"));
 const Pricing = lazy(() => import("./routes/Pricing"));
 const Privacy = lazy(() => import("./routes/Privacy"));
+const Debug = lazy(() => import("./routes/Debug"));
 const Root = lazy(() => import("./routes/Root"));
 const Story = lazy(() => import("./routes/Story"));
 const Terms = lazy(() => import("./routes/Terms"));
@@ -260,6 +261,7 @@ const AppContent = () => {
                 <Route path="cookies" element={<Cookies />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="faqs" element={<FAQs />} />
+                <Route path="debug" element={<Debug />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
