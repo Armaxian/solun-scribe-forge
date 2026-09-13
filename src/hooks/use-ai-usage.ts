@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { useSession } from './use-session'
-import { supabase } from '@/lib/supabase'
+
 import { queryKeys } from './query-keys'
+import { useSession } from './use-session'
+
+import { supabase } from '@/lib/supabase'
 
 export interface UsagePeriod {
   user_id: string
@@ -34,21 +36,13 @@ export function useAIUsage() {
     queryFn: async (): Promise<UsagePeriod | null> => {
       if (!user) return null
 
-      const { data, error } = await supabase
-        .from('user_usage_periods')
-        .select('*')
-        .eq('user_id', user.id)
-        .single()
+      const { data, error } = await supabase.rpc('current_ai_usage')
 
       if (error) {
-        if (error.code === 'PGRST116') {
-          // No usage period yet - user might not have subscription
-          return null
-        }
         throw error
       }
 
-      return data as UsagePeriod
+      return data as UsagePeriod | null
     },
     enabled: !!user,
     staleTime: 1000 * 30, // 30 seconds - usage changes frequently
