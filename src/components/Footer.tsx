@@ -153,7 +153,7 @@ export function Footer() {
               aria-label="Go to homepage"
             >
               <img 
-                src="/fevicon.ico" 
+                src="/favicon.ico"
                 alt="Solun logo" 
                 className="h-6 w-6 rounded-lg object-contain" 
                 aria-hidden="true"

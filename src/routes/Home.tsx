@@ -1,424 +1,204 @@
+import { ArrowRight, BookOpen, Database, FileText, MessageSquare, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import {
-  FileText,
-  Database,
-  MessageSquare,
-  GitBranch,
-  Shield,
-  Palette,
-  ChevronRight,
-  BookOpen,
-  Layers
-} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { GradientButton } from "@/components/ui/gradient-button";
-import { TypewriterTextInk } from "@/components/ui/TypewriterTextInk";
-import InkflowTitle from "@/components/Inkflow/InkflowTitle";
 import PrismDemo from "@/components/ui/prism-demo";
-import { ThreeSplineScene } from "@/components/ui/three-spline-scene";
 import { analytics } from "@/lib/analytics";
 import { getDetailedPlatformInfo, getPlatformLabel, type Platform } from "@/lib/platform";
-import { useInView } from "@/hooks/useInView";
-import { tone } from "@/copy/tone";
 
-const featuresDetailed = [
+const features = [
   {
     icon: FileText,
-    title: "Focused Writing",
-    subtitle: "A place for your manuscript",
-    description:
-      "Write in a clean, distraction-free editor designed for long-form storytelling. Your manuscript stays on your device, organized in local projects with automatic saves and export options.",
-    illustration: "editor",
-    details: [
-      "TipTap-based rich text editor",
-      "Local project organization",
-      "Auto-save to SQLite",
-      "Export to Markdown, DOCX, PDF",
-    ],
+    number: "01",
+    title: "A calm place to draft",
+    description: "Write long-form work in a focused desktop editor with automatic local saves and clean exports.",
+    detail: "Markdown · DOCX · PDF",
   },
   {
     icon: Database,
-    title: "Lore Vault",
-    subtitle: "Keep your story details close",
-    description:
-      "Store characters, places, and items alongside your manuscript. Create relationships and timelines to keep your world consistent. Everything stays in your local database.",
-    illustration: "lore-vault",
-    details: [
-      "Characters, places, items",
-      "Relationships and timeline tracking",
-      "Local SQLite storage",
-      "Cross-referenced to your writing",
-    ],
+    number: "02",
+    title: "A memory for your world",
+    description: "Keep characters, places, items, relationships, and timelines beside the manuscript they belong to.",
+    detail: "Lore Vault · Local SQLite",
   },
   {
     icon: MessageSquare,
-    title: "AI Writing Assistant",
-    subtitle: "Ask questions about your story",
-    description:
-      "Get help from AI that can reference your characters and plot. The AI uses context from your Lore Vault to provide relevant suggestions. Requires an internet connection and subscription for AI access.",
-    illustration: "ai-chat",
-    details: [
-      "Context-aware AI responses",
-      "References your Lore Vault",
-      "Review suggestions before accepting",
-      "AI usage requires subscription",
-    ],
+    number: "03",
+    title: "AI with the right context",
+    description: "Ask for help using the lore and passages you choose. Review every suggestion before it reaches your draft.",
+    detail: "Optional · Subscription access",
   },
   {
     icon: Shield,
-    title: "Local-First Privacy",
-    subtitle: "Your writing stays on your device",
-    description:
-      "Manuscripts, lore, and backups are stored locally in SQLite. Only selected context is sent to AI when you explicitly ask for help. No automatic cloud sync or data mining.",
-    illustration: "privacy",
-    details: [
-      "Local SQLite database",
-      "Device-local storage",
-      "AI context sent only when requested",
-      "Local backups you control",
-    ],
+    number: "04",
+    title: "Your work stays yours",
+    description: "Manuscripts and lore live on your device. Solun sends context only when you make an AI request.",
+    detail: "Local-first · No automatic sync",
   },
 ];
 
 export default function Home() {
-  const [detectedPlatform, setDetectedPlatform] = useState<Platform>('unknown');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
-  const { ref: titleRef, inView } = useInView<HTMLDivElement>("100px");
+  const [platform, setPlatform] = useState<Platform>("unknown");
 
   useEffect(() => {
-    analytics.track({ name: 'hero_view' });
-
-    // Detect platform on component mount
-    const platformInfo = getDetailedPlatformInfo();
-    setDetectedPlatform(platformInfo.platform);
+    analytics.track({ name: "hero_view" });
+    setPlatform(getDetailedPlatformInfo().platform);
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isDropdownOpen && !(event.target as Element).closest('.relative')) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isDropdownOpen]);
-
-  const detectedLabel = getPlatformLabel(detectedPlatform);
-
-  const platformOptions = [
-    { platform: 'windows' as Platform, label: 'Windows' },
-    { platform: 'mac-intel' as Platform, label: 'macOS (Intel)' },
-    { platform: 'mac-arm' as Platform, label: 'macOS (Apple Silicon)' },
-    { platform: 'linux' as Platform, label: 'Linux' },
-  ];
-
-  const handleDownload = (platform?: Platform) => {
-    const targetPlatform = platform || detectedPlatform;
-    analytics.track({
-      name: 'cta_click',
-      properties: {
-        location: 'hero',
-        destination: 'download',
-        platform: targetPlatform
-      }
-    });
-    // Navigate to download page with platform parameter
-    window.location.href = `/download${targetPlatform !== detectedPlatform ? `?platform=${targetPlatform}` : ''}`;
-  };
-
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const platformLabel = getPlatformLabel(platform);
 
   return (
     <>
       <Helmet>
-        <title>Solun - Writing Workspace for Novelists and World-Builders</title>
-        <meta name="description" content="A desktop writing workspace for your manuscript, your world, and the ideas between them. Local-first editor with Lore Vault and AI writing assistance." />
+        <title>Solun — A local-first writing studio for fiction</title>
+        <meta name="description" content="Write your manuscript, organize your world, and ask AI for help in one local-first desktop studio." />
         <link rel="canonical" href="https://solun.app/" />
-        <meta property="og:title" content="Solun - Writing Workspace for Novelists" />
-        <meta property="og:description" content="Desktop writing workspace with manuscript editor, Lore Vault, and AI assistance. Your writing stays on your device." />
+        <meta property="og:title" content="Solun — A local-first writing studio for fiction" />
+        <meta property="og:description" content="Your manuscript, your world, and the ideas between them — together on your desktop." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/" />
         <meta property="og:site_name" content="Solun" />
-        <meta property="og:image" content="https://solun.app/og-image-home.png" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Solun Writing Workspace" />
+        <meta property="og:image" content="https://solun.app/og-image-home.svg" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Solun - Writing Workspace for Novelists" />
-        <meta name="twitter:description" content="Desktop writing workspace with manuscript editor, Lore Vault, and AI assistance. Your writing stays on your device." />
-        <meta name="twitter:image" content="https://solun.app/og-image-home.png" />
-        <meta name="twitter:image:alt" content="Solun Writing Workspace" />
+        <meta name="twitter:title" content="Solun — A local-first writing studio for fiction" />
+        <meta name="twitter:description" content="Your manuscript, your world, and the ideas between them — together on your desktop." />
+        <meta name="twitter:image" content="https://solun.app/og-image-home.svg" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "Solun",
-            "description": "A premium AI workspace for writers and world-builders. Distraction-free editor, Lore Vault, and RAG-powered chat working in harmony.",
-            "brand": {
-              "@type": "Brand",
-              "name": "Solun"
-            },
-            "manufacturer": {
-              "@type": "Organization",
-              "name": "Solun",
-              "url": "https://solun.app"
-            },
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "USD",
-              "description": "Free tier with unlimited basic features"
-            },
-            "applicationCategory": "ProductivityApplication",
-            "operatingSystem": "Windows, macOS, Linux",
-            "softwareVersion": "1.0.0",
-            "fileSize": "85 MB",
-            "url": "https://solun.app/download",
-            "screenshot": "https://solun.app/screenshot.png"
-          })}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Solun",
-            "url": "https://solun.app",
-            "description": "Premium AI writing workspace for world-builders and authors",
-            "foundingDate": "2024",
-            "sameAs": [
-              "https://twitter.com/solun_app"
-            ],
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "contactType": "customer service",
-              "url": "https://solun.app/support"
-            }
+            "@type": "SoftwareApplication",
+            name: "Solun",
+            description: "A local-first desktop writing studio with a manuscript editor, Lore Vault, and optional AI assistance.",
+            applicationCategory: "ProductivityApplication",
+            operatingSystem: "Windows, macOS, Linux",
+            url: "https://solun.app/download",
+            offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
           })}
         </script>
       </Helmet>
-      <div className="flex min-h-screen flex-col relative">
-      
-      {/* Hero Section */}
-      <section className="relative overflow-hidden" style={{ paddingBlock: 'var(--space-hero)' }} aria-labelledby="hero-heading">
-        {/* Prism Background */}
-        <div className="absolute inset-0 z-0">
-          <PrismDemo />
-        </div>
-        
-        {/* Typewriter Heading Over Prism */}
-        <div className="container max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl relative z-10">
-          <div className="flex flex-col items-center justify-center text-center min-h-[600px]">
-            <div className="space-y-8 animate-fade-in max-w-4xl">
-              <div ref={titleRef} className="w-full">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
-                  <TypewriterTextInk
-                    text={["Write worlds.", "Write stories.", "Write ideas."]}
-                    speed={120}
-                    delay={800}
-                    className="typewriter-subtle"
-                    onComplete={() => setIsTypingComplete(true)}
-                    loop={true}
-                    pauseTime={3000}
-                  />
-                </h1>
-                <p className="text-xl md:text-2xl text-foreground/80 font-medium leading-relaxed px-4">
-                  A writing workspace for your manuscript, your world, and the ideas between them.
-                </p>
-              </div>
-              <div className={`flex flex-col items-center gap-6 transition-all duration-1000 ${isTypingComplete ? 'opacity-100 transform translate-y-0' : 'opacity-60 transform translate-y-2'}`}>
-                <p className="text-base text-muted-foreground max-w-2xl px-4">
-                  Explore and write locally without an account. Sign in when you want AI assistance.
-                </p>
-                <GradientButton
-                  className="relative z-10 typewriter text-lg px-8 py-6"
-                  onClick={() => handleDownload()}
-                  aria-label={`Download Solun for ${detectedLabel}`}
-                >
-                  {tone.cta('download')}
-                </GradientButton>
-                <div className="flex flex-wrap items-center justify-center gap-1 text-sm text-muted-foreground typewriter">
-                  <span>Also available for</span>
-                  {platformOptions
-                    .filter(opt => opt.platform !== detectedPlatform)
-                    .map((opt, i, arr) => (
-                      <span key={opt.platform} className="inline-flex items-center">
-                        <button
-                          onClick={() => handleDownload(opt.platform)}
-                          className="underline hover:text-[#0B3D2E] transition-colors font-medium typewriter py-1 px-2 min-h-[44px] inline-flex items-center"
-                        >
-                          {opt.label}
-                        </button>
-                        {i < arr.length - 1 && <span className="mx-1">{i === arr.length - 2 ? ' and' : ','}</span>}
-                      </span>
-                    ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <hr className="mx-auto max-w-5xl xl:max-w-6xl 2xl:max-w-7xl border-t border-black/10 my-10" />
-
-      {/* Features Page Content injected under hero */}
-      {/* Features Grid (detailed) */}
-      <section className="section-tight">
-        <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
-          <div className="space-y-20">
-            {featuresDetailed.map((feature, index) => (
-              <div
-                key={feature.title}
-                className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${
-                  index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-                }`}
-              >
-                {/* Content */}
-                <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-xl bg-phthalo/10">
-                        <feature.icon className="h-8 w-8 text-phthalo" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <h2 className="text-2xl md:text-3xl font-bold">{feature.title}</h2>
-                        {('subtitle' in feature) && (
-                          <p className="text-phthalo font-medium">{(feature as any).subtitle}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <p className="text-lg text-muted-foreground leading-relaxed">
-                      {feature.description}
-                    </p>
-
-                    {'details' in feature && (
-                      <ul className="space-y-3">
-                        {(feature as any).details.map((detail: string, detailIndex: number) => (
-                          <li key={detailIndex} className="flex items-start gap-3">
-                            <ChevronRight className="h-5 w-5 text-phthalo mt-0.5 flex-shrink-0" aria-hidden="true" />
-                            <span className="text-muted-foreground">{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-
-                {/* Illustration Placeholder or Spline Scene */}
-                <div className={index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}>
-                  <div className="card-hover">
-                    {(feature as any).hasSpline ? (
-                      <div className="aspect-video bg-gradient-subtle rounded-lg overflow-hidden">
-                        <ThreeSplineScene
-                          sceneUrl={(feature as any).splineScene}
-                          className="w-full h-full"
-                        />
-                      </div>
-                    ) : (
-                      <div className="aspect-video bg-gradient-subtle rounded-lg flex items-center justify-center">
-                        <div className="text-center space-y-4">
-                          <feature.icon className="h-16 w-16 text-phthalo/40 mx-auto" aria-hidden="true" />
-                          <p className="text-muted-foreground font-medium">
-                            {feature.illustration.replace('-', ' ').toUpperCase()}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            Illustration coming soon
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Feature Comparison */}
-      <section className="section bg-gradient-subtle">
-        <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
-          <div className="mx-auto max-w-4xl xl:max-w-5xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Everything working together
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                Features that enhance each other, creating a seamless writing experience
+      <div className="min-h-screen overflow-hidden">
+        <section className="relative border-b border-black/10" aria-labelledby="hero-heading">
+          <div className="container grid min-h-[calc(100svh-72px)] max-w-7xl items-center gap-8 py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-20">
+            <div className="relative z-10 max-w-3xl">
+              <p className="label-mono mb-7 flex items-center gap-3 text-phthalo">
+                <span className="h-px w-8 bg-current" aria-hidden="true" />
+                A desktop studio for fiction
               </p>
+              <h1 id="hero-heading" className="display-serif text-[clamp(3.6rem,8vw,7.5rem)] font-normal leading-[0.88] tracking-[-0.055em]">
+                Hold a whole world
+                <span className="mt-2 block italic text-phthalo">in one place.</span>
+              </h1>
+              <p className="mt-8 max-w-xl text-lg leading-8 text-foreground/70 md:text-xl">
+                Draft the story, map its lore, and explore new possibilities without scattering your work across a dozen tools.
+              </p>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <GradientButton asChild className="group px-7">
+                  <Link
+                    to="/download"
+                    onClick={() => analytics.track({ name: "cta_click", properties: { location: "hero", destination: "download", platform } })}
+                  >
+                    Download for {platformLabel}
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  </Link>
+                </GradientButton>
+                <Button asChild variant="ghost" size="lg" className="justify-start px-5 text-phthalo sm:justify-center">
+                  <a href="#inside-solun">See what’s inside</a>
+                </Button>
+              </div>
+              <dl className="mt-12 grid max-w-2xl grid-cols-1 gap-4 border-t border-black/10 pt-6 text-sm sm:grid-cols-3">
+                <div><dt className="text-foreground/45">Account</dt><dd className="mt-1 font-semibold">Not required to write</dd></div>
+                <div><dt className="text-foreground/45">Storage</dt><dd className="mt-1 font-semibold">Local SQLite</dd></div>
+                <div><dt className="text-foreground/45">AI</dt><dd className="mt-1 font-semibold">Only when you ask</dd></div>
+              </dl>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="card-hover text-center">
-                <BookOpen className="h-12 w-12 mx-auto mb-4 text-phthalo" aria-hidden="true" />
-                <h3 className="text-xl font-semibold mb-2">Write</h3>
-                <p className="text-muted-foreground">
-                  Distraction-free editor with pagination
-                </p>
+            <div className="relative min-h-[420px] lg:min-h-[650px]" aria-hidden="true">
+              <div className="absolute inset-[-8%_-22%_-8%_-12%] opacity-85 [mask-image:radial-gradient(ellipse_at_center,black_42%,transparent_76%)]">
+                <PrismDemo />
               </div>
-
-              <div className="card-hover text-center">
-                <Database className="h-12 w-12 mx-auto mb-4 text-olive" aria-hidden="true" />
-                <h3 className="text-xl font-semibold mb-2">Connect</h3>
-                <p className="text-muted-foreground">
-                  Lore Vault links everything together
+              <div className="absolute bottom-8 right-0 w-[min(85%,390px)] rotate-[-2deg] border border-black/10 bg-[#faf8f0]/90 p-6 shadow-[0_28px_80px_rgba(14,20,17,.16)] backdrop-blur-sm">
+                <div className="mb-7 flex items-center justify-between border-b border-black/10 pb-3 text-[11px] uppercase tracking-[0.18em] text-foreground/45">
+                  <span>Chapter twelve</span><span>1,842 words</span>
+                </div>
+                <p className="display-serif text-2xl leading-relaxed text-foreground/85">
+                  The bells began before dawn, each note crossing the valley like a question no one wanted to answer.
                 </p>
-              </div>
-
-              <div className="card-hover text-center">
-                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-phthalo" aria-hidden="true" />
-                <h3 className="text-xl font-semibold mb-2">Explore</h3>
-                <p className="text-muted-foreground">
-                  AI chat informed by your world
-                </p>
+                <div className="mt-8 flex items-center gap-2 text-xs text-phthalo">
+                  <BookOpen className="h-4 w-4" /><span>Linked: The Glass Abbey · Elian Voss</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
+        <section id="inside-solun" className="scroll-mt-24 py-24 md:py-32" aria-labelledby="features-heading">
+          <div className="container max-w-7xl">
+            <div className="grid gap-10 border-b border-black/10 pb-14 lg:grid-cols-[.7fr_1.3fr] lg:items-end">
+              <p className="label-mono text-phthalo">Inside Solun</p>
+              <h2 id="features-heading" className="display-serif max-w-4xl text-4xl font-normal leading-tight tracking-[-0.035em] md:text-6xl">
+                The work behind the story, kept close to the story.
+              </h2>
+            </div>
 
-
-      {/* Final CTA */}
-      <section style={{ paddingBlock: 'var(--space-section)' }} className="border-t border-border/40" aria-labelledby="cta-heading">
-        <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl text-center space-y-8 flex flex-col items-center">
-          <h2 id="cta-heading" className="text-3xl md:text-4xl font-semibold tracking-[-0.01em] text-foreground mb-6 typewriter">
-            Start writing today
-          </h2>
-          <div className="h-px w-12 bg-[#0B3D2E]/30 mb-8" />
-          <p className="text-lg text-muted-foreground max-w-xl prose-reading-comfortable typewriter">
-            Join writers crafting immersive worlds with confidence
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <GradientButton
-              asChild
-              className="typewriter"
-            >
-              <Link to="/download" aria-label="Download Solun for free">
-                {tone.cta('download')}
-              </Link>
-            </GradientButton>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 border-[#0B3D2E] text-[#0B3D2E] hover:bg-[#0B3D2E]/5 px-8 py-4 text-lg font-semibold rounded-xl typewriter"
-              asChild
-            >
-              <Link to="/login" aria-label="Log in to Solun">
-                Log In
-              </Link>
-            </Button>
+            <div className="grid md:grid-cols-2">
+              {features.map((feature) => (
+                <article key={feature.number} className="group border-b border-black/10 py-10 md:p-10 md:[&:nth-child(odd)]:border-r">
+                  <div className="mb-10 flex items-start justify-between">
+                    <span className="label-mono text-foreground/35">{feature.number}</span>
+                    <feature.icon className="h-7 w-7 text-phthalo transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" aria-hidden="true" />
+                  </div>
+                  <h3 className="display-serif text-3xl font-normal tracking-[-0.025em]">{feature.title}</h3>
+                  <p className="mt-4 max-w-xl text-base leading-7 text-foreground/65">{feature.description}</p>
+                  <p className="label-mono mt-8 text-[11px] text-phthalo/75">{feature.detail}</p>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <section className="bg-phthalo py-24 text-white md:py-32" aria-labelledby="flow-heading">
+          <div className="container max-w-7xl">
+            <div className="grid gap-14 lg:grid-cols-[.8fr_1.2fr]">
+              <div>
+                <p className="label-mono text-white/55">The writing loop</p>
+                <h2 id="flow-heading" className="display-serif mt-6 text-5xl font-normal leading-none tracking-[-0.04em] md:text-7xl">
+                  Write.<br />Connect.<br /><span className="italic text-[#d7d8a7]">Discover.</span>
+                </h2>
+              </div>
+              <ol className="border-t border-white/20">
+                {[
+                  ["Draft", "Stay in the manuscript while ideas are moving."],
+                  ["Connect", "Link a person, place, or thread before the detail slips away."],
+                  ["Ask", "Bring selected context into an AI conversation when you need another angle."],
+                ].map(([title, description], index) => (
+                  <li key={title} className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-white/20 py-8 sm:grid-cols-[4rem_10rem_1fr] sm:items-baseline">
+                    <span className="label-mono text-white/35">0{index + 1}</span>
+                    <h3 className="display-serif text-3xl font-normal">{title}</h3>
+                    <p className="col-start-2 leading-7 text-white/65 sm:col-start-3">{description}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 md:py-32" aria-labelledby="cta-heading">
+          <div className="container max-w-5xl text-center">
+            <p className="label-mono text-phthalo">Start with the blank page</p>
+            <h2 id="cta-heading" className="display-serif mx-auto mt-7 max-w-4xl text-5xl font-normal leading-[1.02] tracking-[-0.04em] md:text-7xl">
+              Your next world already has a first sentence.
+            </h2>
+            <p className="mx-auto mt-7 max-w-xl text-lg leading-8 text-foreground/65">Explore and write locally for free. Sign in only when you want AI assistance.</p>
+            <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+              <GradientButton asChild><Link to="/download">Download Solun</Link></GradientButton>
+              <Button asChild variant="outline" size="lg"><Link to="/pricing">View pricing</Link></Button>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );

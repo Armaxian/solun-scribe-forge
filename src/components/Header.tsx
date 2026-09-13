@@ -33,11 +33,11 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 py-3.5" role="banner" style={{ backgroundColor: 'transparent' }}>
+    <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f5f2e8]/85 py-3.5 backdrop-blur-xl" role="banner">
       <div className="container max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="Solun - Home">
-            <img src="/fevicon.ico" alt="Solun Logo" className="h-8 w-8" />
+            <img src="/favicon.ico" alt="" className="h-8 w-8" />
             <span className="text-xl font-semibold tracking-tight typewriter">Solun</span>
           </Link>
 

@@ -137,14 +137,14 @@
     --card: 0 0% 100% !important;        /* White cards */
     --card-foreground: 0 0% 5% !important;
     
-    --primary: var(--solun-green);
+    --primary: var(--phthalo);
     --primary-foreground: 0 0% 100%;
     
     --secondary: var(--olive);
     --secondary-foreground: 0 0% 100%;
     
-    --accent: var(--olive-light);
-    --accent-foreground: 0 0% 5%;
+    --accent: 75 32% 88%;
+    --accent-foreground: var(--phthalo);
     
     --muted: 0 0% 95%;        /* Light gray */
     --muted-foreground: 0 0% 45%; /* Improved contrast for WCAG AA compliance (45% vs 35%) */
@@ -153,7 +153,6 @@
     --popover-foreground: 0 0% 5% !important;
 
     --bg: #FFFFFF;
-    --ink: #0C0C0C;
 
     --border: 42 20% 85%;
     --input: 42 20% 90%;
@@ -194,8 +193,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-mono antialiased text-[15px] sm:text-[16px];
-    font-family: 'Courier New', 'Courier', monospace;
+    @apply bg-background text-foreground antialiased text-[16px];
+    font-family: 'Courier Prime', 'Courier New', monospace;
     font-feature-settings: "liga","kern";
     background-color: #f5f2e8 !important;
     color: #0C0C0C !important;
@@ -237,6 +236,7 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
+    font-family: 'Newsreader', Georgia, serif;
     @apply font-semibold tracking-tight;
   }
 
@@ -482,6 +482,10 @@
   .typewriter { 
     font-family: 'Courier Prime', 'Courier', monospace; 
     letter-spacing: .005em; 
+  }
+
+  .display-serif {
+    font-family: 'Newsreader', Georgia, serif;
   }
   
   .label-mono { 

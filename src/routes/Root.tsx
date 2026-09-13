@@ -6,7 +6,7 @@ export default function Root() {
     <>
       <Helmet>
         <title>Solun - Write worlds. Keep them true.</title>
-        <meta name="description" content="A premium AI workspace for writers and world-builders. Distraction-free editor, Lore Vault, and RAG-powered chat working in harmony." />
+        <meta name="description" content="A local-first desktop writing studio with a focused editor, Lore Vault, and optional AI assistance." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0B3D2E" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />

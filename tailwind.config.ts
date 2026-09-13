@@ -28,9 +28,9 @@ export default {
       },
       fontFamily: {
         typewriter: ['Courier Prime', 'Courier', 'monospace'],
-        serif: ['Courier New', 'Courier', 'monospace'],
-        mono: ['Courier New', 'Courier', 'monospace'],
-        sans: ['Courier New', 'Courier', 'monospace'],
+        serif: ['Newsreader', 'Georgia', 'serif'],
+        mono: ['Azeret Mono', 'ui-monospace', 'monospace'],
+        sans: ['Courier Prime', 'Courier', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
