@@ -1,8 +1,8 @@
 import { Github, Instagram } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useState, useCallback, useRef, useMemo } from "react";
+import { Link } from "react-router-dom";
+
 import { useNewsletter } from "@/hooks/use-newsletter";
-import { tone } from "@/copy/tone";
 
 // Define available routes - only show links for routes that exist
 const AVAILABLE_ROUTES = {
@@ -142,11 +142,11 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-background border-t border-border/40" role="contentinfo">
-      <div className="container py-8 sm:py-12">
-        <div className="grid gap-8 md:gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+    <footer className="site-footer border-t border-white/10 bg-phthalo text-white" role="contentinfo">
+      <div className="container max-w-7xl py-12 sm:py-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.25fr_.65fr_.65fr_.65fr_1.15fr] lg:gap-8">
           {/* Brand & Social */}
-          <div className="space-y-3 lg:col-span-2">
+          <div className="space-y-4">
             <Link 
               to="/" 
               className="flex items-center gap-2 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"

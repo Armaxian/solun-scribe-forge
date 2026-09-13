@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useNetworkState } from '@/hooks/use-network-state';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, Wifi, WifiOff } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { useNetworkState } from '@/hooks/use-network-state';
 
 interface OfflineBannerProps {
   /** Minimum number of consecutive failures before showing banner */

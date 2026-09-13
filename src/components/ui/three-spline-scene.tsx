@@ -1,9 +1,9 @@
 'use client'
 
+import SplineLoader from '@splinetool/loader'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import SplineLoader from '@splinetool/loader'
 
 interface ThreeSplineSceneProps {
   sceneUrl: string

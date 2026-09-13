@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import { supabase, type Database } from '../supabase';
 
 import { fetchProfile, updateProfile } from '@/hooks/use-profile';

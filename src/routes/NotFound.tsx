@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import { useLocation, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useLocation, Link } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { tone } from "@/copy/tone";
 

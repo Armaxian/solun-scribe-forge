@@ -1,10 +1,12 @@
+import { Lock, Sparkles } from 'lucide-react';
 import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLicense } from '@/hooks/use-license';
 import { LicenseTier } from '@/lib/license';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { Lock, Sparkles } from 'lucide-react';
+
 
 interface LicenseGateProps {
   children: ReactNode;

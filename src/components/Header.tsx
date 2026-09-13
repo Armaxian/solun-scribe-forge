@@ -18,6 +18,7 @@ import { useSession } from "@/hooks/use-session";
 import { analytics } from "@/lib/analytics";
 
 const navigation = [
+  { name: "Features", href: "/features" },
   { name: "Pricing", href: "/pricing" },
   { name: "Docs", href: "/docs" },
   { name: "Blog", href: "/blog" },
@@ -33,23 +34,23 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f5f2e8]/85 py-3.5 backdrop-blur-xl" role="banner">
-      <div className="container max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl flex items-center justify-between">
+    <header className="site-header sticky top-0 z-50 border-b border-black/10 bg-[#f5f2e8]/88 py-3 backdrop-blur-xl" role="banner">
+      <div className="container flex max-w-7xl items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="Solun - Home">
             <img src="/favicon.ico" alt="" className="h-8 w-8" />
             <span className="text-xl font-semibold tracking-tight typewriter">Solun</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6" role="navigation" aria-label="Main navigation">
+          <nav className="hidden items-center gap-1 md:flex" role="navigation" aria-label="Main navigation">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`text-sm font-medium transition-colors tracking-tight nav-link typewriter ${
+                className={`nav-link typewriter rounded-full px-3 py-2 text-sm font-medium tracking-tight transition-colors ${
                   location.pathname === item.href
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-phthalo/8 text-phthalo"
+                    : "text-muted-foreground hover:bg-black/[.035] hover:text-foreground"
                 }`}
                 aria-current={location.pathname === item.href ? "page" : undefined}
               >

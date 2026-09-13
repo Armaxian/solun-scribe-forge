@@ -1,7 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+
 import { Button } from '@/components/ui/button';
-import { tone } from '@/copy/tone';
 
 interface Props {
   children: ReactNode;

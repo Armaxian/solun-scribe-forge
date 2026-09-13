@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+
+import { queryKeys } from './query-keys';
+
 import {
   getReleaseConfig,
-  type Platform,
-  type ReleaseInfo,
 } from '@/lib/releases';
-import { queryKeys } from './query-keys';
 
 /**
  * Hook for fetching download/release metadata

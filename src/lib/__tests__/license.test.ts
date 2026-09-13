@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import {
   validateLicense,
   fetchUserEntitlements,
   hasValidLicense,
   getTierDisplayName,
   getTierFeatures,
-  type LicenseTier,
 } from '../license';
 import { supabase } from '../supabase';
 

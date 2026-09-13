@@ -82,20 +82,20 @@ export default function Home() {
 
       <div className="min-h-screen overflow-hidden">
         <section className="relative border-b border-black/10" aria-labelledby="hero-heading">
-          <div className="container grid min-h-[calc(100svh-72px)] max-w-7xl items-center gap-8 py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-20">
-            <div className="relative z-10 max-w-3xl">
+          <div className="container grid min-h-[calc(100svh-69px)] max-w-7xl min-w-0 items-center gap-8 py-14 sm:py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-20">
+            <div className="relative z-10 min-w-0 max-w-3xl">
               <p className="label-mono mb-7 flex items-center gap-3 text-phthalo">
                 <span className="h-px w-8 bg-current" aria-hidden="true" />
                 A desktop studio for fiction
               </p>
-              <h1 id="hero-heading" className="display-serif text-[clamp(3.6rem,8vw,7.5rem)] font-normal leading-[0.88] tracking-[-0.055em]">
+              <h1 id="hero-heading" className="display-serif max-w-full text-[clamp(3rem,8vw,7.5rem)] font-normal leading-[0.9] tracking-[-0.055em] [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">
                 Hold a whole world
                 <span className="mt-2 block italic text-phthalo">in one place.</span>
               </h1>
               <p className="mt-8 max-w-xl text-lg leading-8 text-foreground/70 md:text-xl">
                 Draft the story, map its lore, and explore new possibilities without scattering your work across a dozen tools.
               </p>
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-10 flex max-w-full flex-col gap-3 sm:flex-row sm:items-center">
                 <GradientButton asChild className="group px-7">
                   <Link
                     to="/download"
@@ -109,18 +109,18 @@ export default function Home() {
                   <a href="#inside-solun">See what’s inside</a>
                 </Button>
               </div>
-              <dl className="mt-12 grid max-w-2xl grid-cols-1 gap-4 border-t border-black/10 pt-6 text-sm sm:grid-cols-3">
+              <dl className="mt-12 grid max-w-2xl grid-cols-1 gap-5 border-t border-black/10 pt-6 text-sm sm:grid-cols-3 sm:gap-4">
                 <div><dt className="text-foreground/45">Account</dt><dd className="mt-1 font-semibold">Not required to write</dd></div>
                 <div><dt className="text-foreground/45">Storage</dt><dd className="mt-1 font-semibold">Local SQLite</dd></div>
                 <div><dt className="text-foreground/45">AI</dt><dd className="mt-1 font-semibold">Only when you ask</dd></div>
               </dl>
             </div>
 
-            <div className="relative min-h-[420px] lg:min-h-[650px]" aria-hidden="true">
+            <div className="relative min-h-[390px] min-w-0 overflow-hidden sm:min-h-[480px] lg:min-h-[650px] lg:overflow-visible" aria-hidden="true">
               <div className="absolute inset-[-8%_-22%_-8%_-12%] opacity-85 [mask-image:radial-gradient(ellipse_at_center,black_42%,transparent_76%)]">
                 <PrismDemo />
               </div>
-              <div className="absolute bottom-8 right-0 w-[min(85%,390px)] rotate-[-2deg] border border-black/10 bg-[#faf8f0]/90 p-6 shadow-[0_28px_80px_rgba(14,20,17,.16)] backdrop-blur-sm">
+              <div className="absolute bottom-8 right-3 w-[min(88%,390px)] rotate-[-2deg] border border-black/10 bg-[#faf8f0]/90 p-5 shadow-[0_28px_80px_rgba(14,20,17,.16)] backdrop-blur-sm sm:right-6 sm:p-6 lg:right-0">
                 <div className="mb-7 flex items-center justify-between border-b border-black/10 pb-3 text-[11px] uppercase tracking-[0.18em] text-foreground/45">
                   <span>Chapter twelve</span><span>1,842 words</span>
                 </div>

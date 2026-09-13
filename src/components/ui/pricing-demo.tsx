@@ -1,5 +1,5 @@
-import { Pricing } from "@/components/ui/pricing";
 import { PaperBackground } from "@/components/ui/PaperBackground";
+import { Pricing } from "@/components/ui/pricing";
 
 const demoPlans = [
   {

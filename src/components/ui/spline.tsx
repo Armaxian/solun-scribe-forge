@@ -2,9 +2,11 @@
 
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import ErrorBoundary from '../ErrorBoundary'
-import { SplineFallback } from './spline-fallback'
+
 import { logSplineDebugInfo } from '../../lib/spline-debug'
+import ErrorBoundary from '../ErrorBoundary'
+
+import { SplineFallback } from './spline-fallback'
 
 const Spline = lazy(() => import('@splinetool/react-spline'))
 

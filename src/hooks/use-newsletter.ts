@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { subscribeToNewsletter, type NewsletterSource, type NewsletterSubscriptionResult } from '@/lib/newsletter';
 import { toast } from 'sonner';
+
 import { tone } from '@/copy/tone';
+import { subscribeToNewsletter, type NewsletterSource, type NewsletterSubscriptionResult } from '@/lib/newsletter';
 
 /**
  * Hook for subscribing to newsletter (mutation)

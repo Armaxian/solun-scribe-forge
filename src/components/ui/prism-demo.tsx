@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import Prism from '@/components/ui/prism';
 
 export default function PrismDemo() {

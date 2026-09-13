@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
+
 import frag from "./shaders/inkflow.frag.glsl?raw";
 import vert from "./shaders/quad.vert.glsl?raw";
+
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useRafThrottle } from "@/hooks/useRafThrottle";
 

@@ -16,7 +16,7 @@ const blogPosts = [
     readTime: "5 min read",
     category: "Features",
     featured: true,
-    image: "/blog/introducing-lore-vault.svg"
+    image: "/blog/featured-lore-vault.webp"
   },
   {
     slug: "writing-with-ai-context",

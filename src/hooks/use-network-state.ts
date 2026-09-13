@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
 interface NetworkState {
   isOnline: boolean;

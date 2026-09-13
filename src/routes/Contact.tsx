@@ -1,14 +1,15 @@
+import { Mail, Instagram, Send, Clock } from "lucide-react";
 import { useState, FormEvent } from "react";
 import { Helmet } from "react-helmet-async";
-import { Mail, Instagram, Send, Clock } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { useToast } from "@/hooks/use-toast";
-import { validateEmail, isNonEmpty } from "@/lib/validation";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { tone } from "@/copy/tone";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
+import { validateEmail, isNonEmpty } from "@/lib/validation";
 
 // Configurable support information
 const SUPPORT_CONFIG = {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import { Static3DPreview } from './static-3d-preview'
 
 interface SplineFallbackProps {

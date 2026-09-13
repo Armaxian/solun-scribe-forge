@@ -1,9 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSession } from './use-session';
-import { fetchUserEntitlements, hasValidLicense, validateLicense, type LicenseTier, type LicenseDetails, type ValidateLicenseResponse } from '@/lib/license';
 import { toast } from 'sonner';
-import { tone } from '@/copy/tone';
+
 import { queryKeys } from './query-keys';
+import { useSession } from './use-session';
+
+import { tone } from '@/copy/tone';
+import { fetchUserEntitlements, hasValidLicense, validateLicense, type LicenseTier, type LicenseDetails, type ValidateLicenseResponse } from '@/lib/license';
+
 
 /**
  * Hook for fetching and managing user license/entitlements

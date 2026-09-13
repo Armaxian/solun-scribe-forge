@@ -34,31 +34,31 @@
 
   @property --color-1 {
     syntax: '<color>';
-    initial-value: #000;
+    initial-value: #071e18;
     inherits: false;
   }
 
   @property --color-2 {
     syntax: '<color>';
-    initial-value: #08012c;
+    initial-value: #0b3d2e;
     inherits: false;
   }
 
   @property --color-3 {
     syntax: '<color>';
-    initial-value: #4e1e40;
+    initial-value: #315f45;
     inherits: false;
   }
 
   @property --color-4 {
     syntax: '<color>';
-    initial-value: #70464e;
+    initial-value: #6f7442;
     inherits: false;
   }
 
   @property --color-5 {
     syntax: '<color>';
-    initial-value: #88394c;
+    initial-value: #101c16;
     inherits: false;
   }
 
@@ -70,13 +70,13 @@
 
   @property --border-color-1 {
     syntax: '<color>';
-    initial-value: hsla(340, 75%, 60%, 0.2);
+    initial-value: rgba(216, 215, 165, 0.24);
     inherits: true;
   }
 
   @property --border-color-2 {
     syntax: '<color>';
-    initial-value: hsla(340, 75%, 40%, 0.75);
+    initial-value: rgba(216, 215, 165, 0.7);
     inherits: true;
   }
 
@@ -120,7 +120,7 @@
     --olive-light: 75 39% 45%;
     
     /* Base Palette */
-    --cream: 0 0% 100%;           /* #FFFFFF - White Background */
+    --cream: 43 33% 96%;          /* warm paper */
     --ink: 0 0% 5%;               /* #0C0C0C - Text */
     --muted: 0 0% 95%;             /* #F2F2F2 - Light gray elements */
     
@@ -131,10 +131,10 @@
     --error: 348 98% 35%;         /* #B00020 */
     
     /* UI Tokens - Light Mode ONLY */
-    --background: 0 0% 100% !important;  /* Paper background */
+    --background: 43 33% 96% !important; /* Paper background */
     --foreground: 0 0% 5% !important;    /* Dark text */
     
-    --card: 0 0% 100% !important;        /* White cards */
+    --card: 48 38% 98% !important;       /* lifted paper */
     --card-foreground: 0 0% 5% !important;
     
     --primary: var(--phthalo);
@@ -149,10 +149,10 @@
     --muted: 0 0% 95%;        /* Light gray */
     --muted-foreground: 0 0% 45%; /* Improved contrast for WCAG AA compliance (45% vs 35%) */
 
-    --popover: 0 0% 100% !important;     /* White popover */
+    --popover: 48 38% 98% !important;
     --popover-foreground: 0 0% 5% !important;
 
-    --bg: #FFFFFF;
+    --bg: #f5f2e8;
 
     --border: 42 20% 85%;
     --input: 42 20% 90%;
@@ -161,16 +161,16 @@
     --destructive: var(--error);
     --destructive-foreground: 0 0% 100%;
     
-    --radius: 14px;
+    --radius: 12px;
     
     /* Shadows & Effects */
-    --shadow-soft: 0 8px 30px rgba(11, 61, 46, 0.06);
-    --shadow-medium: 0 12px 40px rgba(11, 61, 46, 0.1);
-    --shadow-strong: 0 20px 60px rgba(11, 61, 46, 0.15);
+    --shadow-soft: 0 10px 35px rgba(11, 61, 46, 0.07);
+    --shadow-medium: 0 18px 50px rgba(11, 61, 46, 0.12);
+    --shadow-strong: 0 28px 80px rgba(11, 61, 46, 0.17);
     
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(var(--phthalo)) 0%, hsl(var(--olive)) 100%);
-    --gradient-subtle: linear-gradient(180deg, white 0%, white 100%);
+    --gradient-subtle: linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(242,239,226,.8) 100%);
     --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
 
     /* Vertical Rhythm */
@@ -188,7 +188,7 @@
 
   html {
     color-scheme: light !important;
-    background-color: #FFFFFF !important;
+    background-color: #f5f2e8 !important;
     color: #0C0C0C !important;
   }
 
@@ -210,6 +210,7 @@
       );
     background-size: 100% 100%, 8px 8px;
     background-blend-mode: normal, multiply;
+    overflow-x: clip;
   }
   
   /* Force paper background on root element */
@@ -320,15 +321,16 @@
   
   /* Card styles */
   .card {
-    @apply rounded-2xl border border-border/50 bg-card p-8 shadow-sm transition-all duration-300;
+    @apply rounded-2xl border border-black/10 bg-card p-8 transition-all duration-300;
     /* Subtle paper texture on cards */
     background-image: 
       radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.005) 100%);
     background-blend-mode: multiply;
+    box-shadow: 0 1px 0 rgba(255,255,255,.75) inset, var(--shadow-soft);
   }
   
   .card-hover {
-    @apply card hover:shadow-medium hover:border-border hover:-translate-y-1;
+    @apply card hover:shadow-medium hover:border-phthalo/20 hover:-translate-y-0.5;
   }
 
   /* Sticker effect for feature cards */
@@ -417,16 +419,16 @@
     content: "";
     position: absolute;
     left: 50%;
-    bottom: -6px;
+    bottom: 2px;
     width: 0;
-    height: 2px;
+    height: 1px;
     background: #0B3D2E;
     transition: .25s;
     transform: translateX(-50%);
   }
   .nav-link[aria-current="page"]::after,
   .nav-link:hover::after {
-    width: 60%;
+    width: calc(100% - 1.5rem);
   }
 
   /* Text gradient utility - aurora inspired */
@@ -563,6 +565,47 @@
       --stop-5 0.5s;
   }
 
+  .site-header {
+    box-shadow: 0 1px 0 rgba(255,255,255,.7);
+  }
+
+  .site-footer .text-foreground { color: #f8f4e7 !important; }
+  .site-footer .text-muted-foreground { color: rgba(248,244,231,.62) !important; }
+  .site-footer a:hover { color: #fff !important; }
+  .site-footer input {
+    border-color: rgba(255,255,255,.18);
+    background: rgba(255,255,255,.07);
+    color: #fff;
+  }
+  .site-footer input::placeholder { color: rgba(255,255,255,.42); }
+  .site-footer .btn-primary {
+    background: #d8d7a5;
+    color: #0b3d2e;
+    box-shadow: none;
+  }
+
+  .min-h-screen:not(.overflow-hidden) > section:first-child {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(11,61,46,.12);
+    background:
+      radial-gradient(circle at 85% 20%, rgba(97,126,79,.13), transparent 28rem),
+      linear-gradient(180deg, rgba(255,255,255,.32), transparent);
+  }
+
+  .min-h-screen:not(.overflow-hidden) > section:first-child::after {
+    content: "";
+    position: absolute;
+    right: clamp(1.5rem, 7vw, 7rem);
+    bottom: -5rem;
+    width: clamp(9rem, 20vw, 18rem);
+    aspect-ratio: 1;
+    border: 1px solid rgba(11,61,46,.14);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2.5rem rgba(11,61,46,.025), 0 0 0 5rem rgba(11,61,46,.018);
+    pointer-events: none;
+  }
+
   .gradient-button::before {
     content: '';
     position: absolute;
@@ -584,11 +627,11 @@
     --pos-y: 91.51%;
     --spread-x: 120.24%;
     --spread-y: 103.18%;
-    --color-1: #c96287;
-    --color-2: #c66c64;
-    --color-3: #cc7d23;
-    --color-4: #37140a;
-    --color-5: #000;
+    --color-1: #071e18;
+    --color-2: #0b3d2e;
+    --color-3: #315f45;
+    --color-4: #6f7442;
+    --color-5: #101c16;
     --border-angle: 190deg;
     --border-color-1: hsla(340, 78%, 90%, 0.1);
     --border-color-2: hsla(340, 75%, 90%, 0.6);
@@ -600,10 +643,10 @@
   }
 
   .gradient-button-variant {
-    --color-1: #000022;
-    --color-2: #1f3f6d;
-    --color-3: #469396;
-    --color-4: #f1ffa5;
+    --color-1: #071e18;
+    --color-2: #0b3d2e;
+    --color-3: #3b7253;
+    --color-4: #d8d7a5;
     --border-angle: 200deg;
     --border-color-1: hsla(320, 75%, 90%, 0.6);
     --border-color-2: hsla(320, 50%, 90%, 0.15);
@@ -614,11 +657,11 @@
     --pos-y: 95.51%;
     --spread-x: 110.24%;
     --spread-y: 110.2%;
-    --color-1: #000020;
-    --color-2: #f1ffa5;
-    --color-3: #469396;
-    --color-4: #1f3f6d;
-    --color-5: #000;
+    --color-1: #081b16;
+    --color-2: #d8d7a5;
+    --color-3: #47785b;
+    --color-4: #173f32;
+    --color-5: #07120f;
     --stop-1: 0%;
     --stop-2: 10%;
     --stop-3: 35.44%;

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+
 import InkflowCanvas from "./InkflowCanvas";
+
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 type Props = { text?: string; className?: string; paused?: boolean };
