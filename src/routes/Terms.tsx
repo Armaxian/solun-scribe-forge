@@ -71,10 +71,10 @@ export default function Terms() {
             <h2 className="text-2xl font-semibold mb-4">3. Service Description</h2>
             <p>Solun is an AI-powered writing workspace designed to help users create and manage written content. The Service includes:</p>
             <ul className="list-disc list-inside space-y-2 mt-4">
-              <li>Web-based writing tools and document management</li>
+              <li>Desktop writing and document management tools</li>
               <li>AI-assisted content generation features</li>
               <li>Lore Vault for world-building and knowledge management</li>
-              <li>Offline-first architecture with optional cloud synchronization</li>
+              <li>Local-first storage with user-controlled backups and exports</li>
               <li>Desktop application for Windows, macOS, and Linux</li>
             </ul>
             <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time with or without notice.</p>

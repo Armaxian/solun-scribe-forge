@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FileText,
@@ -16,13 +13,16 @@ import {
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
+import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import { GradientButton } from "@/components/ui/gradient-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { GradientButton } from "@/components/ui/gradient-button";
+import { tone } from "@/copy/tone";
 import { useInView } from "@/hooks/useInView";
 import { analytics } from "@/lib/analytics";
-import { tone } from "@/copy/tone";
 
 // What we do cards
 const whatWeDoCards = [
@@ -38,8 +38,8 @@ const whatWeDoCards = [
   },
   {
     icon: Database,
-    title: "RAG Context",
-    description: "Retrieval-Augmented Generation ensures every AI response draws from your Lore Vault knowledge.",
+    title: "AI with Context",
+    description: "Bring selected Lore Vault entries and manuscript passages into an AI conversation when they are useful.",
   },
   {
     icon: Lightbulb,
@@ -70,8 +70,8 @@ const timelineItems = [
   },
   {
     icon: Globe,
-    title: "Web Companion",
-    description: "Web interface for accessing your stories and lore from anywhere, securely synced.",
+    title: "Accounts & Billing",
+    description: "The website adds optional sign-in, subscription management, and a clear view of AI usage.",
     year: "2024",
   },
 ];
@@ -107,32 +107,25 @@ export default function About() {
         <title>About Solun - Writer-First AI Workspace for World-Builders</title>
         <meta
           name="description"
-          content="Learn about Solun's mission: a writer-first AI workspace with RAG-powered context, Lore Vault, and offline-first architecture. Built for serious world-builders."
+          content="Learn why Solun keeps the manuscript, Lore Vault, and optional AI assistance together in a local-first desktop studio."
         />
         <link rel="canonical" href="https://solun.app/about" />
         <meta property="og:title" content="About Solun - Writer-First AI Workspace" />
         <meta
           property="og:description"
-          content="A writer-first tool that understands context. Built with RAG, Lore Vault, and offline-first architecture for world-builders who care about privacy and control."
+          content="A writer-first desktop studio with a focused editor, structured Lore Vault, optional AI assistance, and local-first storage."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/about" />
         <meta property="og:site_name" content="Solun" />
-        <meta property="og:image" content="https://solun.app/og-image-about.png" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="About Solun - Writer-First AI Workspace" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@solun_app" />
         <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content="About Solun - Writer-First AI Workspace" />
         <meta
           name="twitter:description"
-          content="A writer-first tool that understands context. Built with RAG, Lore Vault, and offline-first architecture."
+          content="A writer-first desktop studio with a focused editor, Lore Vault, optional AI assistance, and local-first storage."
         />
-        <meta name="twitter:image" content="https://solun.app/og-image-about.png" />
-        <meta name="twitter:image:alt" content="About Solun - Writer-First AI Workspace" />
       </Helmet>
 
       <div className="flex min-h-screen flex-col">
@@ -164,8 +157,8 @@ export default function About() {
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 Solun is built for writers who want AI that understands their world, not just their
-                words. With RAG-powered context, a Lore Vault that connects everything, and
-                offline-first architecture that keeps your data yours.
+                words. The Lore Vault keeps the details close, optional AI can use context you
+                choose, and local-first storage keeps the manuscript on your device.
               </p>
             </motion.div>
           </div>
@@ -369,7 +362,7 @@ export default function About() {
                         <h3 className="font-semibold mb-1">Offline-first where possible</h3>
                         <p className="text-sm text-muted-foreground">
                           Core features work entirely offline. Your stories and lore live on your
-                          device, not in the cloud, unless you choose to sync.
+                          device. Solun does not automatically sync your writing to the cloud.
                         </p>
                       </div>
                     </div>
@@ -390,8 +383,8 @@ export default function About() {
                       <div>
                         <h3 className="font-semibold mb-1">Transparent practices</h3>
                         <p className="text-sm text-muted-foreground">
-                          No data mining. No selling your information. No hidden telemetry. We're
-                          transparent about what we collect and why.
+                          No selling your information. Privacy-conscious analytics are limited to
+                          understanding the website, and our policy explains what we collect and why.
                         </p>
                       </div>
                     </div>

@@ -1,5 +1,5 @@
+import { Calendar, Clock, User, ArrowLeft, Share2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
-import { Calendar, Clock, User, ArrowLeft, Share2, Tag } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
 // This would typically come from a CMS or API
@@ -7,7 +7,7 @@ const blogPosts = [
   {
     slug: "introducing-lore-vault",
     title: "Introducing the Lore Vault: Your World's Memory",
-    excerpt: "Discover how Solun's interconnected knowledge base revolutionizes world-building by keeping track of characters, places, and relationships automatically.",
+    excerpt: "See how structured characters, places, items, and relationships keep the details of a growing fictional world close at hand.",
     content: `
       <p>World-building is both the most exciting and most challenging part of creative writing. You spend countless hours crafting intricate details about your characters, mapping out vast landscapes, and weaving complex relationships between elements. But as your world grows, so does the cognitive load of keeping everything straight.</p>
 
@@ -26,7 +26,7 @@ const blogPosts = [
 
       <h2>How the Lore Vault Solves This</h2>
 
-      <p>The Lore Vault treats your world as an interconnected graph where every element—characters, places, items, events—is a node, and relationships between them are edges. This structure allows for automatic consistency checking and intelligent suggestions.</p>
+      <p>The Lore Vault treats your world as an interconnected set of characters, places, items, events, and the relationships between them. This structure keeps related details close when you need to check them.</p>
 
       <p>When you mention "Elara's crystal amulet" in your writing, the Lore Vault knows:</p>
 
@@ -37,21 +37,21 @@ const blogPosts = [
         <li>She received it after completing her apprenticeship three years ago</li>
       </ul>
 
-      <h2>Automatic Relationship Mapping</h2>
+      <h2>Relationship Mapping</h2>
 
-      <p>As you write, the Lore Vault automatically suggests connections between elements. If you're writing about a character visiting a location they've never been to before, it might suggest creating a motivation for the journey or noting this as a significant event in their personal timeline.</p>
+      <p>You can connect related entries as your world grows. When a character visits a location for the first time, record the relationship or add the event to their timeline while the detail is fresh.</p>
 
-      <p>This doesn't just help with consistency—it sparks creativity. The system might suggest plot threads based on unexplored relationships or remind you of seemingly minor details that could become major plot points.</p>
+      <p>Those connections make it easier to notice unexplored relationships and minor details that could become useful plot threads.</p>
 
       <h2>Timeline Intelligence</h2>
 
-      <p>Every event, every character decision, every world-changing occurrence gets timestamped and tracked. The Lore Vault can show you at a glance:</p>
+      <p>Events you add to a timeline give you a quick view of:</p>
 
       <ul>
         <li>What happened before and after any event</li>
         <li>Which characters were involved and how it affected them</li>
         <li>How long ago (in-world time) something occurred</li>
-        <li>Whether timeline inconsistencies exist in your current draft</li>
+        <li>Where you may want to check the draft for timeline conflicts</li>
       </ul>
 
       <h2>Getting Started with the Lore Vault</h2>
@@ -82,15 +82,15 @@ const blogPosts = [
   {
     slug: "writing-with-ai-context",
     title: "Writing with AI That Knows Your World",
-    excerpt: "Explore how RAG-powered chat uses your Lore Vault to provide context-aware writing assistance and plot suggestions.",
+    excerpt: "Explore how selected Lore Vault context can make an AI conversation more relevant to your characters and world.",
     content: `
       <p>The promise of AI writing assistants has always been tempered by a fundamental limitation: they don't know your world. They can generate generic prose, suggest plot structures, or help with grammar—but they can't provide insights specific to your characters, your setting, or your plot.</p>
 
-      <p>Solun changes that with RAG-powered chat that draws from your Lore Vault, creating an AI writing partner that truly understands your creative universe.</p>
+      <p>Solun can bring selected Lore Vault context into an AI conversation, giving the model useful details about your creative universe.</p>
 
-      <h2>The RAG Advantage</h2>
+      <h2>The Context Advantage</h2>
 
-      <p>RAG (Retrieval-Augmented Generation) combines the broad knowledge of large language models with specific, targeted information from your own content. Instead of asking a generic AI "What should happen next in my fantasy novel?", you can ask contextual questions like:</p>
+      <p>Adding specific information from your own content gives a language model more to work with. Instead of asking a generic AI "What should happen next in my fantasy novel?", you can ask contextual questions like:</p>
 
       <ul>
         <li>"Given Elara's fear of water from her childhood trauma, how might she react to crossing the flooded plains?"</li>
@@ -100,7 +100,7 @@ const blogPosts = [
 
       <h2>Context-Aware Suggestions</h2>
 
-      <p>Because the AI has access to your Lore Vault, its suggestions are grounded in the reality you've created. It doesn't just generate plausible ideas—it generates ideas that fit your specific world and characters.</p>
+      <p>When you include relevant Lore Vault entries, the AI can make suggestions informed by the reality you have created. The result can still be wrong, so treat every response as material to review.</p>
 
       <p>When suggesting plot developments, it considers:</p>
 
@@ -135,7 +135,7 @@ const blogPosts = [
 
       <h2>Privacy and Control</h2>
 
-      <p>Just like the rest of Solun, the AI chat runs locally when possible, ensuring your creative work and world details remain private. You control what information the AI has access to, and all conversations are stored locally under your complete control.</p>
+      <p>You control which context accompanies an AI request. That selected material is sent securely to the AI service for processing; the rest of your manuscript and Lore Vault remain on your device.</p>
 
       <h2>The Writing Partner You've Been Waiting For</h2>
 
@@ -147,7 +147,7 @@ const blogPosts = [
     date: "2024-10-10",
     readTime: "7 min read",
     category: "AI",
-    tags: ["AI", "RAG", "writing assistance", "context", "lore"]
+    tags: ["AI", "writing assistance", "context", "lore"]
   },
   // Add more blog posts as needed...
 ];
@@ -182,8 +182,8 @@ export default function BlogPost() {
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://solun.app/blog/${post.slug}`} />
         <meta property="og:site_name" content="Solun" />
-        <meta property="og:image" content={`https://solun.app/blog/${post.slug}.jpg`} />
-        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image" content={`https://solun.app/blog/${post.slug}.svg`} />
+        <meta property="og:image:type" content="image/svg+xml" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={post.title} />
@@ -195,7 +195,7 @@ export default function BlogPost() {
         <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content={`${post.title} - Solun Blog`} />
         <meta name="twitter:description" content={post.excerpt} />
-        <meta name="twitter:image" content={`https://solun.app/blog/${post.slug}.jpg`} />
+        <meta name="twitter:image" content={`https://solun.app/blog/${post.slug}.svg`} />
         <meta name="twitter:image:alt" content={post.title} />
         <meta name="author" content={post.author} />
       </Helmet>

@@ -1,17 +1,18 @@
+import { Search, HelpCircle, ArrowRight } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation } from "react-router-dom";
-import { Search, HelpCircle, ArrowRight } from "lucide-react";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { analytics } from "@/lib/analytics";
+import { Input } from "@/components/ui/input";
 import { tone } from "@/copy/tone";
+import { analytics } from "@/lib/analytics";
 
 interface FAQItem {
   id: string;
@@ -35,12 +36,12 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       {
         id: "what-is-solun",
         question: "What is Solun?",
-        answer: "Solun is an AI-powered writing workspace designed for writers and world-builders. It combines a distraction-free editor with a Lore Vault (knowledge base) and RAG-powered chat to help you maintain consistency in your stories and worlds.",
+        answer: "Solun is a local-first desktop writing studio for fiction. It combines a focused editor, a structured Lore Vault, and optional AI assistance that can use context you choose.",
       },
       {
         id: "download-install",
         question: "How do I download and install Solun?",
-        answer: "Visit our Download page to get Solun for your platform (Web, Windows, macOS, or Linux). The web version runs in your browser, while desktop apps provide a native experience with offline capabilities.",
+        answer: "Visit the Download page and choose the installer for Windows, macOS, or Linux. Public installers will appear there as each platform release becomes available.",
       },
       {
         id: "first-story",
@@ -62,22 +63,22 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       {
         id: "pricing-model",
         question: "How much does Solun cost?",
-        answer: "Solun offers both free and premium tiers. The free version includes core writing features, while premium unlocks advanced AI features, extended Lore Vault capabilities, and priority support. Visit our Pricing page for detailed information.",
+        answer: "The desktop editor, Lore Vault, local backups, and exports are free. Pro adds AI writing assistance and a monthly usage allowance. Visit the Pricing page for current details.",
       },
       {
-        id: "license-types",
-        question: "What types of licenses are available?",
-        answer: "We offer individual licenses for personal use and team licenses for collaborative writing projects. Licenses are perpetual and include updates during the active subscription period.",
+        id: "subscription-types",
+        question: "What plans are available?",
+        answer: "Solun currently offers Free and Pro plans for individual writers. Team collaboration is not currently offered.",
       },
       {
         id: "license-validation",
         question: "How does license validation work?",
-        answer: "Solun validates your license when you start the application and periodically during use. Validation is done securely and respects your privacy. Offline validation is supported for desktop apps.",
+        answer: "Free writing features do not require an account. Solun verifies your signed-in account before enabling subscription-based AI assistance.",
       },
       {
         id: "trial-period",
         question: "Is there a free trial?",
-        answer: "Yes, you can try premium features free for a limited time. The free tier provides access to core functionality so you can evaluate Solun before upgrading.",
+        answer: "The writing workspace is free to use, so you can evaluate the editor and Lore Vault before deciding whether to subscribe for AI assistance.",
       },
     ],
   },
@@ -89,17 +90,17 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       {
         id: "data-storage",
         question: "Where is my data stored?",
-        answer: "Your stories and Lore Vault are stored locally on your device using SQLite with vector extensions. Desktop apps keep everything on your computer. The web version uses browser storage. Your data never leaves your device unless you explicitly sync it.",
+        answer: "Your stories and Lore Vault are stored locally on your device in SQLite. Solun does not automatically sync manuscript content to the cloud.",
       },
       {
         id: "data-privacy",
         question: "Is my writing data private?",
-        answer: "Absolutely. Solun is built with privacy-first principles. Your stories, lore, and chat history are stored locally and encrypted. We don't read your content, and AI processing can be done locally or through secure, privacy-respecting services.",
+        answer: "Your manuscript and lore stay on your device. When you make an AI request, the prompt and context you selected are sent securely to the AI service for processing. See the Privacy Policy for the full data flow.",
       },
       {
         id: "offline-mode",
         question: "Does Solun work offline?",
-        answer: "Yes! Solun is designed with an offline-first architecture. Desktop apps work completely offline. The web version uses service workers to cache your work and enable offline functionality.",
+        answer: "The editor, Lore Vault, local saves, and exports work without a network connection. Signing in, billing, updates, and AI assistance require internet access.",
       },
       {
         id: "data-export",
@@ -109,14 +110,14 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     ],
   },
   {
-    id: "rag-lore-vault",
-    title: "RAG & Lore Vault",
-    description: "AI-powered world knowledge.",
+    id: "ai-lore-vault",
+    title: "AI & Lore Vault",
+    description: "Using your world as context.",
     items: [
       {
-        id: "what-is-rag",
-        question: "What is RAG and how does it work in Solun?",
-        answer: "RAG (Retrieval-Augmented Generation) enhances AI responses by retrieving relevant information from your Lore Vault before generating answers. When you ask a question, Solun searches your lore, finds relevant context, and uses it to provide accurate, world-aware responses.",
+        id: "ai-context",
+        question: "How does Solun give AI context?",
+        answer: "Solun can include relevant Lore Vault entries and selected manuscript text with an AI request. That context helps the response fit your world, but you should still review every suggestion.",
       },
       {
         id: "lore-vault-structure",
@@ -126,7 +127,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       {
         id: "ai-consistency",
         question: "How does AI maintain consistency with my lore?",
-        answer: "The Continuity Engine continuously checks your writing against your Lore Vault. When you ask AI questions, it retrieves relevant lore entries to ensure responses align with your established world. This prevents contradictions and maintains narrative consistency.",
+        answer: "AI can use relevant lore as context when you ask a question, but it does not guarantee continuity. Treat its response as a suggestion and check important details against your manuscript and Lore Vault.",
       },
       {
         id: "vector-search",
@@ -136,43 +137,33 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     ],
   },
   {
-    id: "desktop-web",
-    title: "Desktop & Web",
-    description: "Platform-specific questions.",
+    id: "desktop",
+    title: "Desktop",
+    description: "Platforms and local data.",
     items: [
       {
-        id: "desktop-vs-web",
-        question: "What's the difference between desktop and web versions?",
-        answer: "The desktop app offers native performance, full offline functionality, and system integration. The web version works in any modern browser and syncs across devices but requires an internet connection for some features.",
+        id: "desktop-app",
+        question: "Is Solun a desktop app?",
+        answer: "Yes. The writing workspace is a desktop app. This website provides product information, downloads, account access, billing, documentation, and support.",
       },
       {
         id: "system-requirements",
         question: "What are the system requirements?",
-        answer: "Desktop apps: Windows 10+, macOS 11+, or Linux (AppImage or .deb). Web version: Modern browser with JavaScript enabled. For optimal AI performance, a reasonably modern CPU and sufficient RAM are recommended.",
+        answer: "Planned desktop support covers Windows 10+, macOS 11+, and common 64-bit Linux distributions. Check the Download page for the platforms available in the current release.",
       },
       {
         id: "sync-between-devices",
         question: "Can I sync my work between devices?",
-        answer: "The web version syncs automatically across devices when signed in. Desktop apps can export and import data manually. Full cloud sync for desktop apps is planned for future releases.",
+        answer: "Automatic cloud sync is not currently available. Use local backups and exports to move or protect your work.",
       },
       {
-        id: "browser-support",
-        question: "Which browsers are supported?",
-        answer: "Solun web works in Chrome, Firefox, Safari, and Edge (latest versions). We recommend using a modern browser with JavaScript and local storage enabled for the best experience.",
+        id: "account-browser-support",
+        question: "Which browsers can I use for the website and account pages?",
+        answer: "Use a current version of Chrome, Firefox, Safari, or Edge with JavaScript enabled.",
       },
     ],
   },
 ];
-
-// Generate anchor-friendly slug from text
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .trim();
-}
 
 export default function FAQs() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -222,7 +213,7 @@ export default function FAQs() {
         }, 300);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [location.hash]);
 
   // Filter FAQs based on search query
@@ -276,7 +267,7 @@ export default function FAQs() {
         <title>FAQs - Frequently Asked Questions | Solun</title>
         <meta
           name="description"
-          content="Find answers to common questions about Solun: getting started, pricing, privacy, RAG & Lore Vault, and platform-specific questions."
+          content="Find answers about getting started with Solun, pricing, privacy, AI context, local storage, and desktop support."
         />
         <link rel="canonical" href="https://solun.app/faqs" />
         <meta property="og:title" content="FAQs - Frequently Asked Questions | Solun" />

@@ -106,7 +106,7 @@ export default function Privacy() {
             <h2 className="text-2xl font-semibold mb-4">3. Lawful Basis for Processing</h2>
             <p>We process your personal data based on the following lawful bases:</p>
             <ul className="list-disc list-inside space-y-2 mt-4">
-              <li><strong>Contractual Necessity:</strong> To provide the Service and fulfill our contract with you (account creation, authentication, content sync)</li>
+              <li><strong>Contractual Necessity:</strong> To provide the Service and fulfill our contract with you (account creation, authentication, billing, and AI access)</li>
               <li><strong>Legitimate Interests:</strong> To improve the Service, ensure security, prevent fraud, and analyze usage patterns (telemetry, analytics)</li>
               <li><strong>Consent:</strong> Where you have provided explicit consent (newsletter subscriptions, optional features)</li>
               <li><strong>Legal Obligations:</strong> To comply with applicable laws, regulations, and legal processes</li>
@@ -142,14 +142,13 @@ export default function Privacy() {
 
           <section id="data-storage" className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">6. Data Storage and Security</h2>
-            <p><strong>Data Storage:</strong> We use Supabase, a secure cloud database service, to store user account information and synchronized content. Supabase employs industry-standard encryption and security measures and is compliant with SOC 2 Type II, ISO 27001, and other security certifications.</p>
+            <p><strong>Data Storage:</strong> We use Supabase to store account, subscription, entitlement, and AI usage information. Manuscripts and Lore Vault content remain in the local desktop database.</p>
             <p><strong>Security Practices:</strong> We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. This includes:</p>
             <ul className="list-disc list-inside space-y-2 mt-4">
               <li><strong>Encryption in transit:</strong> SSL/TLS encryption for all data transmission between your device and our servers</li>
               <li><strong>Encryption at rest:</strong> All stored data is encrypted using industry-standard encryption algorithms</li>
               <li><strong>Access controls:</strong> Strict access controls and authentication requirements for our team members</li>
-              <li><strong>Regular security audits:</strong> Periodic security assessments and penetration testing</li>
-              <li><strong>Security monitoring:</strong> Continuous monitoring for security threats and anomalies</li>
+              <li><strong>Least-privilege access:</strong> Server-side billing and usage operations are separated from browser access</li>
               <li><strong>Secure authentication:</strong> Passwords are hashed using secure algorithms (we never store plaintext passwords)</li>
               <li><strong>Backup and disaster recovery:</strong> Regular backups with secure storage and recovery procedures</li>
             </ul>
@@ -213,7 +212,7 @@ export default function Privacy() {
             <h2 className="text-2xl font-semibold mb-4">10. Data Location and International Transfers</h2>
             <p><strong>Data Location:</strong> Your data is primarily stored and processed in the following regions:</p>
             <ul className="list-disc list-inside space-y-2 mt-4">
-              <li><strong>Account and sync data:</strong> Supabase servers (configurable region, default US/EU)</li>
+              <li><strong>Account, billing, and usage data:</strong> Supabase servers in the configured project region</li>
               <li><strong>Analytics data:</strong> PostHog servers (US/EU, with GDPR compliance measures)</li>
               <li><strong>Content (desktop app):</strong> Stored locally on your device by default</li>
             </ul>

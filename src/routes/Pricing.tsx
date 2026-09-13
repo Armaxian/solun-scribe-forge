@@ -87,11 +87,9 @@ export default function Pricing() {
         <meta property="og:description" content="Free local writing and optional Pro AI assistance for writers and world-builders." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/pricing" />
-        <meta property="og:image" content="https://solun.app/og-image-pricing.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Solun Pricing - AI Writing Workspace Plans" />
         <meta name="twitter:description" content="Free local writing and optional Pro AI assistance for writers and world-builders." />
-        <meta name="twitter:image" content="https://solun.app/og-image-pricing.png" />
       </Helmet>
 
       <div className="min-h-screen">

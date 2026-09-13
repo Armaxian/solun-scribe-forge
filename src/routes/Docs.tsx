@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import {
   BookOpen,
   Download,
@@ -12,7 +11,9 @@ import {
   Shield,
   Zap
 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+
 import { Spotlight } from "@/components/ui/spotlight";
 import { tone } from "@/copy/tone";
 
@@ -20,11 +21,11 @@ const quickStartSteps = [
   {
     step: 1,
     title: "Download & Install",
-    description: "Get Solun running on your device. Choose between the web version or native desktop app.",
+    description: "Get the Solun desktop app running on your device.",
     icon: Download,
     details: [
       "Visit the download page",
-      "Choose your platform (Web, Windows, macOS, Linux)",
+      "Choose an available Windows, macOS, or Linux release",
       "Install and launch Solun"
     ]
   },
@@ -81,9 +82,9 @@ const docsSections = [
     description: "Master the editor and writing tools",
     articles: [
       "Page-by-Page Writing",
-      "Version Control",
+      "Local Version History",
       "Export Options",
-      "Collaboration Basics"
+      "Local Backups"
     ]
   },
   {
@@ -102,7 +103,7 @@ const docsSections = [
     icon: MessageSquare,
     description: "Using AI to enhance your writing",
     articles: [
-      "RAG Chat Overview",
+      "AI Chat Overview",
       "Context-Aware Responses",
       "Plot Suggestions",
       "Character Development"
@@ -113,10 +114,10 @@ const docsSections = [
     icon: Settings,
     description: "Power user features and customization",
     articles: [
-      "Continuity Engine",
+      "Account & AI Usage",
       "Custom Themes",
-      "Backup & Sync",
-      "API Access"
+      "Local Backup Workflow",
+      "Troubleshooting"
     ]
   }
 ];
@@ -126,17 +127,15 @@ export default function Docs() {
     <>
       <Helmet>
         <title>Solun Documentation - Complete Guide for World-Building</title>
-        <meta name="description" content="Complete documentation for Solun. Learn about the Lore Vault, RAG-powered chat, continuity engine, and how to build worlds with confidence using our AI writing workspace." />
+        <meta name="description" content="Learn how to install Solun, write a manuscript, organize a Lore Vault, export your work, and use optional AI assistance." />
         <link rel="canonical" href="https://solun.app/docs" />
         <meta property="og:title" content="Solun Documentation - Complete World-Building Guide" />
-        <meta property="og:description" content="Learn everything about Solun: Lore Vault setup, AI chat features, continuity engine, and offline-first architecture." />
+        <meta property="og:description" content="Installation, writing, Lore Vault, export, local storage, and optional AI assistance guides for Solun." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/docs" />
-        <meta property="og:image" content="https://solun.app/og-image-docs.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Solun Documentation - Complete World-Building Guide" />
-        <meta name="twitter:description" content="Learn everything about Solun: Lore Vault setup, AI chat features, continuity engine, and offline-first architecture." />
-        <meta name="twitter:image" content="https://solun.app/og-image-docs.png" />
+        <meta name="twitter:description" content="Installation, writing, Lore Vault, export, local storage, and optional AI assistance guides for Solun." />
       </Helmet>
 
       <div className="min-h-screen">
@@ -223,7 +222,7 @@ export default function Docs() {
                   <h3 className="text-xl font-semibold mb-3">What is the Lore Vault?</h3>
                   <p className="text-muted-foreground mb-4">
                     A structured database of your world's elements—characters, places, items, events, and their relationships.
-                    Everything connects, creating a web of knowledge that maintains consistency.
+                    Relationships keep connected details easy to find while you write.
                   </p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
@@ -250,7 +249,7 @@ export default function Docs() {
                   <h3 className="text-xl font-semibold mb-3">AI Integration</h3>
                   <p className="text-muted-foreground mb-4">
                     Your Lore Vault powers intelligent conversations. Ask questions about your world and get responses
-                    informed by your established lore and continuity.
+                    informed by the lore and manuscript context you choose.
                   </p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
@@ -263,11 +262,11 @@ export default function Docs() {
                     </li>
                     <li className="flex items-center gap-2">
                       <ChevronRight className="h-3 w-3 text-olive" />
-                      World-building consistency checks
+                      Selected lore as context
                     </li>
                     <li className="flex items-center gap-2">
                       <ChevronRight className="h-3 w-3 text-olive" />
-                      Timeline validation
+                      Suggestions you review before using
                     </li>
                   </ul>
                 </div>
@@ -277,8 +276,7 @@ export default function Docs() {
                 <Shield className="h-12 w-12 mx-auto mb-4 text-success" />
                 <h3 className="text-xl font-semibold mb-3">Your Data, Your Control</h3>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Everything runs locally on your device. SQLite database with vector extensions for fast search.
-                  Your stories and lore remain private, encrypted, and completely under your control.
+                  Manuscripts and lore are stored locally on your device in SQLite. Backups and exports stay under your control.
                 </p>
               </div>
             </div>
@@ -336,20 +334,16 @@ export default function Docs() {
                   <p className="text-muted-foreground text-sm mb-4">
                     Browse our complete documentation library
                   </p>
-                  <button className="btn btn-ghost w-full">
-                    Browse Docs
-                  </button>
+                  <Link to="/faqs" className="btn btn-ghost w-full">Browse FAQs</Link>
                 </div>
 
                 <div className="card-hover text-center">
                   <Users className="h-12 w-12 mx-auto mb-4 text-olive" />
                   <h3 className="text-lg font-semibold mb-2">Community</h3>
                   <p className="text-muted-foreground text-sm mb-4">
-                    Join discussions with other Solun users
+                    Read product notes and writing guides
                   </p>
-                  <button className="btn btn-ghost w-full">
-                    Join Community
-                  </button>
+                  <Link to="/blog" className="btn btn-ghost w-full">Read the Blog</Link>
                 </div>
 
                 <div className="card-hover text-center">
@@ -358,9 +352,7 @@ export default function Docs() {
                   <p className="text-muted-foreground text-sm mb-4">
                     Get help from our support team
                   </p>
-                  <button className="btn btn-ghost w-full">
-                    Contact Support
-                  </button>
+                  <Link to="/contact" className="btn btn-ghost w-full">Contact Support</Link>
                 </div>
               </div>
             </div>

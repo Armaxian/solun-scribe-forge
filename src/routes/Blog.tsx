@@ -1,15 +1,16 @@
-import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, User, ArrowRight, Tag } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Spotlight } from "@/components/ui/spotlight";
 import { useState, useCallback, useRef } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+
+import { Spotlight } from "@/components/ui/spotlight";
 import { useNewsletter } from "@/hooks/use-newsletter";
 
 const blogPosts = [
   {
     slug: "introducing-lore-vault",
     title: "Introducing the Lore Vault: Your World's Memory",
-    excerpt: "Discover how Solun's interconnected knowledge base revolutionizes world-building by keeping track of characters, places, and relationships automatically.",
+    excerpt: "See how structured characters, places, items, and relationships keep the details of a growing fictional world close at hand.",
     author: "Solun Team",
     date: "2024-10-15",
     readTime: "5 min read",
@@ -20,61 +21,15 @@ const blogPosts = [
   {
     slug: "writing-with-ai-context",
     title: "Writing with AI That Knows Your World",
-    excerpt: "Explore how RAG-powered chat uses your Lore Vault to provide context-aware writing assistance and plot suggestions.",
+    excerpt: "Explore how selected Lore Vault context can make an AI conversation more relevant to your characters and world.",
     author: "Alex Chen",
     date: "2024-10-10",
     readTime: "7 min read",
     category: "AI",
     featured: false,
     image: "/blog/writing-with-ai-context.svg"
-  },
-  {
-    slug: "offline-first-architecture",
-    title: "Why Offline-First Matters for Creative Work",
-    excerpt: "Learn about Solun's SQLite-based architecture and why keeping your data local and private is crucial for world-building.",
-    author: "Maria Rodriguez",
-    date: "2024-10-05",
-    readTime: "6 min read",
-    category: "Technology",
-    featured: false,
-    image: "/blog/offline-first-architecture.svg"
-  },
-  {
-    slug: "continuity-engine-deep-dive",
-    title: "The Continuity Engine: Never Forget a Detail",
-    excerpt: "A deep dive into how Solun automatically tracks character arcs, plot threads, and timeline consistency across your entire work.",
-    author: "Jordan Smith",
-    date: "2024-09-28",
-    readTime: "8 min read",
-    category: "Features",
-    featured: false,
-    image: "/blog/continuity-engine-deep-dive.svg"
-  },
-  {
-    slug: "version-control-for-writers",
-    title: "Version Control for Writers: Branch Your Stories",
-    excerpt: "Discover how built-in versioning lets you experiment with plot changes while preserving every draft and idea.",
-    author: "Sam Taylor",
-    date: "2024-09-20",
-    readTime: "4 min read",
-    category: "Workflow",
-    featured: false,
-    image: "/blog/version-control-for-writers.svg"
-  },
-  {
-    slug: "olive-cream-theme-story",
-    title: "The Story Behind the Olive + Cream Theme",
-    excerpt: "Learn about the design philosophy behind Solun's premium minimal aesthetic and why it creates the perfect writing environment.",
-    author: "Design Team",
-    date: "2024-09-15",
-    readTime: "3 min read",
-    category: "Design",
-    featured: false,
-    image: "/blog/olive-cream-theme-story.svg"
   }
 ];
-
-const categories = ["All", "Features", "AI", "Technology", "Workflow", "Design"];
 
 export default function Blog() {
   const [email, setEmail] = useState("");
@@ -125,8 +80,8 @@ export default function Blog() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/blog" />
         <meta property="og:site_name" content="Solun" />
-        <meta property="og:image" content="https://solun.app/og-image-blog.png" />
-        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image" content="https://solun.app/og-image-blog.svg" />
+        <meta property="og:image:type" content="image/svg+xml" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Solun Blog - World-Building & AI Writing Insights" />
@@ -135,7 +90,7 @@ export default function Blog() {
         <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content="Solun Blog - World-Building & AI Writing Insights" />
         <meta name="twitter:description" content="Stories and insights from the Solun team about world-building, AI-powered creativity, and writing workflows." />
-        <meta name="twitter:image" content="https://solun.app/og-image-blog.png" />
+        <meta name="twitter:image" content="https://solun.app/og-image-blog.svg" />
         <meta name="twitter:image:alt" content="Solun Blog - World-Building & AI Writing Insights" />
       </Helmet>
 
@@ -155,23 +110,6 @@ export default function Blog() {
               <p className="text-lg md:text-xl text-muted-foreground">
                 Insights, tutorials, and behind-the-scenes from the world of creative writing and world-building
               </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Category Filter */}
-        <section className="section-tight border-b border-border/50">
-          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
-            <div className="flex flex-wrap justify-center gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  className="px-4 py-2 rounded-full text-sm font-medium bg-muted hover:bg-muted/80 transition-colors"
-                  aria-label={`Filter posts by ${category} category`}
-                >
-                  {category}
-                </button>
-              ))}
             </div>
           </div>
         </section>

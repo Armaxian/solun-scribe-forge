@@ -1,5 +1,3 @@
-import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import { 
   Sparkles, 
   Database, 
@@ -10,6 +8,9 @@ import {
   Palette,
   Type
 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+
 import { useInView } from "@/hooks/useInView";
 
 export default function Story() {
@@ -26,13 +27,13 @@ export default function Story() {
     },
     {
       icon: Database,
-      title: "Continuity by default",
-      description: "Your story maintains itself. Characters remember their past, places hold their history, and threads weave together automatically."
+      title: "Details within reach",
+      description: "Characters, places, and timelines stay connected in the Lore Vault so you can check the canon while you write."
     },
     {
       icon: Wand2,
       title: "Context at your fingertips",
-      description: "Ask about anything. The system knows your world, understands your lore, and helps you explore ideas without breaking flow."
+      description: "Bring selected lore and manuscript context into an AI conversation when another perspective would help."
     },
     {
       icon: BookOpen,
@@ -45,24 +46,18 @@ export default function Story() {
     <>
       <Helmet>
         <title>The Solun Story - Why We Built This</title>
-        <meta name="description" content="A letter from the founder about the creative pain Solun solves—continuity, lore sprawl, and context fatigue. Learn about our design principles and why we chose desktop + web." />
+        <meta name="description" content="A letter about the lore sprawl and context fatigue Solun is designed to reduce through local-first desktop writing." />
         <link rel="canonical" href="https://solun.app/story" />
         <meta property="og:title" content="The Solun Story - Why We Built This" />
         <meta property="og:description" content="A letter about the creative pain Solun solves—continuity, lore sprawl, and context fatigue. Learn about our design principles and offline-first architecture." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/story" />
         <meta property="og:site_name" content="Solun" />
-        <meta property="og:image" content="https://solun.app/og-image-story.png" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="The Solun Story" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@solun_app" />
         <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content="The Solun Story - Why We Built This" />
         <meta name="twitter:description" content="A letter about the creative pain Solun solves—continuity, lore sprawl, and context fatigue." />
-        <meta name="twitter:image" content="https://solun.app/og-image-story.png" />
       </Helmet>
 
       <div className="min-h-screen">
@@ -103,7 +98,7 @@ export default function Story() {
                   </p>
                   
                   <p>
-                    Solun exists to solve this pain. Not with flashy features or marketing promises, but with architecture that respects how stories actually work: interconnected, layered, alive. A system where every detail lives in relationship to everything else. Where context is never lost, continuity is never broken, and your creative energy goes to writing—not remembering.
+                    Solun exists to reduce this pain with an architecture that respects how stories actually work: interconnected, layered, alive. A place where details live in relationship to each other, so more of your creative energy can go to writing instead of remembering.
                   </p>
                   
                   <p className="text-phthalo font-medium italic pt-4 border-t border-border/40">
@@ -131,7 +126,7 @@ export default function Story() {
               ref={principlesRef}
               className={`grid md:grid-cols-2 gap-6 transition-opacity duration-700 ${principlesInView ? 'opacity-100' : 'opacity-0'}`}
             >
-              {designPrinciples.map((principle, index) => (
+              {designPrinciples.map((principle) => (
                 <div key={principle.title} className="card-hover p-8">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="p-3 rounded-xl bg-phthalo/10 flex-shrink-0">
@@ -160,7 +155,7 @@ export default function Story() {
               className={`transition-opacity duration-700 ${techInView ? 'opacity-100' : 'opacity-0'}`}
             >
               <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">Why desktop + web</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Why desktop</h2>
                 <p className="text-lg text-muted-foreground">
                   The technical foundation that makes everything possible
                 </p>
@@ -173,10 +168,10 @@ export default function Story() {
                     <div>
                       <h3 className="text-2xl font-bold mb-3">Offline-first architecture</h3>
                       <p className="text-muted-foreground leading-relaxed mb-4">
-                        Your stories live on your device. No cloud sync delays, no internet dependency, no data mining. You write, Solun saves—instantly, locally, privately.
+                        Your stories live on your device without automatic cloud sync. You write, Solun saves—instantly and locally.
                       </p>
                       <p className="text-muted-foreground leading-relaxed">
-                        Everything works even when you're disconnected. Because creativity doesn't wait for Wi‑Fi.
+                        Core writing, lore, saves, and exports work when you're disconnected. AI, accounts, and updates use the network when needed.
                       </p>
                     </div>
                   </div>
@@ -191,7 +186,7 @@ export default function Story() {
                         Your Lore Vault isn't just a database—it's a knowledge graph with vector embeddings. Characters, places, events all connect and relate to each other.
                       </p>
                       <p className="text-muted-foreground leading-relaxed">
-                        When you ask the AI about a character, it searches through semantic relationships, not just keywords. Context emerges naturally from your world's structure.
+                        When you ask AI about a character, Solun can add relevant lore as context so the response starts from your world's structure.
                       </p>
                     </div>
                   </div>
@@ -206,7 +201,7 @@ export default function Story() {
                         Built on Electron, Solun runs natively on Windows, macOS, and Linux. One codebase, three platforms, consistent experience.
                       </p>
                       <p className="text-muted-foreground leading-relaxed">
-                        You get the performance of a desktop app with the flexibility of web technology. And yes, there's a web version too—same engine, same features, different shell.
+                        You get a focused desktop workspace built with portable web technology, while this website handles downloads, documentation, accounts, and billing.
                       </p>
                     </div>
                   </div>

@@ -2,14 +2,15 @@ import { Download as DownloadIcon, ChevronDown, Shield, AlertTriangle, Clock } f
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
+import { CopyableHash } from "@/components/CopyableHash";
+import { PlatformDetect } from "@/components/PlatformDetect";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlatformDetect } from "@/components/PlatformDetect";
-import { CopyableHash } from "@/components/CopyableHash";
-import { useDownloads } from "@/hooks/use-downloads";
 import { tone } from "@/copy/tone";
+import { useDownloads } from "@/hooks/use-downloads";
+import { analytics } from "@/lib/analytics";
 import { 
   detectPlatform, 
   getPlatformLabel, 
@@ -23,7 +24,6 @@ import {
   type Platform,
   type ReleaseInfo,
 } from "@/lib/releases";
-import { analytics } from "@/lib/analytics";
 
 const ALL_PLATFORMS: Platform[] = ['windows', 'mac-intel', 'mac-arm', 'linux'];
 
@@ -84,8 +84,6 @@ Note: macOS may verify the signature automatically, but verifying the hash adds 
 3. Run: sha256sum solun.AppImage (or solun.deb)
 4. Compare the hash with the one shown above
 
-For AppImage files, you may also want to check GPG signature if provided.
-
 Alternative (using shasum):
 shasum -a 256 solun.AppImage`;
     
@@ -96,7 +94,6 @@ shasum -a 256 solun.AppImage`;
 
 export default function Download() {
   const [platform, setPlatform] = useState<PlatformType>('unknown');
-  const [platformInfo, setPlatformInfo] = useState<PlatformInfo | null>(null);
   const [showAllPlatforms, setShowAllPlatforms] = useState(false);
   const { releases: releaseConfig, loading } = useDownloads();
 
@@ -105,7 +102,6 @@ export default function Download() {
   }, []);
 
   const handlePlatformDetected = (info: PlatformInfo) => {
-    setPlatformInfo(info);
     setPlatform(info.platform);
   };
 
@@ -119,15 +115,15 @@ export default function Download() {
     <>
       <Helmet>
         <title>Download Solun - Free Writing Software for World-Builders</title>
-        <meta name="description" content="Download Solun for free. Available for Windows, macOS, and Linux. Premium AI writing workspace with Lore Vault, RAG-powered chat, and distraction-free editor." />
+        <meta name="description" content="Get current Solun desktop releases for Windows, macOS, and Linux as they become available." />
         <link rel="canonical" href="https://solun.app/download" />
         <meta property="og:title" content="Download Solun - Premium AI Writing Workspace" />
         <meta property="og:description" content="Get Solun for free. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/download" />
         <meta property="og:site_name" content="Solun" />
-        <meta property="og:image" content="https://solun.app/og-image-download.png" />
-        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image" content="https://solun.app/og-image-download.svg" />
+        <meta property="og:image:type" content="image/svg+xml" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Download Solun - Premium AI Writing Workspace" />
@@ -136,7 +132,7 @@ export default function Download() {
         <meta name="twitter:creator" content="@solun_app" />
         <meta name="twitter:title" content="Download Solun - Premium AI Writing Workspace" />
         <meta name="twitter:description" content="Get Solun for free. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
-        <meta name="twitter:image" content="https://solun.app/og-image-download.png" />
+        <meta name="twitter:image" content="https://solun.app/og-image-download.svg" />
         <meta name="twitter:image:alt" content="Download Solun - Premium AI Writing Workspace" />
       </Helmet>
       <div className="flex min-h-screen flex-col">
@@ -147,7 +143,7 @@ export default function Download() {
                 Download Solun
               </h1>
               <p className="text-lg text-muted-foreground">
-                Get started with the premium writing workspace
+                Get the current desktop release for your platform
               </p>
             </div>
 
@@ -186,8 +182,6 @@ export default function Download() {
                 <CardContent className="space-y-4">
                   {currentInstallers.map((installer, index) => {
                     const fileType = getFileType(installer);
-                    const hash = installer.sha256 || '';
-                    
                     return (
                       <div
                         key={`${detectedPlatform}-${index}`}
@@ -241,7 +235,7 @@ export default function Download() {
                         <div className="flex-1">
                           <h4 className="font-semibold text-sm mb-2">Security & Verification</h4>
                           <p className="text-sm text-muted-foreground mb-3">
-                            All downloads are cryptographically signed and verified. After downloading, verify the SHA256 hash matches exactly.
+                            After downloading, verify that the SHA256 hash matches the value shown here.
                           </p>
 
                           <div className="space-y-3 mb-4">
@@ -509,28 +503,7 @@ export default function Download() {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold mb-2">Security & Trust</h3>
                   <div className="space-y-3 text-sm text-muted-foreground">
-                    <p>
-                      All Solun installers are digitally signed and cryptographically verified.
-                      We use industry-standard security practices to ensure your downloads are safe.
-                    </p>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="font-medium text-foreground mb-1">Code Signing</h4>
-                        <ul className="text-xs space-y-1">
-                          <li>• Windows: Authenticode signed by Solun Technologies</li>
-                          <li>• macOS: Developer ID signed and Apple notarized</li>
-                          <li>• Linux: GPG signed packages</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-foreground mb-1">Verification</h4>
-                        <ul className="text-xs space-y-1">
-                          <li>• SHA256 hashes provided for all downloads</li>
-                          <li>• Automatic integrity checks during installation</li>
-                          <li>• Regular security audits and updates</li>
-                        </ul>
-                      </div>
-                    </div>
+                    <p>Published releases include a SHA256 checksum on this page. Compare it with the downloaded file before installing.</p>
                     <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded">
                       <p className="text-xs text-amber-800">
                         <strong>Important:</strong> Only download Solun from this official website.

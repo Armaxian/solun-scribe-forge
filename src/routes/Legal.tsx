@@ -1,6 +1,7 @@
+import { FileText, Shield, Cookie, Lock, Database, ArrowRight } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { FileText, Shield, Cookie, Lock, Database, ArrowRight } from "lucide-react";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const legalDocuments = [
@@ -109,11 +110,10 @@ export default function Legal() {
                 </p>
                 <h3 className="text-lg font-semibold mb-2">Security Practices</h3>
                 <ul className="list-disc list-inside space-y-2 mb-4 text-muted-foreground">
-                  <li>End-to-end encryption for data in transit</li>
-                  <li>Encryption at rest for stored data</li>
-                  <li>Regular security audits and penetration testing</li>
-                  <li>Secure authentication and access controls</li>
-                  <li>Compliance with industry-standard security practices</li>
+                  <li>TLS encryption for data in transit</li>
+                  <li>Provider-managed encryption at rest for account and billing data</li>
+                  <li>Row-level access controls for account data</li>
+                  <li>Signed webhook verification for billing events</li>
                 </ul>
                 <h3 className="text-lg font-semibold mb-2">Vulnerability Disclosure</h3>
                 <p className="text-muted-foreground mb-4">

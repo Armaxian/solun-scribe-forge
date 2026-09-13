@@ -21,9 +21,7 @@ const staticRoutes = [
 // Blog posts from the blog data
 const blogPosts = [
   'introducing-lore-vault',
-  'writing-with-ai-context',
-  'offline-first-architecture',
-  'continuity-engine-deep-dive'
+  'writing-with-ai-context'
 ];
 
 const baseUrl = 'https://solun.app';
