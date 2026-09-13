@@ -1,9 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { supabase, type Database } from '../supabase';
 
-// Import the functions we need to test
-// Since fetchProfile and updateProfile are not exported, we'll test them via a testable wrapper
-// or extract them. For now, we'll create a testable version or test the logic directly
+import { fetchProfile, updateProfile } from '@/hooks/use-profile';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -13,46 +11,6 @@ vi.mock('../supabase', () => ({
     from: vi.fn(),
   },
 }));
-
-// Testable profile functions (matching the implementation in use-profile.ts)
-async function fetchProfile(userId: string): Promise<Profile | null> {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userId)
-    .single();
-
-  if (error) {
-    if (error.code === 'PGRST116') {
-      // Not found - return null (profile might not exist yet)
-      return null;
-    }
-    throw error;
-  }
-
-  return data;
-}
-
-async function updateProfile(
-  userId: string,
-  updates: Partial<Omit<Profile, 'id' | 'created_at'>>
-): Promise<Profile> {
-  const { data, error } = await supabase
-    .from('profiles')
-    .update({
-      ...updates,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', userId)
-    .select()
-    .single();
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
-}
 
 describe('profile functions', () => {
   beforeEach(() => {

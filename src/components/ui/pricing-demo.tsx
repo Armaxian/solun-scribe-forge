@@ -62,7 +62,7 @@ const demoPlans = [
 
 function PricingBasic() {
   return (
-    <PaperBackground className="rounded-lg">
+    <div className="rounded-lg"><PaperBackground />
       <div className="h-[800px] overflow-y-auto">
         <Pricing
           plans={demoPlans}
@@ -70,7 +70,7 @@ function PricingBasic() {
           description={"Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support."}
         />
       </div>
-    </PaperBackground>
+    </div>
   );
 }
 

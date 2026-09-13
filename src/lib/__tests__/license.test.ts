@@ -28,10 +28,13 @@ vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'test-anon-key');
 describe('license', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2025-01-01T00:00:00Z'));
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   describe('validateLicense', () => {

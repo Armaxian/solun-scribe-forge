@@ -72,16 +72,31 @@ export default function Privacy() {
               <li><strong>Error logs:</strong> Technical error information to diagnose and fix issues</li>
             </ul>
             <p className="text-sm text-muted-foreground italic">
-              Note: Our offline-first architecture means most of your content remains on your device and is not transmitted to our servers unless you choose to sync.
+              Note: Our local-first architecture means all your content remains on your device and is not transmitted to our servers except when you explicitly use AI assistance features.
             </p>
 
             <h3 className="text-lg font-medium mb-3">Content Data</h3>
-            <p>Your written content and documents created using our service:</p>
+            <p>Your written content and documents created using our desktop application:</p>
             <ul className="list-disc list-inside space-y-2 mb-4">
-              <li>Content is stored locally on your device (desktop app) when possible</li>
-              <li>Content is optionally synchronized to our servers only if you enable cloud sync</li>
-              <li>We do not access, read, or analyze your content except as necessary to provide synchronization services</li>
+              <li><strong>Local storage:</strong> All manuscripts and lore are stored locally on your device in a local database</li>
+              <li><strong>No automatic cloud sync:</strong> Cloud synchronization is currently disabled. Your writing does not automatically upload to our servers</li>
+              <li><strong>AI context sharing:</strong> When you use AI writing assistance, your request and relevant manuscript and lore context are sent to our servers and AI provider</li>
+              <li>We do not access, read, or analyze your manuscripts except for selected context during AI requests you initiate</li>
             </ul>
+
+            <h3 className="text-lg font-medium mb-3 mt-6">AI Writing Assistant Data</h3>
+            <p>When you use the AI writing assistance feature (requires subscription):</p>
+            <ul className="list-disc list-inside space-y-2 mb-4">
+              <li><strong>What is sent:</strong> Selected manuscript text, chosen Lore Vault entries, and your user ID</li>
+              <li><strong>Where it goes:</strong> Data is transmitted to our Supabase Edge Functions, then forwarded to our AI provider for processing</li>
+              <li><strong>AI provider:</strong> We use third-party AI services that process your requests according to their privacy policies</li>
+              <li><strong>What we store:</strong> Usage metadata (request timestamps, token counts) for billing and abuse prevention—not your manuscript content</li>
+              <li><strong>What is NOT sent:</strong> Local backups and version history are not automatically uploaded</li>
+              <li><strong>Response handling:</strong> AI-generated suggestions are returned to your device where you review and choose whether to accept them</li>
+            </ul>
+            <p className="text-sm text-muted-foreground italic mt-2">
+              Important: AI assistance requires an internet connection and active subscription. Your manuscripts remain on your device; the context included with your request is transmitted.
+            </p>
 
             <h3 className="text-lg font-medium mb-3">Payment Information</h3>
             <p>Payment information is processed securely through third-party payment processors. We do not store full credit card numbers or sensitive payment data on our servers.</p>
@@ -229,7 +244,9 @@ export default function Privacy() {
             <p className="mt-4">
               <strong>Privacy Inquiries:</strong> <a href="mailto:privacy@solun.app" className="text-phthalo hover:underline">privacy@solun.app</a><br />
               <strong>General Legal:</strong> <a href="mailto:legal@solun.app" className="text-phthalo hover:underline">legal@solun.app</a><br />
-              <strong>Address:</strong> [Company Address], Australia<br />
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Note: Company address information will be provided upon official business registration.
             </p>
             <p className="mt-4">
               For data requests, see our <Link to="/legal#data-requests" className="text-phthalo hover:underline">Data Requests section</Link> in the Legal Center.

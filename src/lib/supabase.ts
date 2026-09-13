@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
+import { authCallbackUrl } from './auth-redirect'
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
@@ -221,35 +223,37 @@ export const signInWithEmail = async (email: string, password: string) => {
   return { data, error }
 }
 
-export const signInWithMagicLink = async (email: string) => {
+export const signInWithMagicLink = async (email: string, redirect = '/account') => {
   const { data, error } = await supabase.auth.signInWithOtp({
     email,
     options: {
       shouldCreateUser: true,
+      emailRedirectTo: authCallbackUrl(redirect),
     },
   })
   return { data, error }
 }
 
-export const signInWithOAuth = async (provider: 'google' | 'apple') => {
+export const signInWithOAuth = async (provider: 'google' | 'apple', redirect = '/account') => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${window.location.origin}/account`,
+      redirectTo: authCallbackUrl(redirect),
     },
   })
   return { data, error }
 }
 
 export const signOut = async () => {
-  const { error } = await supabase.auth.signOut()
+  const { error } = await supabase.auth.signOut({ scope: 'local' })
   return { error }
 }
 
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (email: string, password: string, redirect = '/account') => {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: { emailRedirectTo: authCallbackUrl(redirect) },
   })
   return { data, error }
 }

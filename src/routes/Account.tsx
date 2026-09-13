@@ -1,20 +1,36 @@
+import {
+  User,
+  LogOut,
+  CreditCard,
+  Key,
+  CheckCircle,
+  AlertCircle,
+  ExternalLink,
+  Clock,
+  CalendarDays,
+  Loader2,
+  RefreshCw,
+  Zap,
+  TrendingUp,
+} from "lucide-react";
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { toast } from "sonner";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
-import { useSession } from "@/hooks/use-session";
-import { useProfile } from "@/hooks/use-profile";
+import { tone } from "@/copy/tone";
+import { useAIUsage } from "@/hooks/use-ai-usage";
 import { useLicense } from "@/hooks/use-license";
+import { useProfile } from "@/hooks/use-profile";
+import { useSession } from "@/hooks/use-session";
 import { useSubscription } from "@/hooks/use-subscription";
-import { signOut } from "@/lib/supabase";
-import { sanitizeLicenseKey } from "@/lib/validation";
 import { sanitizeSupabaseError, sanitizeError } from "@/lib/error-sanitizer";
 import { 
   getTierDisplayName as getLicenseTierDisplayName, 
@@ -26,21 +42,8 @@ import {
   isExpiringsSoon,
   SUBSCRIPTION_STATUS,
 } from "@/lib/stripe";
-import { tone } from "@/copy/tone";
-import { 
-  User, 
-  LogOut, 
-  Monitor, 
-  CreditCard, 
-  Key, 
-  CheckCircle, 
-  AlertCircle, 
-  ExternalLink,
-  Clock,
-  CalendarDays,
-  Loader2,
-  RefreshCw,
-} from "lucide-react";
+import { signOut } from "@/lib/supabase";
+import { sanitizeLicenseKey } from "@/lib/validation";
 
 type LicenseStatus = 'none' | 'valid' | 'expired' | 'invalid';
 
@@ -48,16 +51,20 @@ export default function Account() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, loading: sessionLoading } = useSession();
-  const { profile, loading: profileLoading } = useProfile();
+  const { profile, loading: profileLoading, error: profileError, updateProfile, isUpdating } = useProfile();
+  const [displayNameInput, setDisplayNameInput] = useState<string | null>(null);
+  const [signingOut, setSigningOut] = useState(false);
   const { entitlements, loading: licenseLoading, isValidating, validateLicenseAsync } = useLicense();
-  const { 
-    subscription, 
-    loading: subscriptionLoading, 
+  const {
+    subscription,
+    loading: subscriptionLoading,
+    error: subscriptionError,
     isActive: hasActiveSubscription,
     openPortal,
     isOpeningPortal,
     refresh: refreshSubscription,
   } = useSubscription();
+  const aiUsage = useAIUsage();
 
   // License state
   const [licenseKey, setLicenseKey] = useState('');
@@ -76,9 +83,9 @@ export default function Account() {
 
     if (checkoutResult === 'success' && sessionId) {
       // Show success message
-      const successToast = tone.toast("success", "Your subscription is now active!");
+      const successToast = tone.toast("success", "Checkout completed. Confirming your subscription…");
       toast.success(successToast.title, {
-        description: "Thank you for subscribing to Solun. Your premium features are now unlocked."
+        description: "Your plan will appear once payment confirmation arrives. Use Refresh if it is still pending."
       });
       // Refresh subscription data
       refreshSubscription();
@@ -114,12 +121,7 @@ export default function Account() {
     }
   }, [entitlements, licenseLoading]);
 
-  useEffect(() => {
-    if (!sessionLoading && !user) {
-      navigate('/login');
-      return;
-    }
-  }, [user, sessionLoading, navigate]);
+
 
   const handleRedeemLicense = async () => {
     // Validate and sanitize license key
@@ -194,6 +196,8 @@ export default function Account() {
   };
 
   const handleSignOut = async () => {
+    if (signingOut) return;
+    setSigningOut(true);
     try {
       const { error } = await signOut();
       if (error) {
@@ -219,7 +223,7 @@ export default function Account() {
       toast.error(errorToast.title, {
         description: errorToast.description,
       });
-    }
+    } finally { setSigningOut(false); }
   };
 
   const handleOpenPortal = () => {
@@ -313,6 +317,13 @@ export default function Account() {
                 </Badge>
               </div>
             </div>
+            {profileError && <p role="alert" className="text-sm text-destructive">Unable to load your profile. Please refresh this page.</p>}
+            <form className="space-y-3" onSubmit={event => { event.preventDefault(); updateProfile({ display_name: displayNameInput ?? profile?.display_name ?? '' }); }}>
+              <Label htmlFor="display-name">Display name</Label>
+              <Input id="display-name" maxLength={80} value={displayNameInput ?? profile?.display_name ?? ''} onChange={event => setDisplayNameInput(event.target.value)} />
+              <Button disabled={isUpdating || !!profileError} type="submit">{isUpdating ? 'Saving…' : 'Save profile'}</Button>
+            </form>
+            <Link className="text-sm underline" to="/login?mode=reset">Change password</Link>
           </CardContent>
         </Card>
 
@@ -328,7 +339,7 @@ export default function Account() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {subscriptionLoading ? (
+            {subscriptionError ? <div role="alert"><p>Unable to load your subscription. Please try again.</p><Button variant="outline" onClick={refreshSubscription}>Retry</Button></div> : subscriptionLoading ? (
               <div className="text-center py-6">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo border-t-transparent mx-auto mb-4"></div>
                 <p className="text-sm text-muted-foreground">{tone.loading('skeleton')}</p>
@@ -497,6 +508,120 @@ export default function Account() {
           </CardContent>
         </Card>
 
+        {/* AI Usage Section */}
+        {hasActiveSubscription && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5" />
+                AI Usage This Month
+              </CardTitle>
+              <CardDescription>
+                Your AI writing assistance usage and remaining allowance
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {aiUsage.loading ? (
+                <div className="text-center py-6">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-phthalo border-t-transparent mx-auto mb-4"></div>
+                  <p className="text-sm text-muted-foreground">{tone.loading('skeleton')}</p>
+                </div>
+              ) : aiUsage.error ? <div role="alert"><p>Unable to load AI usage.</p><Button variant="outline" onClick={() => aiUsage.refetch()}>Retry</Button></div> : aiUsage.usage ? (
+                <>
+                  {/* Requests Usage */}
+                  {aiUsage.requestsLimit > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium">AI Requests</span>
+                        <span className="text-muted-foreground">
+                          {aiUsage.requestsUsed.toLocaleString()} / {aiUsage.requestsLimit.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+                        <div
+                          className={`absolute inset-y-0 left-0 rounded-full transition-all ${
+                            aiUsage.requestsPercentage >= 90
+                              ? 'bg-red-500'
+                              : aiUsage.requestsPercentage >= 75
+                              ? 'bg-yellow-500'
+                              : 'bg-green-500'
+                          }`}
+                          style={{ width: `${Math.min(100, aiUsage.requestsPercentage)}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {aiUsage.requestsRemaining} requests remaining
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Tokens Usage */}
+                  {aiUsage.tokensLimit > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium">Tokens</span>
+                        <span className="text-muted-foreground">
+                          {aiUsage.tokensUsed.toLocaleString()} / {aiUsage.tokensLimit.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+                        <div
+                          className={`absolute inset-y-0 left-0 rounded-full transition-all ${
+                            aiUsage.tokensPercentage >= 90
+                              ? 'bg-red-500'
+                              : aiUsage.tokensPercentage >= 75
+                              ? 'bg-yellow-500'
+                              : 'bg-green-500'
+                          }`}
+                          style={{ width: `${Math.min(100, aiUsage.tokensPercentage)}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {aiUsage.tokensRemaining.toLocaleString()} tokens remaining
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Period Info */}
+                  {aiUsage.periodEnd && (
+                    <div className="pt-4 border-t">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <TrendingUp className="h-4 w-4" />
+                        <span>
+                          Usage resets on {new Date(aiUsage.periodEnd).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Refresh Button */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => aiUsage.refetch()}
+                    className="w-full"
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Refresh Usage
+                  </Button>
+                </>
+              ) : (
+                <div className="text-center py-6">
+                  <Zap className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                  <p className="mb-1 font-medium">No AI usage tracked yet</p>
+                  <p className="text-sm text-muted-foreground">
+                    Start using AI writing assistance in the desktop app to see your usage here
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         {/* License Section */}
         <Card className="mb-6">
           <CardHeader>
@@ -617,26 +742,6 @@ export default function Account() {
           </CardContent>
         </Card>
 
-        {/* Devices Section */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Monitor className="h-5 w-5" />
-              Device Management
-            </CardTitle>
-            <CardDescription>
-              Manage devices connected to your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center py-8">
-              <Monitor className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <p className="mb-1 font-medium">No devices connected</p>
-              <p className="text-sm text-muted-foreground">Devices will appear here when you start using Solun</p>
-            </div>
-          </CardContent>
-        </Card>
-
         <Separator className="my-8" />
 
         {/* Sign Out Section */}
@@ -652,6 +757,7 @@ export default function Account() {
               <Button
                 variant="destructive"
                 onClick={handleSignOut}
+                disabled={signingOut}
                 className="flex items-center gap-2"
               >
                 <LogOut className="h-4 w-4" />

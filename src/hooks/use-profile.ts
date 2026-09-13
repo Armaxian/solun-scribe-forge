@@ -1,17 +1,20 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSession } from './use-session';
-import { supabase, type Database } from '@/lib/supabase';
-import { sanitizeSupabaseError, sanitizeError } from '@/lib/error-sanitizer';
 import { toast } from 'sonner';
-import { tone } from '@/copy/tone';
+
 import { queryKeys } from './query-keys';
+import { useSession } from './use-session';
+
+import { tone } from '@/copy/tone';
+import { sanitizeSupabaseError } from '@/lib/error-sanitizer';
+import { supabase, type Database } from '@/lib/supabase';
+
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
 /**
  * Fetches a user's profile from Supabase
  */
-async function fetchProfile(userId: string): Promise<Profile | null> {
+export async function fetchProfile(userId: string): Promise<Profile | null> {
   const { data, error } = await supabase
     .from('profiles')
     .select('*')
@@ -32,14 +35,14 @@ async function fetchProfile(userId: string): Promise<Profile | null> {
 /**
  * Updates a user's profile
  */
-async function updateProfile(
+export async function updateProfile(
   userId: string,
   updates: Partial<Omit<Profile, 'id' | 'created_at'>>
 ): Promise<Profile> {
   const { data, error } = await supabase
     .from('profiles')
     .update({
-      ...updates,
+      display_name: updates.display_name?.trim() || null,
       updated_at: new Date().toISOString(),
     })
     .eq('id', userId)

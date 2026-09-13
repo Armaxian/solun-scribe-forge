@@ -1,11 +1,12 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useRef, useState, type ComponentType } from 'react'
+import type { SplineProps } from '@splinetool/react-spline'
 import { useLocation } from 'react-router-dom'
 import ErrorBoundary from '../ErrorBoundary'
 import { SplineFallback } from './spline-fallback'
 import { logSplineDebugInfo } from '../../lib/spline-debug'
 
 // Custom Spline wrapper that handles import issues
-const SplineWrapper = lazy(async () => {
+const SplineWrapper = lazy<ComponentType<SplineProps>>(async () => {
   try {
     // Try to import Spline with proper error handling
     const SplineModule = await import('@splinetool/react-spline')

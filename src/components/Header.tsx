@@ -1,6 +1,6 @@
 import { FileDown, LogIn, Menu } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 import { Button } from "./ui/button";
 import { GradientButton } from "./ui/gradient-button";
@@ -12,8 +12,10 @@ import {
   SheetTrigger,
   SheetClose,
 } from "./ui/sheet";
-import { analytics } from "@/lib/analytics";
+
 import { tone } from "@/copy/tone";
+import { useSession } from "@/hooks/use-session";
+import { analytics } from "@/lib/analytics";
 
 const navigation = [
   { name: "Pricing", href: "/pricing" },
@@ -23,6 +25,7 @@ const navigation = [
 
 export function Header() {
   const location = useLocation();
+  const { user } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleNavigationClick = () => {
@@ -61,11 +64,11 @@ export function Header() {
           <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" size="default" className="typewriter" asChild>
               <Link
-                to="/login"
+                to={user ? '/account' : '/login'}
                 onClick={() => analytics.track({ name: 'cta_click', properties: { location: 'header', destination: 'login' } })}
               >
                 <LogIn className="h-4 w-4" aria-hidden="true" />
-                Log in
+                {user ? 'Account' : 'Sign in'}
               </Link>
             </Button>
             <GradientButton
@@ -131,11 +134,11 @@ export function Header() {
                     onClick={handleNavigationClick}
                   >
                     <Link
-                      to="/login"
+                      to={user ? '/account' : '/login'}
                       onClick={() => analytics.track({ name: 'cta_click', properties: { location: 'header_mobile', destination: 'login' } })}
                     >
                       <LogIn className="h-4 w-4 mr-2" aria-hidden="true" />
-                      Log in
+                      {user ? 'Account' : 'Sign in'}
                     </Link>
                   </Button>
                 </SheetClose>

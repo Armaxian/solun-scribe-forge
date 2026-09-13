@@ -202,14 +202,12 @@ export async function fetchSubscription(): Promise<Subscription | null> {
         // No subscription found
         return null
       }
-      console.error('Error fetching subscription:', error)
-      return null
+      throw error
     }
 
     return data as Subscription
   } catch (error) {
-    console.error('Error fetching subscription:', error)
-    return null
+    throw error
   }
 }
 
@@ -218,8 +216,8 @@ export async function fetchSubscription(): Promise<Subscription | null> {
  */
 export function isSubscriptionActive(subscription: Subscription | null): boolean {
   if (!subscription) return false
-  return subscription.status === SUBSCRIPTION_STATUS.ACTIVE || 
-         subscription.status === SUBSCRIPTION_STATUS.TRIALING
+  return (subscription.status === SUBSCRIPTION_STATUS.ACTIVE || subscription.status === SUBSCRIPTION_STATUS.TRIALING) &&
+    !!subscription.current_period_end && new Date(subscription.current_period_end).getTime() > Date.now()
 }
 
 /**

@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { sanitizeError, sanitizeSupabaseError } from '../error-sanitizer';
 
 // Mock console.error to avoid noise in tests
-const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+let consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 beforeEach(() => {
-  consoleErrorSpy.mockClear();
+  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 });
 
 afterEach(() => {

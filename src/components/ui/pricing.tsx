@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
+import NumberFlow from "@number-flow/react";
+import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
 import { Check, Star, Loader2 } from "lucide-react";
-import confetti from "canvas-confetti";
-import NumberFlow from "@number-flow/react";
-import { Link, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -11,9 +11,9 @@ import { Switch } from "@/components/ui/switch";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSession } from "@/hooks/use-session";
 import { useSubscription } from "@/hooks/use-subscription";
-import { cn } from "@/lib/utils";
-import { STRIPE_LOOKUP_KEYS, type StripeLookupKey } from "@/lib/stripe";
 import { analytics } from "@/lib/analytics";
+import { type StripeLookupKey } from "@/lib/stripe";
+import { cn } from "@/lib/utils";
 
 export interface PricingPlan {
   name: string;
@@ -46,7 +46,8 @@ export function Pricing({
   title = "Simple, Transparent Pricing",
   description = "Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support.",
 }: PricingProps) {
-  const [isMonthly, setIsMonthly] = useState(true);
+  const [searchParams] = useSearchParams();
+  const [isMonthly, setIsMonthly] = useState(searchParams.get('billing') !== 'yearly');
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const switchRef = useRef<HTMLButtonElement>(null);
@@ -111,7 +112,7 @@ export function Pricing({
     // Paid plan - need to be logged in
     if (!user) {
       // Redirect to login with return URL
-      navigate(`/login?redirect=/pricing&plan=${plan.name.toLowerCase()}&billing=${isMonthly ? 'monthly' : 'yearly'}`);
+      navigate(`/login?redirect=${encodeURIComponent(`/pricing?billing=${isMonthly ? 'monthly' : 'yearly'}`)}`);
       return;
     }
 
@@ -182,6 +183,7 @@ export function Pricing({
   };
 
   const isButtonDisabled = (plan: PricingPlan) => {
+    if (!plan.isFree && !plan.isContactSales && sessionLoading) return true;
     if (loadingPlan === plan.name) return true;
     if (isCheckingOut) return true;
     
@@ -216,7 +218,8 @@ export function Pricing({
         <label className="relative inline-flex items-center cursor-pointer">
           <Label>
             <Switch
-              ref={switchRef as any}
+              ref={switchRef}
+              aria-label="Annual billing"
               checked={!isMonthly}
               onCheckedChange={handleToggle}
               className="relative"
@@ -224,11 +227,11 @@ export function Pricing({
           </Label>
         </label>
         <span className="ml-2 font-semibold">
-          Annual billing <span className="text-primary">(Save 20%)</span>
+          Annual billing
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 sm:2 gap-4">
+      <div className={`grid grid-cols-1 ${plans.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-4`}>
         {plans.map((plan, index) => (
           <motion.div
             key={index}
@@ -288,7 +291,6 @@ export function Pricing({
                       minimumFractionDigits: 0,
                       maximumFractionDigits: 0,
                     }}
-                    formatter={(value) => `$${value}`}
                     transformTiming={{
                       duration: 500,
                       easing: "ease-out",
@@ -305,7 +307,7 @@ export function Pricing({
               </div>
 
               <p className="text-xs leading-5 text-muted-foreground">
-                {plan.isFree ? "Free forever" : isMonthly ? "billed monthly" : "billed annually"}
+                {plan.isFree ? "Free forever · No account required" : isMonthly ? `${plan.price} USD billed monthly` : `${Number(plan.yearlyPrice) * 12} USD billed annually`}
               </p>
 
               <ul className="mt-5 gap-2 flex flex-col">

@@ -1,81 +1,20 @@
+import { Check, X, ChevronRight, Info } from "lucide-react";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Check, X, Star, Users, Crown, Sparkles, ChevronRight, Info } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Pricing as PricingBlock } from "@/components/ui/pricing";
 import { toast } from "sonner";
 
+import { Pricing as PricingBlock } from "@/components/ui/pricing";
+import { tone } from "@/copy/tone";
 import { analytics } from "@/lib/analytics";
 import { STRIPE_LOOKUP_KEYS } from "@/lib/stripe";
-import { tone } from "@/copy/tone";
 
-const plans = [
-  {
-    name: "Free",
-    description: "Perfect for exploring Solun and getting started",
-    price: "$0",
-    period: "forever",
-    icon: Sparkles,
-    popular: false,
-    features: [
-      { name: "Distraction-free editor", included: true },
-      { name: "Basic Lore Vault (up to 100 entities)", included: true },
-      { name: "Local AI chat (limited)", included: true },
-      { name: "Version control (3 versions)", included: true },
-      { name: "Offline-first architecture", included: true },
-      { name: "Priority support", included: false },
-      { name: "Advanced continuity checking", included: false },
-      { name: "Team collaboration", included: false },
-      { name: "Cloud sync", included: false }
-    ]
-  },
-  {
-    name: "Pro",
-    description: "Everything you need for serious world-building",
-    price: "$19",
-    period: "per month",
-    icon: Crown,
-    popular: true,
-    features: [
-      { name: "Distraction-free editor", included: true },
-      { name: "Unlimited Lore Vault entities", included: true },
-      { name: "Full RAG-powered AI chat", included: true },
-      { name: "Unlimited version control", included: true },
-      { name: "Advanced continuity engine", included: true },
-      { name: "Priority email support", included: true },
-      { name: "Export options (PDF, EPUB)", included: true },
-      { name: "Team collaboration", included: false },
-      { name: "Cloud sync", included: false }
-    ]
-  },
-  {
-    name: "Team",
-    description: "Collaborative world-building for groups",
-    price: "$49",
-    period: "per month",
-    icon: Users,
-    popular: false,
-    features: [
-      { name: "Everything in Pro", included: true },
-      { name: "Up to 10 team members", included: true },
-      { name: "Real-time collaboration", included: true },
-      { name: "Shared Lore Vault", included: true },
-      { name: "Team continuity tracking", included: true },
-      { name: "Priority phone support", included: true },
-      { name: "Admin dashboard", included: true },
-      { name: "Advanced permissions", included: true },
-      { name: "Cloud sync & backup", included: true }
-    ]
-  }
-];
-
-const featureCategories = [
-  { name: "Core Writing", features: ["Distraction-free editor"] },
-  { name: "World-Building", features: ["Lore Vault", "Continuity engine", "Version control"] },
-  { name: "AI Features", features: ["RAG-powered chat", "Context awareness"] },
-  { name: "Collaboration", features: ["Team features", "Real-time editing"] },
-  { name: "Support", features: ["Support level", "Response time"] },
-  { name: "Platform", features: ["Offline-first", "Cross-platform"] }
+const comparison = [
+  { name: "Desktop writing editor", free: true },
+  { name: "Lore Vault", free: true },
+  { name: "Local backups and exports", free: true },
+  { name: "Write without an account", free: true },
+  { name: "AI writing assistance (sign-in required)", free: false },
 ];
 
 export default function Pricing() {
@@ -106,13 +45,12 @@ export default function Pricing() {
       yearlyPrice: "0",
       period: "forever",
       features: [
-        "Distraction-free editor",
-        "Basic Lore Vault (up to 100 entities)",
-        "Local AI chat (limited)",
-        "Version control (3 versions)",
-        "Offline-first architecture",
+        "Desktop writing editor",
+        "Lore Vault for story details",
+        "Local backups and exports",
+        "All writing features included",
       ],
-      description: "Perfect for exploring Solun and getting started",
+      description: "Write locally without an account",
       buttonText: "Download Free",
       href: "/download",
       isPopular: false,
@@ -121,16 +59,15 @@ export default function Pricing() {
     {
       name: "Pro",
       price: "19",
-      yearlyPrice: "15",
+      yearlyPrice: "16",
       period: "per month",
       features: [
-        "Unlimited Lore Vault entities",
-        "Full RAG-powered AI chat",
-        "Unlimited version control",
-        "Advanced continuity engine",
-        "Priority email support",
+        "Everything in Free",
+        "AI writing assistance",
+        "Context from your Lore Vault",
+        "Monthly AI usage allowance",
       ],
-      description: "Everything you need for serious world-building",
+      description: "Unlock AI assistance for your writing",
       buttonText: "Get Pro",
       href: "/pricing",
       isPopular: true,
@@ -138,41 +75,22 @@ export default function Pricing() {
       stripeLookupKeyMonthly: STRIPE_LOOKUP_KEYS.PRO_MONTHLY,
       stripeLookupKeyYearly: STRIPE_LOOKUP_KEYS.PRO_YEARLY,
     },
-    {
-      name: "Team",
-      price: "49",
-      yearlyPrice: "39",
-      period: "per month",
-      features: [
-        "Everything in Pro",
-        "Up to 10 team members",
-        "Real-time collaboration",
-        "Shared Lore Vault",
-        "Cloud sync & backup",
-      ],
-      description: "Collaborative world-building for groups",
-      buttonText: "Contact Sales",
-      href: "/contact",
-      isPopular: false,
-      isFree: false,
-      isContactSales: true,
-    },
   ];
 
   return (
     <>
       <Helmet>
         <title>Solun Pricing - Free & Pro Plans for World-Builders</title>
-        <meta name="description" content="Choose the perfect Solun plan. Free forever plan available. Pro plan at $19/month with unlimited Lore Vault and RAG-powered AI chat. Team plans for collaborative writing." />
+        <meta name="description" content="Explore Solun and write locally for free. Sign in and choose Pro when you want AI assistance." />
         <link rel="canonical" href="https://solun.app/pricing" />
         <meta property="og:title" content="Solun Pricing - AI Writing Workspace Plans" />
-        <meta property="og:description" content="Free and Pro plans for writers and world-builders. Unlimited Lore Vault, RAG-powered chat, and offline-first architecture." />
+        <meta property="og:description" content="Free local writing and optional Pro AI assistance for writers and world-builders." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/pricing" />
         <meta property="og:image" content="https://solun.app/og-image-pricing.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Solun Pricing - AI Writing Workspace Plans" />
-        <meta name="twitter:description" content="Free and Pro plans for writers and world-builders. Unlimited Lore Vault, RAG-powered chat, and offline-first architecture." />
+        <meta name="twitter:description" content="Free local writing and optional Pro AI assistance for writers and world-builders." />
         <meta name="twitter:image" content="https://solun.app/og-image-pricing.png" />
       </Helmet>
 
@@ -189,7 +107,7 @@ export default function Pricing() {
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground">
-                Start free, upgrade when you need more. No hidden fees, no surprises.
+                Explore and write without signing in. Create an account when you want AI assistance.
               </p>
             </div>
           </div>
@@ -225,23 +143,23 @@ export default function Pricing() {
                     <thead>
                       <tr className="border-b border-border/50">
                         <th className="text-left p-6 font-semibold">Features</th>
-                        {plans.map((plan) => (
-                          <th key={plan.name} className="text-center p-6 font-semibold min-w-[120px]">
-                            {plan.name}
+                        {["Free", "Pro"].map((plan) => (
+                          <th key={plan} className="text-center p-6 font-semibold min-w-[120px]">
+                            {plan}
                           </th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {plans[0].features.map((feature, index) => (
+                      {comparison.map((feature, index) => (
                         <tr key={index} className="border-b border-border/20">
                           <td className="p-6 font-medium">{feature.name}</td>
-                          {plans.map((plan) => (
-                            <td key={plan.name} className="text-center p-6">
-                              {plan.features[index].included ? (
-                                <Check className="h-5 w-5 text-success mx-auto" aria-hidden="true" />
+                          {["Free", "Pro"].map((plan) => (
+                            <td key={plan} className="text-center p-6">
+                              {plan === "Pro" || feature.free ? (
+                                <span><Check className="h-5 w-5 text-success mx-auto" aria-hidden="true" /><span className="sr-only">Included</span></span>
                               ) : (
-                                <X className="h-5 w-5 text-muted-foreground mx-auto" aria-hidden="true" />
+                                <span><X className="h-5 w-5 text-muted-foreground mx-auto" aria-hidden="true" /><span className="sr-only">Not included</span></span>
                               )}
                             </td>
                           ))}
@@ -270,28 +188,28 @@ export default function Pricing() {
                 <div className="card">
                   <h3 className="text-lg font-semibold mb-2">Can I upgrade or downgrade at any time?</h3>
                   <p className="text-muted-foreground">
-                    Yes! You can change your plan at any time. Upgrades take effect immediately, downgrades at the end of your current billing cycle.
+                    Manage or cancel your subscription from Account. The billing portal shows when a change takes effect. Local writing remains available without a subscription.
                   </p>
                 </div>
 
                 <div className="card">
                   <h3 className="text-lg font-semibold mb-2">Is there a desktop app?</h3>
                   <p className="text-muted-foreground">
-                    Yes, Solun offers native desktop applications for Windows, macOS, and Linux. The desktop app license is sold separately from the web version.
+                    Solun is a desktop writing app. Visit Downloads for available releases. An account is only needed for AI assistance and billing.
                   </p>
                 </div>
 
                 <div className="card">
                   <h3 className="text-lg font-semibold mb-2">What payment methods do you accept?</h3>
                   <p className="text-muted-foreground">
-                    We accept all major credit cards, PayPal, and bank transfers for annual plans.
+                    Available payment methods and the full amount are shown securely at checkout. Prices shown here are in USD.
                   </p>
                 </div>
 
                 <div className="card">
                   <h3 className="text-lg font-semibold mb-2">Do you offer refunds?</h3>
                   <p className="text-muted-foreground">
-                    Yes, we offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your payment.
+                    See our Terms for the refund policy and contact support for help with a payment.
                   </p>
                 </div>
               </div>
@@ -305,13 +223,13 @@ export default function Pricing() {
             <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="card-hover text-center">
                 <Info className="h-12 w-12 mx-auto mb-4 text-info" aria-hidden="true" />
-                <h3 className="text-xl font-semibold mb-3">Desktop App License</h3>
+                <h3 className="text-xl font-semibold mb-3">Start with local writing</h3>
                 <p className="text-muted-foreground mb-4">
-                  The Solun desktop application is available as a separate purchase. It includes all web features plus native performance optimizations and offline capabilities.
+                  Download the desktop app and explore your writing workspace without an account. Sign in when you choose to use AI assistance.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link to="/download" className="btn btn-ghost">
-                    Web Version (Free)
+                    Download Free
                   </Link>
                   <Link to="/download" className="btn btn-primary">
                     Desktop App
@@ -329,7 +247,7 @@ export default function Pricing() {
               Ready to start writing?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl prose-reading-comfortable mx-auto">
-              Join thousands of writers who trust Solun with their creative process
+              Make room for your manuscript, your world, and your next idea.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

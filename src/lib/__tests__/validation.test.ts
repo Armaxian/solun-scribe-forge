@@ -98,7 +98,7 @@ describe('validateEmail', () => {
     });
 
     it('should reject email longer than 254 characters', () => {
-      const longEmail = 'a'.repeat(240) + '@example.com';
+      const longEmail = 'a'.repeat(250) + '@example.com';
       expect(longEmail.length).toBeGreaterThan(254);
       const result = validateEmail(longEmail);
       expect(result.valid).toBe(false);

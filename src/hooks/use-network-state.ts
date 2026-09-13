@@ -129,8 +129,8 @@ export function useNetworkState(): NetworkState {
     const queryCache = queryClient.getQueryCache();
     
     const unsubscribe = queryCache.subscribe((event) => {
-      if (event?.type === 'error') {
-        const error = event.error;
+      if (event.type === 'updated' && event.action.type === 'error') {
+        const error = event.query.state.error;
         if (isNetworkError(error)) {
           setConsecutiveFailures((prev) => prev + 1);
         }

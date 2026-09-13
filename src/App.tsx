@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { tone } from "@/copy/tone";
+import { SessionProvider } from "@/hooks/use-session";
 
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -207,7 +208,7 @@ const queryClient = new QueryClient({
       refetchOnReconnect: true, // Do refetch when reconnecting
     },
     mutations: {
-      retry: 1, // Retry mutations once
+      retry: false,
       retryDelay: 1000, // 1 second delay
     },
   },
@@ -280,7 +281,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <AppContent />
+          <SessionProvider><AppContent /></SessionProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </HelmetProvider>

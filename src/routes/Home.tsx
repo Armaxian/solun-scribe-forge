@@ -28,104 +28,58 @@ import { tone } from "@/copy/tone";
 const featuresDetailed = [
   {
     icon: FileText,
-    title: "Distraction-Free Editor",
-    subtitle: "Write worlds, not code",
+    title: "Focused Writing",
+    subtitle: "A place for your manuscript",
     description:
-      "A cozy, page-by-page writing experience with elegant pagination. Focus on your story with a clean interface that feels like writing on parchment. Smooth page transitions and minimal distractions keep you in the flow.",
-    illustration: "editor-pagination",
+      "Write in a clean, distraction-free editor designed for long-form storytelling. Your manuscript stays on your device, organized in local projects with automatic saves and export options.",
+    illustration: "editor",
     details: [
-      "Page-by-page navigation with smooth transitions",
-      "Minimal, parchment-like interface",
-      "Auto-save with local encryption",
-      "Distraction-free fullscreen mode",
+      "TipTap-based rich text editor",
+      "Local project organization",
+      "Auto-save to SQLite",
+      "Export to Markdown, DOCX, PDF",
     ],
   },
   {
     icon: Database,
     title: "Lore Vault",
-    subtitle: "Your world's memory",
+    subtitle: "Keep your story details close",
     description:
-      "Store characters, places, items, relationships, and timelines in an interconnected knowledge base. Every entity links to others, creating a web of relationships that maintains your world's consistency.",
+      "Store characters, places, and items alongside your manuscript. Create relationships and timelines to keep your world consistent. Everything stays in your local database.",
     illustration: "lore-vault",
-    hasSpline: true,
-    splineScene: "https://prod.spline.design/klSoItsFh7uXybAi/scene.splinecode",
     details: [
-      "Interconnected entities and relationships",
-      "Rich metadata for characters, places, and items",
-      "Timeline tracking and chronology",
-      "Quick search and cross-references",
+      "Characters, places, items",
+      "Relationships and timeline tracking",
+      "Local SQLite storage",
+      "Cross-referenced to your writing",
     ],
   },
   {
     icon: MessageSquare,
-    title: "RAG-Powered Chat",
-    subtitle: "AI that knows your world",
+    title: "AI Writing Assistant",
+    subtitle: "Ask questions about your story",
     description:
-      "Context-aware conversations that draw from your Lore Vault. Ask questions about your characters, get plot suggestions, or explore world-building ideas—all informed by your existing content.",
-    illustration: "rag-chat",
+      "Get help from AI that can reference your characters and plot. The AI uses context from your Lore Vault to provide relevant suggestions. Requires an internet connection and subscription for AI access.",
+    illustration: "ai-chat",
     details: [
-      "Vector search through your lore",
-      "Context-aware responses",
-      "Seamless editor integration",
-      "Export chat to editor or notes",
-    ],
-  },
-  {
-    icon: Layers,
-    title: "Continuity Engine",
-    subtitle: "Never forget a detail",
-    description:
-      "Track character arcs, plot threads, and timeline consistency effortlessly. The system automatically suggests continuity fixes and maintains narrative coherence across your entire work.",
-    illustration: "continuity",
-    hasSpline: true,
-    splineScene: "https://prod.spline.design/klSoItsFh7uXybAi/scene.splinecode",
-    details: [
-      "Automatic continuity checking",
-      "Character arc tracking",
-      "Plot thread management",
-      "Timeline validation",
-    ],
-  },
-  {
-    icon: GitBranch,
-    title: "Version Control & Drafts",
-    subtitle: "Every idea preserved",
-    description:
-      "Built-in versioning keeps every draft, revision, and idea. Branch your story, experiment with plot changes, and merge back when ready. Never lose a brilliant idea again.",
-    illustration: "versioning",
-    details: [
-      "Unlimited draft versions",
-      "Branch and merge storylines",
-      "Compare versions side-by-side",
-      "Restore any previous state",
+      "Context-aware AI responses",
+      "References your Lore Vault",
+      "Review suggestions before accepting",
+      "AI usage requires subscription",
     ],
   },
   {
     icon: Shield,
-    title: "Offline-First Architecture",
-    subtitle: "Your data, your control",
+    title: "Local-First Privacy",
+    subtitle: "Your writing stays on your device",
     description:
-      "Runs entirely on your device with SQLite and vector extensions. No cloud dependency, no data mining. Your stories and lore remain private, encrypted, and under your complete control.",
-    illustration: "offline-first",
+      "Manuscripts, lore, and backups are stored locally in SQLite. Only selected context is sent to AI when you explicitly ask for help. No automatic cloud sync or data mining.",
+    illustration: "privacy",
     details: [
-      "SQLite with vector extensions",
-      "End-to-end encryption",
-      "No internet required",
-      "Cross-platform sync options",
-    ],
-  },
-  {
-    icon: Palette,
-    title: "Olive + Cream Theme",
-    subtitle: "Premium minimal aesthetic",
-    description:
-      "A carefully crafted color palette of deep phthalo greens and warm olive tones on cream backgrounds. Like writing on aged parchment with fine ink—comfortable for hours of creation.",
-    illustration: "theme",
-    details: [
-      "Phthalo green and olive accents",
-      "Warm cream backgrounds",
-      "Dark mode support",
-      "Accessibility-optimized contrast",
+      "Local SQLite database",
+      "Device-local storage",
+      "AI context sent only when requested",
+      "Local backups you control",
     ],
   },
 ];
@@ -184,11 +138,11 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Solun - Premium AI Writing Workspace for World-Builders</title>
-        <meta name="description" content="Write worlds. Keep them true. Premium AI workspace with Lore Vault, RAG-powered chat, and distraction-free editor. Offline-first, local-first architecture for serious world-building." />
+        <title>Solun - Writing Workspace for Novelists and World-Builders</title>
+        <meta name="description" content="A desktop writing workspace for your manuscript, your world, and the ideas between them. Local-first editor with Lore Vault and AI writing assistance." />
         <link rel="canonical" href="https://solun.app/" />
-        <meta property="og:title" content="Solun - Premium AI Writing Workspace for World-Builders" />
-        <meta property="og:description" content="Write worlds. Keep them true. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
+        <meta property="og:title" content="Solun - Writing Workspace for Novelists" />
+        <meta property="og:description" content="Desktop writing workspace with manuscript editor, Lore Vault, and AI assistance. Your writing stays on your device." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/" />
         <meta property="og:site_name" content="Solun" />
@@ -196,14 +150,12 @@ export default function Home() {
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Solun - Premium AI Writing Workspace for World-Builders" />
+        <meta property="og:image:alt" content="Solun Writing Workspace" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@solun_app" />
-        <meta name="twitter:creator" content="@solun_app" />
-        <meta name="twitter:title" content="Solun - Premium AI Writing Workspace for World-Builders" />
-        <meta name="twitter:description" content="Write worlds. Keep them true. Context-aware AI, Lore Vault, and elegant editor for writers and world-builders." />
+        <meta name="twitter:title" content="Solun - Writing Workspace for Novelists" />
+        <meta name="twitter:description" content="Desktop writing workspace with manuscript editor, Lore Vault, and AI assistance. Your writing stays on your device." />
         <meta name="twitter:image" content="https://solun.app/og-image-home.png" />
-        <meta name="twitter:image:alt" content="Solun - Premium AI Writing Workspace for World-Builders" />
+        <meta name="twitter:image:alt" content="Solun Writing Workspace" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -264,11 +216,11 @@ export default function Home() {
         {/* Typewriter Heading Over Prism */}
         <div className="container max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl relative z-10">
           <div className="flex flex-col items-center justify-center text-center min-h-[600px]">
-            <div className="space-y-8 animate-fade-in">
+            <div className="space-y-8 animate-fade-in max-w-4xl">
               <div ref={titleRef} className="w-full">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
-                  <TypewriterTextInk 
-                    text={["Write worlds.", "Write stories.", "Write ideas.", "Write dreams.", "Write tales.", "Write narratives."]}
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
+                  <TypewriterTextInk
+                    text={["Write worlds.", "Write stories.", "Write ideas."]}
                     speed={120}
                     delay={800}
                     className="typewriter-subtle"
@@ -277,10 +229,16 @@ export default function Home() {
                     pauseTime={3000}
                   />
                 </h1>
+                <p className="text-xl md:text-2xl text-foreground/80 font-medium leading-relaxed px-4">
+                  A writing workspace for your manuscript, your world, and the ideas between them.
+                </p>
               </div>
-              <div className={`flex flex-col items-center gap-4 transition-all duration-1000 ${isTypingComplete ? 'opacity-100 transform translate-y-0' : 'opacity-60 transform translate-y-2'}`}>
+              <div className={`flex flex-col items-center gap-6 transition-all duration-1000 ${isTypingComplete ? 'opacity-100 transform translate-y-0' : 'opacity-60 transform translate-y-2'}`}>
+                <p className="text-base text-muted-foreground max-w-2xl px-4">
+                  Explore and write locally without an account. Sign in when you want AI assistance.
+                </p>
                 <GradientButton
-                  className="relative z-10 typewriter"
+                  className="relative z-10 typewriter text-lg px-8 py-6"
                   onClick={() => handleDownload()}
                   aria-label={`Download Solun for ${detectedLabel}`}
                 >
