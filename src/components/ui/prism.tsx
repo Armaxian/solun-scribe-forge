@@ -186,6 +186,8 @@ const Prism = ({
           col = clamp(hueRotation(uHueShift) * col, 0.0, 1.0);
         }
 
+        col = mix(vec3(0.043, 0.239, 0.180), vec3(0.61, 0.72, 0.64), L);
+
         gl_FragColor = vec4(col, o.a);
       }
     `;

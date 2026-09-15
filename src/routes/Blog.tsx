@@ -1,10 +1,8 @@
 import { Calendar, Clock, User, ArrowRight, Tag } from "lucide-react";
-import { useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 import { Spotlight } from "@/components/ui/spotlight";
-import { useNewsletter } from "@/hooks/use-newsletter";
 
 const blogPosts = [
   {
@@ -32,43 +30,6 @@ const blogPosts = [
 ];
 
 export default function Blog() {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const { subscribe, isSubmitting } = useNewsletter();
-  const submitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleSubscribe = useCallback(() => {
-    if (!email.trim()) {
-      return; // Empty email - validation will be handled by the mutation
-    }
-
-    if (isSubmitting) {
-      return; // Prevent double submission
-    }
-
-    subscribe({ email, source: 'blog' });
-    setEmail("");
-  }, [email, subscribe, isSubmitting]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Clear any existing timeout
-    if (submitTimeoutRef.current) {
-      clearTimeout(submitTimeoutRef.current);
-    }
-
-    // Prevent double submission
-    if (isSubmitting) {
-      return;
-    }
-
-    // Debounce the submission
-    submitTimeoutRef.current = setTimeout(() => {
-      handleSubscribe();
-    }, 300);
-  };
-
   return (
     <>
       <Helmet>
@@ -226,62 +187,6 @@ export default function Blog() {
                   </div>
                 </Link>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Newsletter Signup */}
-        <section className="section bg-gradient-subtle">
-          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
-            <div className="mx-auto max-w-2xl prose-reading-comfortable text-center space-y-6">
-              <div className="space-y-4">
-                <h2 className="text-2xl md:text-3xl font-bold">
-                  Stay in the loop
-                </h2>
-                <p className="text-muted-foreground">
-                  Get notified about new posts, feature updates, and writing tips
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-md mx-auto">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      // Clear error when user starts typing
-                      if (emailError) setEmailError(null);
-                    }}
-                    disabled={isSubmitting}
-                    className={`flex-1 px-4 py-3 rounded-xl border bg-card text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-phthalo disabled:opacity-50 disabled:cursor-not-allowed ${
-                      emailError ? "border-destructive" : "border-border"
-                    }`}
-                    aria-label="Email address for newsletter subscription"
-                    aria-invalid={!!emailError}
-                    aria-describedby={emailError ? "blog-email-error" : undefined}
-                    required
-                  />
-                <button 
-                  type="submit"
-                  className="btn btn-primary whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={isSubmitting}
-                  aria-label="Subscribe to newsletter"
-                >
-                  {isSubmitting ? "Subscribing..." : "Subscribe"}
-                </button>
-                </div>
-                {emailError && (
-                  <p id="blog-email-error" className="text-sm font-medium text-destructive">
-                    {emailError}
-                  </p>
-                )}
-              </form>
-
-              <p className="text-xs text-muted-foreground">
-                No spam, unsubscribe at any time.
-              </p>
             </div>
           </div>
         </section>

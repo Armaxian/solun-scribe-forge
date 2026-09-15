@@ -33,7 +33,5 @@ export const queryKeys = {
     all: ['ai-usage'] as const,
     period: (userId: string) => ['ai-usage', 'period', userId] as const,
   },
-
-  // Newsletter (no queries, only mutations)
 } as const;
 

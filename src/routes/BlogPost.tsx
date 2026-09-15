@@ -329,7 +329,6 @@ export default function BlogPost() {
           </div>
         </section>
 
-        {/* Related Posts or Newsletter could go here */}
       </div>
     </>
   );

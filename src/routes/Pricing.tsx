@@ -12,9 +12,9 @@ import { STRIPE_LOOKUP_KEYS } from "@/lib/stripe";
 const comparison = [
   { name: "Desktop writing editor", free: true },
   { name: "Lore Vault", free: true },
-  { name: "Local backups and exports", free: true },
-  { name: "Write without an account", free: true },
-  { name: "AI writing assistance (sign-in required)", free: false },
+  { name: "Backups and exports", free: true },
+  { name: "Start writing right away", free: true },
+  { name: "A sounding board when you want one", free: false },
 ];
 
 export default function Pricing() {
@@ -46,11 +46,11 @@ export default function Pricing() {
       period: "forever",
       features: [
         "Desktop writing editor",
-        "Lore Vault for story details",
-        "Local backups and exports",
-        "All writing features included",
+        "A home for your story details",
+        "Backups and easy exports",
+        "Everything you need to write",
       ],
-      description: "Write locally without an account",
+      description: "Start writing today. No sign-up required.",
       buttonText: "Download Free",
       href: "/download",
       isPopular: false,
@@ -63,11 +63,11 @@ export default function Pricing() {
       period: "per month",
       features: [
         "Everything in Free",
-        "AI writing assistance",
-        "Context from your Lore Vault",
-        "Monthly AI usage allowance",
+        "A little help when you need it",
+        "Ideas shaped by your story",
+        "A generous monthly allowance",
       ],
-      description: "Unlock AI assistance for your writing",
+      description: "For writers who want a thoughtful second opinion.",
       buttonText: "Get Pro",
       href: "/pricing",
       isPopular: true,
@@ -80,16 +80,16 @@ export default function Pricing() {
   return (
     <>
       <Helmet>
-        <title>Solun Pricing - Free & Pro Plans for World-Builders</title>
-        <meta name="description" content="Explore Solun and write locally for free. Sign in and choose Pro when you want AI assistance." />
+        <title>Solun Pricing — Start free, add help when you need it</title>
+        <meta name="description" content="Start writing with Solun for free. Choose Pro when you want a thoughtful second opinion for your story." />
         <link rel="canonical" href="https://solun.app/pricing" />
-        <meta property="og:title" content="Solun Pricing - AI Writing Workspace Plans" />
-        <meta property="og:description" content="Free local writing and optional Pro AI assistance for writers and world-builders." />
+        <meta property="og:title" content="Solun Pricing — Start free, add help when you need it" />
+        <meta property="og:description" content="Everything you need to write is free. Add Pro when you want a thoughtful second opinion for your story." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/pricing" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Solun Pricing - AI Writing Workspace Plans" />
-        <meta name="twitter:description" content="Free local writing and optional Pro AI assistance for writers and world-builders." />
+        <meta name="twitter:title" content="Solun Pricing — Start free, add help when you need it" />
+        <meta name="twitter:description" content="Everything you need to write is free. Add Pro when you want a thoughtful second opinion for your story." />
       </Helmet>
 
       <div className="min-h-screen">
@@ -98,14 +98,14 @@ export default function Pricing() {
           <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4">
             <div className="mx-auto md:mx-0 container-narrow text-center md:text-left space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-                Fair pricing for
+                Start free.
                 <br />
                 <span className="bg-gradient-hero bg-clip-text text-transparent">
-                  creative writers
+                  Add help when you need it.
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground">
-                Explore and write without signing in. Create an account when you want AI assistance.
+                Everything you need to write is included. Pro is there when you want a fresh perspective on the page.
               </p>
             </div>
           </div>
@@ -128,10 +128,10 @@ export default function Pricing() {
             <div className="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Compare all features
+                  See what fits your writing life
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Everything you need to know about our pricing plans
+                  Start with the essentials. Add more only when it earns its place.
                 </p>
               </div>
 
@@ -184,30 +184,30 @@ export default function Pricing() {
 
               <div className="space-y-6">
                 <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">Can I upgrade or downgrade at any time?</h3>
+                  <h3 className="text-lg font-semibold mb-2">Can I change plans later?</h3>
                   <p className="text-muted-foreground">
-                    Manage or cancel your subscription from Account. The billing portal shows when a change takes effect. Local writing remains available without a subscription.
+                    Yes. Manage or cancel your subscription from Account. Your writing stays available either way.
                   </p>
                 </div>
 
                 <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">Is there a desktop app?</h3>
+                  <h3 className="text-lg font-semibold mb-2">What do I get for free?</h3>
                   <p className="text-muted-foreground">
-                    Solun is a desktop writing app. Visit Downloads for available releases. An account is only needed for AI assistance and billing.
+                    The writing space, your story details, backups, and exports. You can start with the parts you need and decide about Pro later.
                   </p>
                 </div>
 
                 <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">What payment methods do you accept?</h3>
+                  <h3 className="text-lg font-semibold mb-2">What is Pro for?</h3>
                   <p className="text-muted-foreground">
-                    Available payment methods and the full amount are shown securely at checkout. Prices shown here are in USD.
+                    Pro gives you a thoughtful second opinion when you are stuck, exploring a scene, or looking for what might happen next. It is there when you want it—not in the way when you do not.
                   </p>
                 </div>
 
                 <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">Do you offer refunds?</h3>
+                  <h3 className="text-lg font-semibold mb-2">How do payments work?</h3>
                   <p className="text-muted-foreground">
-                    See our Terms for the refund policy and contact support for help with a payment.
+                    Prices are shown in USD and payment details are handled securely at checkout. See our Terms for the refund policy.
                   </p>
                 </div>
               </div>
@@ -221,9 +221,9 @@ export default function Pricing() {
             <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="card-hover text-center">
                 <Info className="h-12 w-12 mx-auto mb-4 text-info" aria-hidden="true" />
-                <h3 className="text-xl font-semibold mb-3">Start with local writing</h3>
+                <h3 className="text-xl font-semibold mb-3">Start with a blank page</h3>
                 <p className="text-muted-foreground mb-4">
-                  Download the desktop app and explore your writing workspace without an account. Sign in when you choose to use AI assistance.
+                  Download Solun and start writing straight away. When you want a fresh perspective, Pro is ready.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link to="/download" className="btn btn-ghost">

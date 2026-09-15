@@ -20,46 +20,46 @@ import { tone } from "@/copy/tone";
 const quickStartSteps = [
   {
     step: 1,
-    title: "Download & Install",
-    description: "Get the Solun desktop app running on your device.",
+    title: "Install Solun",
+    description: "Download the desktop app and open your writing space.",
     icon: Download,
     details: [
-      "Visit the download page",
-      "Choose an available Windows, macOS, or Linux release",
-      "Install and launch Solun"
+      "Open the download page",
+      "Choose the release for your operating system",
+      "Install Solun and launch the app"
     ]
   },
   {
     step: 2,
-    title: "Create Your First Story",
-    description: "Start writing with our distraction-free editor. Experience the page-by-page writing flow.",
+    title: "Create your first story",
+    description: "Start with a blank page, give the project a name, and write your opening scene.",
     icon: FileText,
     details: [
-      "Click 'New Story' in the sidebar",
-      "Choose a title and genre",
-      "Start writing on the first page"
+      "Choose New Story in the sidebar",
+      "Add a title and optional genre",
+      "Write your first scene"
     ]
   },
   {
     step: 3,
-    title: "Build Your Lore Vault",
-    description: "Add characters, places, and items to create an interconnected knowledge base.",
+    title: "Build your Lore Vault",
+    description: "Save the details you want to remember and connect them as your world grows.",
     icon: Database,
     details: [
-      "Navigate to the Lore tab",
-      "Add your first character or place",
-      "Link entities together with relationships"
+      "Open the Lore tab",
+      "Add a character, place, item, or event",
+      "Link related entries together"
     ]
   },
   {
     step: 4,
-    title: "Chat with Your World",
-    description: "Ask questions about your story and get AI-powered insights informed by your lore.",
+    title: "Ask for a fresh perspective",
+    description: "Use selected story context to explore ideas, motivations, and possible next steps.",
     icon: MessageSquare,
     details: [
       "Open the Chat panel",
-      "Ask about character motivations",
-      "Get plot suggestions based on your world"
+      "Choose the writing or lore to include",
+      "Review the response before using any idea"
     ]
   }
 ];
@@ -68,7 +68,7 @@ const docsSections = [
   {
     title: "Getting Started",
     icon: Play,
-    description: "Quick start guide and basic setup",
+    description: "Install Solun and make your first project",
     articles: [
       "Installation Guide",
       "First Story Setup",
@@ -79,7 +79,7 @@ const docsSections = [
   {
     title: "Writing Features",
     icon: FileText,
-    description: "Master the editor and writing tools",
+    description: "Learn the editor, saves, versions, and exports",
     articles: [
       "Page-by-Page Writing",
       "Local Version History",
@@ -90,7 +90,7 @@ const docsSections = [
   {
     title: "Lore Vault",
     icon: Database,
-    description: "Build and manage your world knowledge",
+    description: "Organize characters, places, events, and connections",
     articles: [
       "Creating Entities",
       "Relationships & Links",
@@ -101,7 +101,7 @@ const docsSections = [
   {
     title: "AI Features",
     icon: MessageSquare,
-    description: "Using AI to enhance your writing",
+    description: "Use selected context to explore story ideas",
     articles: [
       "AI Chat Overview",
       "Context-Aware Responses",
@@ -112,7 +112,7 @@ const docsSections = [
   {
     title: "Advanced",
     icon: Settings,
-    description: "Power user features and customization",
+    description: "Accounts, backups, settings, and troubleshooting",
     articles: [
       "Account & AI Usage",
       "Custom Themes",
@@ -126,16 +126,16 @@ export default function Docs() {
   return (
     <>
       <Helmet>
-        <title>Solun Documentation - Complete Guide for World-Building</title>
-        <meta name="description" content="Learn how to install Solun, write a manuscript, organize a Lore Vault, export your work, and use optional AI assistance." />
+        <title>Solun Documentation — Guides for writing and world-building</title>
+        <meta name="description" content="Learn how to install Solun, start a story, organize your Lore Vault, make backups, export your work, and use story assistance." />
         <link rel="canonical" href="https://solun.app/docs" />
-        <meta property="og:title" content="Solun Documentation - Complete World-Building Guide" />
-        <meta property="og:description" content="Installation, writing, Lore Vault, export, local storage, and optional AI assistance guides for Solun." />
+        <meta property="og:title" content="Solun Documentation — Guides for writing and world-building" />
+        <meta property="og:description" content="Practical guides for installing Solun, writing, organizing your Lore Vault, backing up, exporting, and using story assistance." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://solun.app/docs" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Solun Documentation - Complete World-Building Guide" />
-        <meta name="twitter:description" content="Installation, writing, Lore Vault, export, local storage, and optional AI assistance guides for Solun." />
+        <meta name="twitter:title" content="Solun Documentation — Guides for writing and world-building" />
+        <meta name="twitter:description" content="Practical guides for installing Solun, writing, organizing your Lore Vault, backing up, exporting, and using story assistance." />
       </Helmet>
 
       <div className="min-h-screen">
@@ -152,7 +152,7 @@ export default function Docs() {
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground">
-                Everything you need to master Solun and bring your worlds to life
+                Clear answers for getting started, writing, and keeping your story world together
               </p>
             </div>
           </div>
@@ -164,10 +164,10 @@ export default function Docs() {
             <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Quick Start Guide
+                  Start here
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Get up and running with Solun in under 10 minutes
+                  Go from download to first scene in a few minutes
                 </p>
               </div>
 
@@ -209,10 +209,10 @@ export default function Docs() {
             <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Connect Your Lore Vault
+                  Keep your world within reach
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Your world's knowledge base powers everything in Solun
+                  A practical home for the details your story depends on
                 </p>
               </div>
 
@@ -221,8 +221,8 @@ export default function Docs() {
                   <Database className="h-12 w-12 mb-4 text-phthalo" />
                   <h3 className="text-xl font-semibold mb-3">What is the Lore Vault?</h3>
                   <p className="text-muted-foreground mb-4">
-                    A structured database of your world's elements—characters, places, items, events, and their relationships.
-                    Relationships keep connected details easy to find while you write.
+                    The Lore Vault is where you keep the people, places, objects, events, and connections behind your story.
+                    It turns scattered notes into a world you can return to while you write.
                   </p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
@@ -246,10 +246,10 @@ export default function Docs() {
 
                 <div className="card-hover">
                   <MessageSquare className="h-12 w-12 mb-4 text-olive" />
-                  <h3 className="text-xl font-semibold mb-3">AI Integration</h3>
+                  <h3 className="text-xl font-semibold mb-3">Story assistance</h3>
                   <p className="text-muted-foreground mb-4">
-                    Your Lore Vault powers intelligent conversations. Ask questions about your world and get responses
-                    informed by the lore and manuscript context you choose.
+                    When you want another perspective, choose the writing and lore you want to discuss.
+                    Solun uses that context to help you explore possibilities without taking over the story.
                   </p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
@@ -274,9 +274,9 @@ export default function Docs() {
 
               <div className="card-hover text-center">
                 <Shield className="h-12 w-12 mx-auto mb-4 text-success" />
-                <h3 className="text-xl font-semibold mb-3">Your Data, Your Control</h3>
+                <h3 className="text-xl font-semibold mb-3">Backups and exports</h3>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Manuscripts and lore are stored locally on your device in SQLite. Backups and exports stay under your control.
+                  Your manuscript and lore are stored on your device. Use the backup and export tools to keep copies where you want them.
                 </p>
               </div>
             </div>
@@ -289,10 +289,10 @@ export default function Docs() {
             <div className="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Complete Documentation
+                  Find your next answer
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Detailed guides for every feature and workflow
+                  Practical notes for the features you will use most
                 </p>
               </div>
 
@@ -321,9 +321,9 @@ export default function Docs() {
           <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
             <div className="mx-auto max-w-4xl xl:max-w-5xl">
               <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4">Need Help?</h2>
+                <h2 className="text-3xl font-bold mb-4">Still have a question?</h2>
                 <p className="text-muted-foreground">
-                  Can't find what you're looking for? We're here to help.
+                  Start with the guides, browse the FAQs, or contact us directly.
                 </p>
               </div>
 
@@ -332,7 +332,7 @@ export default function Docs() {
                   <BookOpen className="h-12 w-12 mx-auto mb-4 text-phthalo" />
                   <h3 className="text-lg font-semibold mb-2">Documentation</h3>
                   <p className="text-muted-foreground text-sm mb-4">
-                    Browse our complete documentation library
+                    Find answers to common questions
                   </p>
                   <Link to="/faqs" className="btn btn-ghost w-full">Browse FAQs</Link>
                 </div>
@@ -341,7 +341,7 @@ export default function Docs() {
                   <Users className="h-12 w-12 mx-auto mb-4 text-olive" />
                   <h3 className="text-lg font-semibold mb-2">Community</h3>
                   <p className="text-muted-foreground text-sm mb-4">
-                    Read product notes and writing guides
+                    Read practical writing and product notes
                   </p>
                   <Link to="/blog" className="btn btn-ghost w-full">Read the Blog</Link>
                 </div>
@@ -350,7 +350,7 @@ export default function Docs() {
                   <Zap className="h-12 w-12 mx-auto mb-4 text-success" />
                   <h3 className="text-lg font-semibold mb-2">Support</h3>
                   <p className="text-muted-foreground text-sm mb-4">
-                    Get help from our support team
+                    Get help from a real person
                   </p>
                   <Link to="/contact" className="btn btn-ghost w-full">Contact Support</Link>
                 </div>
@@ -363,10 +363,10 @@ export default function Docs() {
         <section className="section border-t border-border/50">
           <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl text-center space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold">
-              Ready to start building worlds?
+              Ready to write your story?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl prose-reading-comfortable mx-auto">
-              Download Solun and begin your world-building journey today
+              Download Solun and give your next idea somewhere to grow
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

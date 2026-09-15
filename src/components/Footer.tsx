@@ -1,8 +1,6 @@
 import { Github, Instagram } from "lucide-react";
-import { useState, useCallback, useRef, useMemo } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
-
-import { useNewsletter } from "@/hooks/use-newsletter";
 
 // Define available routes - only show links for routes that exist
 const AVAILABLE_ROUTES = {
@@ -105,46 +103,10 @@ function FooterLinkSection({ title, links }: FooterLinkSectionProps) {
 }
 
 export function Footer() {
-  const [email, setEmail] = useState("");
-  const { subscribe, isSubmitting } = useNewsletter();
-  const submitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleSubscribe = useCallback(() => {
-    if (!email.trim()) {
-      return; // Empty email - validation will be handled by the mutation
-    }
-
-    if (isSubmitting) {
-      return; // Prevent double submission
-    }
-
-    subscribe({ email, source: 'footer' });
-    setEmail("");
-  }, [email, subscribe, isSubmitting]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Clear any existing timeout
-    if (submitTimeoutRef.current) {
-      clearTimeout(submitTimeoutRef.current);
-    }
-
-    // Prevent double submission
-    if (isSubmitting) {
-      return;
-    }
-
-    // Debounce the submission
-    submitTimeoutRef.current = setTimeout(() => {
-      handleSubscribe();
-    }, 300);
-  };
-
   return (
     <footer className="site-footer border-t border-white/10 bg-phthalo text-white" role="contentinfo">
       <div className="container max-w-7xl py-12 sm:py-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.25fr_.65fr_.65fr_.65fr_1.15fr] lg:gap-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.25fr_.65fr_.65fr_.65fr] lg:gap-8">
           {/* Brand & Social */}
           <div className="space-y-4">
             <Link 
@@ -190,37 +152,6 @@ export function Footer() {
           {/* Legal */}
           <FooterLinkSection title="Legal" links={AVAILABLE_ROUTES.legal} />
 
-          {/* Newsletter - Right column */}
-          <div>
-            <h3 className="mb-3 text-sm font-semibold typewriter text-foreground">Newsletter</h3>
-            <p className="text-sm text-muted-foreground mb-4 typewriter">
-              Stay updated with the latest features.
-            </p>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                  disabled={isSubmitting}
-                  className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 typewriter disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
-                  aria-label="Email address for newsletter subscription"
-                  required
-                />
-                <button 
-                  type="submit"
-                  className="btn btn-primary text-xs typewriter disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] px-4 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 whitespace-nowrap"
-                  disabled={isSubmitting}
-                  aria-label="Subscribe to newsletter"
-                >
-                  {isSubmitting ? "Subscribing..." : "Subscribe"}
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
         
         {/* Footer bottom: copyright only */}
