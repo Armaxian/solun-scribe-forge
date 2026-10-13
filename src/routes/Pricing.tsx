@@ -1,9 +1,10 @@
-import { Check, X, ChevronRight, Info } from "lucide-react";
+import { Check, X, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Pricing as PricingBlock } from "@/components/ui/pricing";
 import { tone } from "@/copy/tone";
 import { analytics } from "@/lib/analytics";
@@ -92,7 +93,7 @@ export default function Pricing() {
         <meta name="twitter:description" content="Everything you need to write is free. Add Pro when you want a thoughtful second opinion for your story." />
       </Helmet>
 
-      <div className="min-h-screen">
+      <div className="pricing-page min-h-screen">
         {/* Hero Section */}
         <section className="py-8 md:py-12 lg:py-16">
           <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4">
@@ -135,9 +136,10 @@ export default function Pricing() {
                 </p>
               </div>
 
-              <div className="card overflow-hidden">
+              <div className="card pricing-comparison overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
+                    <caption className="sr-only">Features included in Solun Free and Pro</caption>
                     <thead>
                       <tr className="border-b border-border/50">
                         <th className="text-left p-6 font-semibold">Features</th>
@@ -182,58 +184,12 @@ export default function Pricing() {
                 </p>
               </div>
 
-              <div className="space-y-6">
-                <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">Can I change plans later?</h3>
-                  <p className="text-muted-foreground">
-                    Yes. Manage or cancel your subscription from Account. Your writing stays available either way.
-                  </p>
-                </div>
-
-                <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">What do I get for free?</h3>
-                  <p className="text-muted-foreground">
-                    The writing space, your story details, backups, and exports. You can start with the parts you need and decide about Pro later.
-                  </p>
-                </div>
-
-                <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">What is Pro for?</h3>
-                  <p className="text-muted-foreground">
-                    Pro gives you a thoughtful second opinion when you are stuck, exploring a scene, or looking for what might happen next. It is there when you want it—not in the way when you do not.
-                  </p>
-                </div>
-
-                <div className="card">
-                  <h3 className="text-lg font-semibold mb-2">How do payments work?</h3>
-                  <p className="text-muted-foreground">
-                    Prices are shown in USD and payment details are handled securely at checkout. See our Terms for the refund policy.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Desktop App Notice */}
-        <section className="section border-t border-border/50 bg-muted/20">
-          <div className="container max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
-            <div className="mx-auto max-w-4xl xl:max-w-5xl">
-              <div className="card-hover text-center">
-                <Info className="h-12 w-12 mx-auto mb-4 text-info" aria-hidden="true" />
-                <h3 className="text-xl font-semibold mb-3">Start with a blank page</h3>
-                <p className="text-muted-foreground mb-4">
-                  Download Solun and start writing straight away. When you want a fresh perspective, Pro is ready.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/download" className="btn btn-ghost">
-                    Download Free
-                  </Link>
-                  <Link to="/download" className="btn btn-primary">
-                    Desktop App
-                  </Link>
-                </div>
-              </div>
+              <Accordion type="single" collapsible className="pricing-faq">
+                <AccordionItem value="change"><AccordionTrigger>Can I change plans later?</AccordionTrigger><AccordionContent>Yes. Manage or cancel your subscription from Account. Your writing stays available either way.</AccordionContent></AccordionItem>
+                <AccordionItem value="free"><AccordionTrigger>What do I get for free?</AccordionTrigger><AccordionContent>The writing space, Lore Vault, backups, and exports. Start with the parts you need and decide about Pro later.</AccordionContent></AccordionItem>
+                <AccordionItem value="pro"><AccordionTrigger>What is Pro for?</AccordionTrigger><AccordionContent>Pro adds optional AI assistance when you’re stuck, exploring a scene, or looking for what might happen next. You decide what belongs on the page.</AccordionContent></AccordionItem>
+                <AccordionItem value="payments"><AccordionTrigger>How do payments work?</AccordionTrigger><AccordionContent>Prices are in USD. Payment details are handled at checkout. See our <Link to="/terms" className="underline">Terms</Link> for the refund policy.</AccordionContent></AccordionItem>
+              </Accordion>
             </div>
           </div>
         </section>

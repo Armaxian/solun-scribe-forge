@@ -49,12 +49,12 @@ export default function Features() {
         <meta property="og:url" content="https://solun.app/features" />
       </Helmet>
 
-      <div className="min-h-screen">
+      <div className="features-page min-h-screen">
         <section className="border-b border-black/10 py-24 md:py-32" aria-labelledby="features-heading">
           <div className="container max-w-7xl">
             <p className="label-mono text-phthalo">Made for the way stories actually happen</p>
             <h1 id="features-heading" className="display-serif mt-7 max-w-5xl text-6xl font-normal leading-[.95] tracking-[-.05em] md:text-8xl">
-              Write the story. <span className="italic text-phthalo">Keep the world.</span>
+              Write the story.<br />Keep the world.
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-foreground/65 md:text-xl">
               Solun gives you one clear place for the draft, the details, and the ideas that make the story worth finishing.
@@ -64,10 +64,10 @@ export default function Features() {
 
         <section aria-label="Solun features">
           <div className="container max-w-7xl">
-            {features.map((feature, index) => (
-              <article key={feature.eyebrow} className="grid gap-10 border-b border-black/10 py-20 md:py-28 lg:grid-cols-[.6fr_1.4fr]">
-                <div className="flex items-start justify-between lg:block">
-                  <span className="label-mono text-foreground/35">0{index + 1}</span>
+            {features.map((feature) => (
+              <article key={feature.eyebrow} className="grid gap-6 border-b border-black/10 py-12 md:py-28 lg:grid-cols-[.6fr_1.4fr]">
+                <div className="flex items-start lg:block">
+
                   <feature.icon className="mt-0 h-8 w-8 text-phthalo lg:mt-10 lg:h-10 lg:w-10" aria-hidden="true" />
                 </div>
                 <div>

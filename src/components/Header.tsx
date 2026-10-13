@@ -13,7 +13,6 @@ import {
   SheetClose,
 } from "./ui/sheet";
 
-import { tone } from "@/copy/tone";
 import { useSession } from "@/hooks/use-session";
 import { analytics } from "@/lib/analytics";
 
@@ -39,7 +38,7 @@ export function Header() {
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="Solun - Home">
             <img src="/favicon.ico" alt="" className="h-8 w-8" />
-            <span className="text-xl font-semibold tracking-tight typewriter">Solun</span>
+            <span className="site-wordmark">Solun</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex" role="navigation" aria-label="Main navigation">
@@ -82,11 +81,12 @@ export function Header() {
                 aria-label="Download Solun"
               >
                 <FileDown className="h-4 w-4 mr-2" aria-hidden="true" />
-                {tone.cta('download')}
+                Download Solun
               </Link>
             </GradientButton>
           </div>
 
+          <Button asChild className="mobile-download md:hidden" variant="outline"><Link to="/download">Get Solun</Link></Button>
           {/* Mobile hamburger menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -103,7 +103,7 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[85vw] sm:max-w-sm" id="mobile-navigation">
               <SheetHeader>
-                <SheetTitle className="text-left">Navigation</SheetTitle>
+                <SheetTitle className="text-left text-3xl font-normal">Find your way.</SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-4 mt-8" role="navigation" aria-label="Mobile navigation">
                 {navigation.map((item) => (
@@ -155,7 +155,7 @@ export function Header() {
                       aria-label="Download Solun"
                     >
                       <FileDown className="h-4 w-4 mr-2" aria-hidden="true" />
-                      {tone.cta('download')}
+                      Download Solun
                     </Link>
                   </GradientButton>
                 </SheetClose>

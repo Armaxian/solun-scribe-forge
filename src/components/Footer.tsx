@@ -106,9 +106,9 @@ export function Footer() {
   return (
     <footer className="site-footer border-t border-white/10 bg-phthalo text-white" role="contentinfo">
       <div className="container max-w-7xl py-12 sm:py-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.25fr_.65fr_.65fr_.65fr] lg:gap-8">
+        <div className="footer-grid grid gap-8 lg:gap-8">
           {/* Brand & Social */}
-          <div className="space-y-4">
+          <div className="footer-brand space-y-4">
             <Link 
               to="/" 
               className="flex items-center gap-2 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
@@ -120,10 +120,10 @@ export function Footer() {
                 className="h-6 w-6 rounded-lg object-contain" 
                 aria-hidden="true"
               />
-              <span className="font-semibold typewriter text-foreground">Solun</span>
+              <span className="site-wordmark text-foreground">Solun</span>
             </Link>
             <p className="text-sm text-muted-foreground typewriter">
-              Write worlds.
+              For the worlds in your head.
             </p>
             {SOCIAL_LINKS.length > 0 && (
               <div className="flex gap-2" role="list">

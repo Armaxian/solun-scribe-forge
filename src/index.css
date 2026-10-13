@@ -672,3 +672,63 @@
     --border-color-2: hsla(320, 50%, 90%, 0.75);
   }
 }
+
+/* Shared reading and navigation styles for the writing studio. */
+body { font-family: 'Segoe UI', Arial, sans-serif; }
+.site-header > .container, .site-footer > .container { max-width: 1280px; padding-inline: clamp(22px, 5vw, 64px); }
+.site-header .typewriter, .site-footer .typewriter { font-family: 'Segoe UI', Arial, sans-serif; letter-spacing: normal; }
+.site-wordmark { font-family: 'Newsreader', Georgia, serif; font-size: 30px; letter-spacing: -.055em; font-weight: 500; line-height: 1; }
+.site-header { background: #f5f2e8ed; }
+.site-header .nav-link { color: #52645a; min-height: 44px; display: inline-flex; align-items: center; }
+.site-header .nav-link[aria-current='page'] { color: #173e31; background: #e5ebde; }
+.site-header .gradient-button { font-weight: 500; }
+.site-header .mobile-download { min-height: 44px; border-radius: 7px; border-color: #153d3126; font-size: 12px; background: #faf8f280; color: #173e31; }
+#mobile-navigation { background: #faf8f2; padding: 30px 24px; }
+#mobile-navigation .typewriter { font-family: 'Segoe UI', Arial, sans-serif; }
+#mobile-navigation nav { gap: 8px; }
+#mobile-navigation nav a { font-family: 'Newsreader', Georgia, serif; font-size: 28px; font-weight: 400; min-height: 58px; padding-inline: 12px; }
+.site-footer { background: #173e31; }
+.footer-grid { grid-template-columns: 1.25fr .65fr .65fr .65fr; }
+.site-footer .footer-brand > p { max-width: 220px; font-family: 'Newsreader', Georgia, serif; font-size: 26px; line-height: 1.3; color: #c5d1c2 !important; }
+.site-footer .text-muted-foreground { color: #c5d1c2 !important; }
+.site-footer h3 { font-size: 13px; font-weight: 500; }
+.site-footer ul { margin-top: 15px; }
+.site-footer ul a { font-size: 13px; padding-left: 0; }
+.site-footer a:focus-visible { outline: 2px solid #d4d3a3; outline-offset: 4px; }
+.site-footer .border-t { border-color: #ffffff26; }
+.site-footer .border-t p { font-size: 11px; }
+@media (max-width: 767px) {
+  .site-header > .container, .site-footer > .container { padding-inline: 22px; }
+  .site-header { padding-block: 10px; }
+  .site-header .site-wordmark { font-size: 28px; }
+  .site-header .h-8.w-8 { width: 26px; height: 26px; }
+  .site-header > .container > div:last-child { gap: 7px; }
+  .footer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 15px; }
+  .footer-brand { grid-column: 1 / -1; padding-bottom: 8px; }
+  .site-footer .footer-brand > p { max-width: 250px; }
+  .site-footer ul { margin-top: 10px; }
+  .site-footer ul a { font-size: 12px; line-height: 1.5; }
+  .site-footer h3 { margin-bottom: 10px; }
+  .site-footer ul.space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0; }
+  main > .min-h-screen > section:first-child h1, main > .min-h-screen > section:first-child h2 { overflow-wrap: break-word; }
+  main > .min-h-screen:not(.landing) > section:first-child { padding-block: 52px; }
+  main > .min-h-screen:not(.landing) > section:first-child h1 { font-size: clamp(40px, 10vw, 62px); line-height: 1.05; }
+}
+
+.pricing-page > section:first-child h1 { font-weight: 400; color: #173e31; }
+.pricing-page > section:first-child h1 > span { background: none; color: inherit; }
+.pricing-faq { border-top: 1px solid #153d3126; }
+.pricing-faq h3 button { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 400; min-height: 72px; gap: 20px; text-align: left; text-decoration: none; }
+.pricing-faq [role='region'] > div { font-size: 14px; line-height: 1.8; color: #52645a; padding-bottom: 24px; }
+.features-page .label-mono { font-family: 'Segoe UI', Arial, sans-serif; text-transform: none; letter-spacing: 0; font-size: 13px; }
+@media (max-width: 767px) {
+  .pricing-comparison { padding: 0; }
+  .pricing-comparison table { table-layout: fixed; font-size: 12px; }
+  .pricing-comparison th, .pricing-comparison td { padding: 16px 12px; min-width: 0; }
+  .pricing-comparison th:first-child { width: 56%; }
+  .pricing-comparison th:not(:first-child) { width: 22%; }
+  .pricing-comparison td:first-child { font-weight: 400; }
+  .pricing-page .section { padding-block: 56px; }
+  .pricing-page .section-tight { padding-block: 32px; }
+  .features-page > section:last-child { padding-block: 58px; }
+}
